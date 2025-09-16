@@ -90,7 +90,7 @@ export default function Dock({
           isHovered.set(0);
           mouseX.set(Infinity);
         }}
-        className={`${className} flex items-end w-fit gap-6 rounded-2xl border-white/30 border-2 py-3 px-6 bg-white/10 backdrop-blur-sm`}
+        className={`${className} flex items-end w-fit gap-10 rounded-2xl border-white/30 border-2 py-3 px-6 bg-white/10 backdrop-blur-sm`}
         style={{ minHeight: panelHeight }}
         role="toolbar"
         aria-label="Application dock"

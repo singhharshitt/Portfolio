@@ -121,3 +121,161 @@
 .font-snpro {
   font-family: 'SN Pro', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 }
+.anonymous-pro-regular {
+  font-family: "Anonymous Pro", monospace;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.anonymous-pro-bold {
+  font-family: "Anonymous Pro", monospace;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.anonymous-pro-regular-italic {
+  font-family: "Anonymous Pro", monospace;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.anonymous-pro-bold-italic {
+  font-family: "Anonymous Pro", monospace;
+  font-weight: 700;
+  font-style: italic;
+}
+
+.lexend-exa-normal {
+  font-family: "Lexend Exa", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400; /* Normal */
+  font-style: normal;
+}
+
+/* Semi-Bold (600) */
+.lexend-exa-semibold {
+  font-family: "Lexend Exa", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600; /* Semi-bold */
+  font-style: normal;
+}
+
+/* Bold (700) */
+.lexend-exa-bold {
+  font-family: "Lexend Exa", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700; /* Bold */
+  font-style: normal;
+}
+
+/* Extra-Bold (800) */
+.lexend-exa-extrabold {
+  font-family: "Lexend Exa", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 800; /* Extra-bold */
+  font-style: normal;
+}
+
+/* Normal (400) */
+.plus-jakarta-sans-normal {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400; /* Normal */
+  font-style: normal;
+}
+
+/* Medium (500) */
+.plus-jakarta-sans-medium {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500; /* Medium */
+  font-style: normal;
+}
+
+/* Semi-Bold (600) */
+.plus-jakarta-sans-semibold {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600; /* Semi-bold */
+  font-style: normal;
+}
+
+/* Bold (700) */
+.plus-jakarta-sans-bold {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700; /* Bold */
+  font-style: normal;
+}
+
+/* Extra-Bold (800) */
+.plus-jakarta-sans-extrabold {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 800; /* Extra-bold */
+  font-style: normal;
+}
+
+/* Black (900) */
+.plus-jakarta-sans-black {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 900; /* Heaviest */
+  font-style: normal;
+}
+
+
+@keyframes chitchat {
+  0%   { content: "#"; opacity: 1; }
+  5%   { content: "."; }
+  10%  { content: "^{"; }
+  15%  { content: "-!"; }
+  20%  { content: "#$_"; }
+  25%  { content: "№:0"; }
+  30%  { content: "#{+."; }
+  35%  { content: "@}-?"; }
+  40%  { content: "?{4@%"; }
+  45%  { content: "=.,^!"; }
+  50%  { content: "?2@%"; }
+  55%  { content: "\\;1}]"; }
+  60%  { content: "?{%:%"; }
+  65%  { content: "|{f[4"; }
+  70%  { content: "{4%0%"; }
+  75%  { content: "'1_0<"; }
+  80%  { content: "{0%"; }
+  85%  { content: "]>'"; }
+  90%  { content: "4"; }
+  95%  { content: "2"; }
+  100% { content: ""; opacity: 0; }
+}
+
+/* Support current markup: animate ::after when parent .group is hovered */
+.group:hover .group-hover\:animate-chitchat {
+  position: relative;
+}
+
+.group:hover .group-hover\:animate-chitchat::after {
+  animation: chitchat 1.2s linear both;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  color: currentColor;
+}
+
+/* Prevent unintended scrollbars while preserving layout */
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+/* Hide scrollbars visually but allow scrolling if needed */
+/* WebKit */
+::-webkit-scrollbar { width: 0; height: 0; }
+/* Firefox */
+* { scrollbar-width: none; }
+
+
