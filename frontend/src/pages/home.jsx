@@ -427,56 +427,120 @@ function Home() {
         </section>
 
 
-        <section className="my-20 lg:my-28 mx-4 lg:mx-8 rounded-3xl border-2 min-h-[500px] lg:min-h-[650px]">
-          <h2 className="text-3xl sm:text-4xl lg:text-6xl lexend-exa-bold m-4 mt-10 ml-6 sm:ml-12 mb-8">
-            TECH STACK<span className="text-orange-400">.</span>
-          </h2>
-          <div style={{ height: '200px', position: 'relative', overflow: 'hidden' }} className="mt-4 mx-6 ">
-            <LogoLoop
-              logos={techLogos}
-              speed={30}
-              direction="left"
-              logoHeight={110}
-              gap={40}
-              pauseOnHover
-              scaleOnHover
-              fadeOut
-              fadeOutColor="#ffffff"
-              ariaLabel="Technology partners"
-            />
-          </div>
+        <section className="my-20 lg:my-28 mx-4 lg:mx-10 rounded-3xl border-2   backdrop-blur-md">
+  {/* Title */}
+  <h2 className="text-3xl sm:text-4xl lg:text-6xl lexend-exa-bold m-6 mt-10 ml-6 sm:ml-12 mb-8">
+    TECH STACK<span className="text-orange-400">.</span>
+  </h2>
 
-          <div className="grid grid-cols-2">
-            <div className="">
-              <div className="">
-                <h3>FRONTEND</h3>
-                <AnimatedFile />
-              </div>
-              <div className="">
-                <h3>BACKEND</h3>
-                <AnimatedFile />
-              </div> 
-            </div>
-            <div>
-                <div>
-                  <h3>Core Langs</h3>
-                  <AnimatedFile />
-                </div>
-                <div>
-                  <h3>Tools & Platforms</h3>
-                  <AnimatedFile />
-                </div>
+  {/* Scrolling Logos */}
+  <div
+    className="mt-4 mx-6 sm:mx-10   overflow-hidden"
+    style={{ height: "200px", position: "relative" }}
+  >
+    <LogoLoop
+      logos={techLogos}
+      speed={30}
+      direction="left"
+      logoHeight={110}
+      gap={40}
+      pauseOnHover
+      scaleOnHover
+      fadeOut
+      fadeOutColor="#ffffff"
+      ariaLabel="Technology partners"
+    />
+  </div>
 
-              </div>
+  {/* Tech Folders Grid */}
+  <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-16 px-4 sm:px-8 lg:px-12">
+  {/* Left Column */}
+  <div className="flex flex-col gap-16">
+    <div>
+      <h3 className="text-xl sm:text-2xl font-semibold mb-3 text-slate-800 tracking-wide">
+        FRONTEND
+      </h3>
+      {/* 👇 Changed justify-center → justify-start */}
+      <div className="flex justify-start">
+        <AnimatedFile
+          title="Frontend"
+          type="frontend"
+          cards={[
+            { name: "React", icon: SiReact },
+            { name: "Next.js", icon: SiNextdotjs },
+            { name: "Tailwind", icon: SiTailwindcss },
+            { name: "TypeScript", icon: SiTypescript },
+            { name: "HTML", icon: SiHtml5 },
+            { name: "CSS", icon: SiCss3 },
+          ]}
+        />
+      </div>
+    </div>
 
+    <div>
+      <h3 className="text-xl sm:text-2xl font-semibold mb-3 text-slate-800 tracking-wide">
+        BACKEND
+      </h3>
+      <div className="flex justify-start">
+        <AnimatedFile
+          title="Backend"
+          type="backend"
+          cards={[
+            { name: "Node.js", icon: SiNodedotjs },
+            { name: "Express", icon: SiExpress },
+            { name: "MongoDB", icon: SiMongodb },
+            { name: "Python", icon: SiPython },
+            { name: "PHP", icon: SiPhp },
+          ]}
+        />
+      </div>
+    </div>
+  </div>
 
-          </div>
-        </section>
+  {/* Right Column */}
+  <div className="flex flex-col gap-16">
+    <div>
+      <h3 className="text-xl sm:text-2xl font-semibold mb-3 text-slate-800 tracking-wide">
+        ESSENTIALS
+      </h3>
+      <div className="flex justify-start">
+        <AnimatedFile
+          title="Essentials"
+          type="core"
+          cards={[
+            { name: "C", icon: SiPython }, // Replace with correct icon
+            { name: "C++", icon: SiPhp }, // Replace with correct icon
+            { name: "Java", icon: SiDocker }, // Replace with correct icon
+          ]}
+        />
+      </div>
+    </div>
+
+    <div>
+      <h3 className="text-xl sm:text-2xl font-semibold mb-3 text-slate-800 tracking-wide">
+        TOOLKIT
+      </h3>
+      <div className="flex justify-start">
+        <AnimatedFile
+          title="Toolkit"
+          type="devops"
+          cards={[
+            { name: "Docker", icon: SiDocker },
+            { name: "GitHub", icon: SiGithub },
+          ]}
+        />
+      </div>
+    </div>
+  </div>
+</div>
+
+</section>
+
         <section className="my-20 lg:my-28 mx-4 lg:mx-8 rounded-3xl border-2 min-h-[500px] lg:min-h-[650px]">
           <h2 className="text-3xl sm:text-4xl lg:text-6xl lexend-exa-bold m-4 mt-10 ml-6 sm:ml-12 mb-8">
             ACHIEVEMENTS<span className="text-orange-400">.</span>
           </h2>
-          
+
 
         </section>
         <section className="my-20 lg:my-28 mx-4 lg:mx-8 rounded-3xl border-2 min-h-[500px] lg:min-h-[650px]">

@@ -1,7 +1,6 @@
 import React from "react";
 import { motion } from "motion/react";
-import Ink from "./Inksplash";
-import Hand from "./HandWriting";
+
 
 const PreLoader = () => {
   return (

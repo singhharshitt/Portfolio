@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&family=Funnel+Display:wght@300..800&family=Gabarito:wght@400..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lexend+Exa:wght@100..900&family=Lexend+Mega:wght@100..900&family=Paytone+One&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
 @import "tailwindcss";
 
 @font-face {
@@ -12,6 +13,14 @@
   font-display: swap;
 }
 
+.space-grotesk-label {
+  font-family: "Space Grotesk", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;       /* Semi-bold gives clarity without being heavy */
+  font-style: normal;
+  letter-spacing: 0.5px;  /* Slight spacing for balance */
+  text-transform: uppercase; /* Optional, gives clean folder titles */
+}
 
 @font-face {
   font-family: 'DepartureMono';
