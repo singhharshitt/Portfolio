@@ -107,7 +107,12 @@ export default function FolderWithDocuments({ title = "Frontend", type = "fronte
           animate={open ? "open" : "closed"}
           onClick={() => setOpen(!open)}
           style={{ transformStyle: "preserve-3d" }}
-          whileHover={{ scale: 1.05 }}
+          whileHover={{
+            scale: 1.08,
+            boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.3)",
+            transition: { duration: 0.2 }
+          }}
+          whileTap={{ scale: 0.95 }}
         >
           {/* Folder Flap */}
           <motion.div
@@ -145,9 +150,15 @@ export default function FolderWithDocuments({ title = "Frontend", type = "fronte
                   key={i}
                   custom={i}
                   variants={cardVariants}
-                  className="absolute w-24 sm:w-28 h-28 sm:h-32 bg-white/90 backdrop-blur-sm border border-slate-200 rounded-lg shadow-md flex flex-col items-center justify-center text-[0.75rem] sm:text-sm font-medium text-slate-700 cursor-pointer hover:-translate-y-1 hover:shadow-xl transition-transform duration-300"
+                  className="absolute w-24 sm:w-28 h-28 sm:h-32 bg-white/90 backdrop-blur-sm border border-slate-200 rounded-lg shadow-md flex flex-col items-center justify-center text-[0.75rem] sm:text-sm font-medium text-slate-700 cursor-pointer transition-transform duration-300"
                   style={{ zIndex: cards.length - i }}
-                  whileHover={{ scale: 1.05 }}
+                  whileHover={{
+                    scale: 1.1,
+                    y: -8,
+                    boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.2)",
+                    rotate: 0,
+                    transition: { duration: 0.2 }
+                  }}
                 >
                   {item.icon && (
                     <item.icon

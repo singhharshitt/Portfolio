@@ -96,19 +96,37 @@ export default function Dock({
         aria-label="Application dock"
       >
         {items.map((item, index) => (
-          <DockItem
-            key={index}
-            onClick={item.onClick}
-            className="relative"
-            mouseX={mouseX}
-            spring={spring}
-            distance={distance}
-            magnification={magnification}
-            baseItemSize={baseItemSize}
+          <motion.a
+            key={item.href || index} // Use href as key if available, otherwise index
+            href={item.href}
+            className="text-slate-700 hover:text-orange-500 transition-colors duration-200"
+            whileHover={{
+              scale: 1.3,
+              y: -8,
+              transition: {
+                type: "spring",
+                stiffness: 400,
+                damping: 10
+              }
+            }}
+            whileTap={{ scale: 0.95 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.05 }}
           >
-            <DockIcon>{item.icon}</DockIcon>
-            <DockLabel>{item.label}</DockLabel>
-          </DockItem>
+            <DockItem
+              onClick={item.onClick}
+              className="relative"
+              mouseX={mouseX}
+              spring={spring}
+              distance={distance}
+              magnification={magnification}
+              baseItemSize={baseItemSize}
+            >
+              <DockIcon>{item.icon}</DockIcon>
+              <DockLabel>{item.label}</DockLabel>
+            </DockItem>
+          </motion.a>
         ))}
       </motion.div>
     </div>
