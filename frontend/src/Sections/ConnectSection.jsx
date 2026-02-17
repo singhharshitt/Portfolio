@@ -33,11 +33,11 @@ const ConnectSection = () => {
     return (
         <div className="flex flex-col lg:flex-row gap-8 px-4 sm:px-6 lg:px-12 pb-12">
             {/* Left side - Message */}
-            <div className="flex-1 plus-jakarta-sans-medium bg-[#f8f8f6] shadow-md rounded-xl overflow-hidden border-b-4 border-r-4 border-orange-400 group p-8 transition-all duration-500 ease-in-out hover:scale-105 hover:rounded-none hover:shadow-xl relative">
+            <div className="flex-1 plus-jakarta-sans-medium bg-sand-100 shadow-md rounded-xl overflow-hidden border-b-4 border-r-4 border-orange-400 group p-8 transition-all duration-500 ease-in-out hover:scale-105 hover:rounded-none hover:shadow-xl relative">
                 <div className="absolute inset-0 border-2 border-orange-400 opacity-0 rotate-6 transition-all duration-500 ease-in-out group-hover:inset-4 group-hover:opacity-100 group-hover:rotate-0"></div>
 
                 <div className="relative z-10">
-                    <h3 className="text-2xl sm:text-3xl font-bold text-[#111827] mb-4">
+                    <h3 className="text-2xl sm:text-3xl font-bold text-charcoal mb-4">
                         Let's Build Something{' '}
                         <span className="text-orange-400">Amazing</span> Together
                     </h3>
@@ -84,17 +84,17 @@ const ConnectSection = () => {
                     </div>
                 </div>
 
-                <span className="absolute left-1/2 -translate-x-1/2 bottom-2 text-[9px] uppercase tracking-[0.5em] text-orange-400 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out bg-[#f8f8f6] px-2">
+                <span className="absolute left-1/2 -translate-x-1/2 bottom-2 text-[9px] uppercase tracking-[0.5em] text-orange-400 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out bg-sand-100 px-2">
                     Get In Touch
                 </span>
             </div>
 
             {/* Right side - Social Links */}
-            <div className="flex-1 plus-jakarta-sans-medium bg-[#f8f8f6] shadow-md rounded-xl overflow-hidden border-b-4 border-r-4 border-orange-400 group p-8 transition-all duration-500 ease-in-out hover:scale-105 hover:rounded-none hover:shadow-xl relative">
+            <div className="flex-1 plus-jakarta-sans-medium bg-sand-100 shadow-md rounded-xl overflow-hidden border-b-4 border-r-4 border-orange-400 group p-8 transition-all duration-500 ease-in-out hover:scale-105 hover:rounded-none hover:shadow-xl relative">
                 <div className="absolute inset-0 border-2 border-orange-400 opacity-0 rotate-6 transition-all duration-500 ease-in-out group-hover:inset-4 group-hover:opacity-100 group-hover:rotate-0"></div>
 
                 <div className="relative z-10">
-                    <h3 className="text-2xl sm:text-3xl font-bold text-[#111827] mb-6">
+                    <h3 className="text-2xl sm:text-3xl font-bold text-charcoal mb-6">
                         Find Me <span className="text-orange-400">Online</span>
                     </h3>
 
@@ -114,7 +114,7 @@ const ConnectSection = () => {
                                         <Icon className={`w-6 h-6 text-orange-400 group-hover/link:text-white transition-colors duration-300`} />
                                     </div>
                                     <div className="flex-1">
-                                        <p className="font-bold text-[#111827]">{social.name}</p>
+                                        <p className="font-bold text-charcoal">{social.name}</p>
                                         <p className="text-sm text-gray-500">@singhharshitt</p>
                                     </div>
                                     <svg
@@ -145,7 +145,7 @@ const ConnectSection = () => {
                     </div>
                 </div>
 
-                <span className="absolute left-1/2 -translate-x-1/2 bottom-2 text-[9px] uppercase tracking-[0.5em] text-orange-400 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out bg-[#f8f8f6] px-2">
+                <span className="absolute left-1/2 -translate-x-1/2 bottom-2 text-[9px] uppercase tracking-[0.5em] text-orange-400 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out bg-sand-100 px-2">
                     Social Links
                 </span>
             </div>

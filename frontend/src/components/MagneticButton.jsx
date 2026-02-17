@@ -1,0 +1,78 @@
+import { useRef, useState } from 'react';
+import { motion } from 'framer-motion';
+
+/**
+ * MagneticButton — Pill-shaped CTA with magnetic pull + fill sweep
+ * - Rounded-full border pill
+ * - Fill animation sweeps left → right on hover
+ * - Subtle magnetic cursor pull via onMouseMove offset
+ * - Text color inversion on hover
+ */
+export default function MagneticButton({
+    children,
+    onClick,
+    href,
+    className = '',
+    variant = 'primary', // 'primary' | 'outline'
+}) {
+    const buttonRef = useRef(null);
+    const [position, setPosition] = useState({ x: 0, y: 0 });
+    const [isHovered, setIsHovered] = useState(false);
+
+    const handleMouseMove = (e) => {
+        if (!buttonRef.current) return;
+        const rect = buttonRef.current.getBoundingClientRect();
+        const x = (e.clientX - rect.left - rect.width / 2) * 0.15;
+        const y = (e.clientY - rect.top - rect.height / 2) * 0.15;
+        setPosition({ x, y });
+    };
+
+    const handleMouseLeave = () => {
+        setPosition({ x: 0, y: 0 });
+        setIsHovered(false);
+    };
+
+    const baseClasses = `
+        relative overflow-hidden rounded-full px-8 py-4
+        font-medium text-base cursor-pointer
+        transition-colors duration-300
+        focus-ring active-press
+    `;
+
+    const variantClasses = variant === 'primary'
+        ? `border-2 border-[#252627] ${isHovered ? 'text-[#F7F4F3]' : 'text-[#252627]'}`
+        : `border-2 border-[#252627]/20 ${isHovered ? 'text-[#F7F4F3]' : 'text-[#252627]'}`;
+
+    const Tag = href ? 'a' : 'button';
+    const linkProps = href ? { href, target: href.startsWith('http') ? '_blank' : undefined, rel: href.startsWith('http') ? 'noopener noreferrer' : undefined } : {};
+
+    return (
+        <motion.div
+            style={{ x: position.x, y: position.y }}
+            transition={{ type: 'spring', stiffness: 150, damping: 15, mass: 0.1 }}
+        >
+            <Tag
+                ref={buttonRef}
+                onClick={onClick}
+                onMouseMove={handleMouseMove}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={handleMouseLeave}
+                className={`${baseClasses} ${variantClasses} ${className}`}
+                {...linkProps}
+            >
+                {/* Fill sweep background */}
+                <span
+                    className="absolute inset-0 bg-[#252627] origin-left transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]"
+                    style={{
+                        transform: isHovered ? 'scaleX(1)' : 'scaleX(0)',
+                    }}
+                />
+
+                {/* Content */}
+                <span className="relative z-10 flex items-center gap-2">
+                    {children}
+                </span>
+            </Tag>
+        </motion.div>
+    );
+}

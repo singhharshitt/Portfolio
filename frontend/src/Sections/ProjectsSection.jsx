@@ -95,7 +95,7 @@ const ProjectsSection = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: "-50px" }}
                         transition={{ duration: 0.5, delay: index * 0.1 }}
-                        className="plus-jakarta-sans-medium bg-[#f8f8f6] shadow-md rounded-xl overflow-hidden border-b-4 border-r-4 border-orange-400 group transition-all duration-500 ease-in-out hover:scale-105 hover:rounded-none hover:shadow-xl relative flex flex-col h-full"
+                        className="plus-jakarta-sans-medium bg-sand-100 shadow-md rounded-xl overflow-hidden border-b-4 border-r-4 border-orange-400 group transition-all duration-500 ease-in-out hover:scale-105 hover:rounded-none hover:shadow-xl relative flex flex-col h-full"
                     >
                         {/* Hover border effect */}
                         <div className="absolute inset-0 border-2 border-orange-400 opacity-0 rotate-6 transition-all duration-500 ease-in-out group-hover:inset-4 group-hover:opacity-100 group-hover:rotate-0"></div>
@@ -109,7 +109,7 @@ const ProjectsSection = () => {
                             </div>
 
                             {/* Title */}
-                            <h3 className="text-xl font-bold text-[#111827] mb-3 line-clamp-2">
+                            <h3 className="text-xl font-bold text-charcoal mb-3 line-clamp-2">
                                 {project.title}
                             </h3>
 
@@ -175,7 +175,7 @@ const ProjectsSection = () => {
                             </div>
                         </div>
 
-                        <span className="absolute left-1/2 -translate-x-1/2 bottom-2 text-[9px] uppercase tracking-[0.5em] text-orange-400 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out bg-[#f8f8f6] px-2">
+                        <span className="absolute left-1/2 -translate-x-1/2 bottom-2 text-[9px] uppercase tracking-[0.5em] text-orange-400 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-in-out bg-sand-100 px-2">
                             Project
                         </span>
                     </motion.article>

@@ -63,7 +63,7 @@ const BlogSection = () => {
             {blogPosts.map((post) => (
                 <article
                     key={post.id}
-                    className="plus-jakarta-sans-medium bg-[#f8f8f6] shadow-md rounded-xl overflow-hidden border-b-4 border-r-4 border-orange-400 group transition-all duration-500 ease-in-out hover:scale-105 hover:rounded-none hover:shadow-xl relative"
+                    className="plus-jakarta-sans-medium bg-sand-100 shadow-md rounded-xl overflow-hidden border-b-4 border-r-4 border-orange-400 group transition-all duration-500 ease-in-out hover:scale-105 hover:rounded-none hover:shadow-xl relative"
                 >
                     {/* Hover border effect */}
                     <div className="absolute inset-0 border-2 border-orange-400 opacity-0 rotate-6 transition-all duration-500 ease-in-out group-hover:inset-4 group-hover:opacity-100 group-hover:rotate-0"></div>
@@ -77,7 +77,7 @@ const BlogSection = () => {
                         </div>
 
                         {/* Title */}
-                        <h3 className="text-xl font-bold text-[#111827] mb-3 line-clamp-2">
+                        <h3 className="text-xl font-bold text-charcoal mb-3 line-clamp-2">
                             {post.title}
                         </h3>
 

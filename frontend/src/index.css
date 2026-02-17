@@ -1,13 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Anonymous+Pro:ital,wght@0,400;0,700;1,400;1,700&family=Funnel+Display:wght@300..800&family=Gabarito:wght@400..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Lexend+Exa:wght@100..900&family=Lexend+Mega:wght@100..900&family=Paytone+One&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 @import "tailwindcss";
 
 @font-face {
   font-family: 'Favorit';
   src: url('./fonts/Favorit-Regular.woff2') format('woff2'),
-       url('./fonts/Favorit-Regular.woff') format('woff'),
-       url('./fonts/Favorit-Regular.otf') format('opentype');
+    url('./fonts/Favorit-Regular.woff') format('woff'),
+    url('./fonts/Favorit-Regular.otf') format('opentype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -16,10 +17,13 @@
 .space-grotesk-label {
   font-family: "Space Grotesk", sans-serif;
   font-optical-sizing: auto;
-  font-weight: 600;       /* Semi-bold gives clarity without being heavy */
+  font-weight: 600;
+  /* Semi-bold gives clarity without being heavy */
   font-style: normal;
-  letter-spacing: 0.5px;  /* Slight spacing for balance */
-  text-transform: uppercase; /* Optional, gives clean folder titles */
+  letter-spacing: 0.5px;
+  /* Slight spacing for balance */
+  text-transform: uppercase;
+  /* Optional, gives clean folder titles */
 }
 
 @font-face {
@@ -109,20 +113,21 @@
 @font-face {
   font-family: 'Neue Brucke';
   src: url('./fonts/NeueBrucke-Regular.woff2') format('woff2'),
-  url('./fonts/NeueBrucke-Regular.woff') format('woff'),
-       url('./fonts/NeueBrucke-Regular.otf') format('opentype');
+    url('./fonts/NeueBrucke-Regular.woff') format('woff'),
+    url('./fonts/NeueBrucke-Regular.otf') format('opentype');
 }
 
-.Neu{
+.Neu {
   font-family: 'Neue Brucke';
-    font-weight: normal;
+  font-weight: normal;
 
 }
 
 /* Convenience classes (optional) */
-.fav{
+.fav {
   font-family: 'Favorit', sans-serif;
 }
+
 .font-departure {
   font-family: 'DepartureMono', monospace;
 }
@@ -157,6 +162,7 @@
 .font-snpro {
   font-family: 'SN Pro', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
 }
+
 .anonymous-pro-regular {
   font-family: "Anonymous Pro", monospace;
   font-weight: 400;
@@ -184,7 +190,8 @@
 .lexend-exa-normal {
   font-family: "Lexend Exa", sans-serif;
   font-optical-sizing: auto;
-  font-weight: 400; /* Normal */
+  font-weight: 400;
+  /* Normal */
   font-style: normal;
 }
 
@@ -192,7 +199,8 @@
 .lexend-exa-semibold {
   font-family: "Lexend Exa", sans-serif;
   font-optical-sizing: auto;
-  font-weight: 600; /* Semi-bold */
+  font-weight: 600;
+  /* Semi-bold */
   font-style: normal;
 }
 
@@ -200,7 +208,8 @@
 .lexend-exa-bold {
   font-family: "Lexend Exa", sans-serif;
   font-optical-sizing: auto;
-  font-weight: 700; /* Bold */
+  font-weight: 700;
+  /* Bold */
   font-style: normal;
 }
 
@@ -208,7 +217,8 @@
 .lexend-exa-extrabold {
   font-family: "Lexend Exa", sans-serif;
   font-optical-sizing: auto;
-  font-weight: 800; /* Extra-bold */
+  font-weight: 800;
+  /* Extra-bold */
   font-style: normal;
 }
 
@@ -216,7 +226,8 @@
 .plus-jakarta-sans-normal {
   font-family: "Plus Jakarta Sans", sans-serif;
   font-optical-sizing: auto;
-  font-weight: 400; /* Normal */
+  font-weight: 400;
+  /* Normal */
   font-style: normal;
 }
 
@@ -224,7 +235,8 @@
 .plus-jakarta-sans-medium {
   font-family: "Plus Jakarta Sans", sans-serif;
   font-optical-sizing: auto;
-  font-weight: 500; /* Medium */
+  font-weight: 500;
+  /* Medium */
   font-style: normal;
 }
 
@@ -232,7 +244,8 @@
 .plus-jakarta-sans-semibold {
   font-family: "Plus Jakarta Sans", sans-serif;
   font-optical-sizing: auto;
-  font-weight: 600; /* Semi-bold */
+  font-weight: 600;
+  /* Semi-bold */
   font-style: normal;
 }
 
@@ -240,7 +253,8 @@
 .plus-jakarta-sans-bold {
   font-family: "Plus Jakarta Sans", sans-serif;
   font-optical-sizing: auto;
-  font-weight: 700; /* Bold */
+  font-weight: 700;
+  /* Bold */
   font-style: normal;
 }
 
@@ -248,7 +262,8 @@
 .plus-jakarta-sans-extrabold {
   font-family: "Plus Jakarta Sans", sans-serif;
   font-optical-sizing: auto;
-  font-weight: 800; /* Extra-bold */
+  font-weight: 800;
+  /* Extra-bold */
   font-style: normal;
 }
 
@@ -256,33 +271,98 @@
 .plus-jakarta-sans-black {
   font-family: "Plus Jakarta Sans", sans-serif;
   font-optical-sizing: auto;
-  font-weight: 900; /* Heaviest */
+  font-weight: 900;
+  /* Heaviest */
   font-style: normal;
 }
 
 
 @keyframes chitchat {
-  0%   { content: "#"; opacity: 1; }
-  5%   { content: "."; }
-  10%  { content: "^{"; }
-  15%  { content: "-!"; }
-  20%  { content: "#$_"; }
-  25%  { content: "№:0"; }
-  30%  { content: "#{+."; }
-  35%  { content: "@}-?"; }
-  40%  { content: "?{4@%"; }
-  45%  { content: "=.,^!"; }
-  50%  { content: "?2@%"; }
-  55%  { content: "\\;1}]"; }
-  60%  { content: "?{%:%"; }
-  65%  { content: "|{f[4"; }
-  70%  { content: "{4%0%"; }
-  75%  { content: "'1_0<"; }
-  80%  { content: "{0%"; }
-  85%  { content: "]>'"; }
-  90%  { content: "4"; }
-  95%  { content: "2"; }
-  100% { content: ""; opacity: 0; }
+  0% {
+    content: "#";
+    opacity: 1;
+  }
+
+  5% {
+    content: ".";
+  }
+
+  10% {
+    content: "^{";
+  }
+
+  15% {
+    content: "-!";
+  }
+
+  20% {
+    content: "#$_";
+  }
+
+  25% {
+    content: "№:0";
+  }
+
+  30% {
+    content: "#{+.";
+  }
+
+  35% {
+    content: "@}-?";
+  }
+
+  40% {
+    content: "?{4@%";
+  }
+
+  45% {
+    content: "=.,^!";
+  }
+
+  50% {
+    content: "?2@%";
+  }
+
+  55% {
+    content: "\\;1}]";
+  }
+
+  60% {
+    content: "?{%:%";
+  }
+
+  65% {
+    content: "|{f[4";
+  }
+
+  70% {
+    content: "{4%0%";
+  }
+
+  75% {
+    content: "'1_0<";
+  }
+
+  80% {
+    content: "{0%";
+  }
+
+  85% {
+    content: "]>'";
+  }
+
+  90% {
+    content: "4";
+  }
+
+  95% {
+    content: "2";
+  }
+
+  100% {
+    content: "";
+    opacity: 0;
+  }
 }
 
 /* Support current markup: animate ::after when parent .group is hovered */
@@ -302,7 +382,9 @@
 }
 
 /* Prevent unintended scrollbars while preserving layout */
-html, body, #root {
+html,
+body,
+#root {
   width: 100%;
   height: 100%;
   overflow-x: hidden;
@@ -310,9 +392,15 @@ html, body, #root {
 
 /* Hide scrollbars visually but allow scrolling if needed */
 /* WebKit */
-::-webkit-scrollbar { width: 0; height: 0; }
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
 /* Firefox */
-* { scrollbar-width: none; }
+* {
+  scrollbar-width: none;
+}
 
 
 
@@ -400,24 +488,240 @@ html, body, #root {
 }
 
 @layer utilities {
+
   /* base wave shape */
   .clip-wave {
-    clip-path: polygon(
-      0% 74%, 4% 75%, 8% 76%, 11% 77%, 15% 78%, 20% 78%, 25% 77%,
-      32% 77%, 37% 75%, 40% 74%, 43% 74%, 46% 73%, 52% 72%, 57% 72%,
-      65% 74%, 66% 75%, 71% 78%, 75% 82%, 81% 86%, 83% 88%, 88% 91%,
-      90% 94%, 94% 96%, 98% 98%, 100% 100%, 82% 100%, 0 100%
-    );
+    clip-path: polygon(0% 74%, 4% 75%, 8% 76%, 11% 77%, 15% 78%, 20% 78%, 25% 77%,
+        32% 77%, 37% 75%, 40% 74%, 43% 74%, 46% 73%, 52% 72%, 57% 72%,
+        65% 74%, 66% 75%, 71% 78%, 75% 82%, 81% 86%, 83% 88%, 88% 91%,
+        90% 94%, 94% 96%, 98% 98%, 100% 100%, 82% 100%, 0 100%);
   }
 
   /* hover wave expansion */
   .clip-wave-hover {
-    clip-path: polygon(
-      0 30%, 9% 34%, 7% 39%, 11% 43%, 13% 33%, 17% 30%, 24% 34%, 25% 35%,
-      30% 31%, 30% 38%, 39% 33%, 35% 43%, 43% 45%, 55% 46%, 65% 74%,
-      67% 66%, 81% 57%, 75% 82%, 81% 86%, 83% 88%, 88% 91%, 90% 94%,
-      94% 96%, 98% 98%, 100% 100%, 82% 100%, 0 100%
-    );
+    clip-path: polygon(0 30%, 9% 34%, 7% 39%, 11% 43%, 13% 33%, 17% 30%, 24% 34%, 25% 35%,
+        30% 31%, 30% 38%, 39% 33%, 35% 43%, 43% 45%, 55% 46%, 65% 74%,
+        67% 66%, 81% 57%, 75% 82%, 81% 86%, 83% 88%, 88% 91%, 90% 94%,
+        94% 96%, 98% 98%, 100% 100%, 82% 100%, 0 100%);
   }
 }
 
+@theme {
+  --color-sand-100: #F7F4F3;
+  --color-sand-200: #ECE2D0;
+  --color-sand-300: #DCC48E;
+  --color-charcoal: #252627;
+  --color-bronze-400: #C69C72;
+
+  --font-serif: "Playfair Display", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+
+  --animate-fade-in-up: fadeInUp 0.6s ease-out forwards;
+
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+/* ========================================
+   PREMIUM PORTFOLIO ENHANCEMENTS
+   ======================================== */
+
+:root {
+  /* Original color palette (preserved) */
+  --color-bg-light: #F2F7F2;
+  --color-primary-orange: #FE621D;
+  --color-bright-orange: #FD5200;
+  --color-dark-orange: #AF3800;
+  --color-brown-orange: #994636;
+  --color-black: #000000;
+
+  /* New complementary accents */
+  --color-accent-peach: #FFE5D9;
+  --color-accent-warm: #FF8C42;
+  --color-dark-warm: #2C2416;
+  --color-highlight: #FFF4ED;
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, #FE621D, #FD5200);
+  --gradient-accent: linear-gradient(135deg, #FFE5D9, #FFF4ED);
+  --gradient-text: linear-gradient(45deg, #000 30%, #FE621D 50%, #000 70%);
+
+  /* Shadows & Glows */
+  --shadow-glow: 0 0 20px rgba(254, 98, 29, 0.3);
+  --shadow-glow-strong: 0 0 30px rgba(254, 98, 29, 0.4), 0 0 60px rgba(254, 98, 29, 0.2);
+  --shadow-soft: 0 20px 60px rgba(0, 0, 0, 0.15);
+
+  /* === REFINED BRAND PALETTE FOR HERO === */
+  /* Primary Accents */
+  --brand-primary: #fb923c;
+  /* orange-400 (Tailwind) */
+  --brand-fire: #F42B03;
+  /* Vibrant fiery orange */
+  --brand-deep: #D84A05;
+  /* Deep warm orange */
+
+  /* Neutrals & Backgrounds */
+  --bg-primary: #F7F4F3;
+  /* Warm off-white */
+  --bg-surface: #ECE2D0;
+  /* Soft neutral beige */
+  --bg-card: rgba(236, 226, 208, 0.7);
+  /* Glassmorphism surface */
+
+  /* Accent Tones */
+  --accent-gold: #DCC48E;
+  /* Soft gold-beige */
+  --accent-bronze: #C69C72;
+  /* Muted bronze */
+
+  /* Text Hierarchy */
+  --text-primary: #252627;
+  /* Dark charcoal */
+  --text-secondary: #3F3F3F;
+  /* Muted charcoal */
+  --text-muted: #8B7A6F;
+  /* Soft grey-brown */
+
+  /* Hero-Specific Gradients */
+  --gradient-warm: linear-gradient(135deg, #fb923c 0%, #D84A05 100%);
+  --gradient-subtle: linear-gradient(180deg, rgba(247, 244, 243, 0) 0%, rgba(236, 226, 208, 0.3) 100%);
+  --gradient-glow: radial-gradient(circle at center, rgba(251, 146, 60, 0.15) 0%, transparent 70%);
+
+  /* Hero Shadows & Effects */
+  --hero-glow: 0 0 40px rgba(251, 146, 60, 0.4);
+  --hero-glow-pulse: 0 0 60px rgba(251, 146, 60, 0.6);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark theme overrides */
+[data-theme="dark"] {
+  --bg-primary: #252627;
+  --bg-surface: #2f3031;
+  --bg-card: rgba(47, 48, 49, 0.8);
+  --text-primary: #F7F4F3;
+  --text-secondary: #C69C72;
+  --text-muted: #a89b8f;
+}
+
+/* Theme transition system */
+.theme-section {
+  transition: background-color 600ms cubic-bezier(0.4, 0, 0.2, 1),
+    color 600ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Playfair Display utility */
+.font-playfair {
+  font-family: 'Playfair Display', ui-serif, Georgia, Cambria, 'Times New Roman', serif;
+}
+
+/* Magnetic button fill animation */
+@keyframes fillSweep {
+  from {
+    transform: scaleX(0);
+  }
+
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Skeleton shimmer for loading states */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(90deg, #ECE2D0 25%, #DCC48E 50%, #ECE2D0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+/* Focus ring utility */
+.focus-ring {
+  outline: none;
+}
+
+.focus-ring:focus-visible {
+  outline: 2px solid #fb923c;
+  outline-offset: 2px;
+}
+
+/* Active press state */
+.active-press:active {
+  transform: scale(0.98);
+}
+
+/* Gradient text animation */
+@keyframes gradient-shift {
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.gradient-text {
+  background: var(--gradient-text);
+  background-size: 200% auto;
+  animation: gradient-shift 3s ease-in-out infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Subtle background gradient animation */
+@keyframes bg-gradient-shift {
+
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+
+/* GPU acceleration helper */
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
