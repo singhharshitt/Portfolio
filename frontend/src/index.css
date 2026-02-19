@@ -388,6 +388,11 @@ body,
   width: 100%;
   height: 100%;
   overflow-x: hidden;
+  background-color: var(--theme-bg-current, #F2F7F2);
+  color: var(--theme-text-current, #2F1000);
+  transition:
+    background-color var(--theme-transition-duration, 700ms) var(--theme-transition-ease, cubic-bezier(0.4, 0, 0.2, 1)),
+    color var(--theme-transition-duration, 700ms) var(--theme-transition-ease, cubic-bezier(0.4, 0, 0.2, 1));
 }
 
 /* Hide scrollbars visually but allow scrolling if needed */
@@ -535,70 +540,234 @@ body,
    ======================================== */
 
 :root {
-  /* Original color palette (preserved) */
-  --color-bg-light: #F2F7F2;
-  --color-primary-orange: #FE621D;
-  --color-bright-orange: #FD5200;
-  --color-dark-orange: #AF3800;
-  --color-brown-orange: #994636;
-  --color-black: #000000;
+  --app-bg-main: #B54A3F;
+  --app-accent-primary: #F17300;
+  --app-accent-secondary: #C8553D;
+  --app-bg-light: #F2F7F2;
+  --app-text-dark: #2F1000;
+  --app-text-light: #FFFFFF;
+  /* ── Color Palette (Monte-Cafe) ── */
+  --color-bg-light: var(--app-bg-light);
+  --color-primary: var(--app-accent-primary);
+  --color-primary-deep: var(--app-accent-secondary);
+  --color-secondary: var(--app-accent-secondary);
+  --color-tertiary: #F7B05B;
+  --color-terracotta: var(--app-bg-main);
+  --color-charcoal: var(--app-text-dark);
 
-  /* New complementary accents */
-  --color-accent-peach: #FFE5D9;
-  --color-accent-warm: #FF8C42;
-  --color-dark-warm: #2C2416;
-  --color-highlight: #FFF4ED;
+  /* Complementary accents */
+  --color-accent-warm: #DCC48E;
+  --color-accent-bronze: #C69C72;
+  --color-accent-cream: var(--app-bg-light);
 
   /* Gradients */
-  --gradient-primary: linear-gradient(135deg, #FE621D, #FD5200);
-  --gradient-accent: linear-gradient(135deg, #FFE5D9, #FFF4ED);
-  --gradient-text: linear-gradient(45deg, #000 30%, #FE621D 50%, #000 70%);
+  --gradient-primary: linear-gradient(135deg, var(--app-accent-primary), var(--app-accent-secondary));
+  --gradient-accent: linear-gradient(135deg, var(--app-accent-secondary), #F7B05B);
+  --gradient-text: linear-gradient(45deg, var(--app-text-dark) 30%, var(--app-accent-primary) 50%, var(--app-text-dark) 70%);
 
-  /* Shadows & Glows */
-  --shadow-glow: 0 0 20px rgba(254, 98, 29, 0.3);
-  --shadow-glow-strong: 0 0 30px rgba(254, 98, 29, 0.4), 0 0 60px rgba(254, 98, 29, 0.2);
-  --shadow-soft: 0 20px 60px rgba(0, 0, 0, 0.15);
-
-  /* === REFINED BRAND PALETTE FOR HERO === */
-  /* Primary Accents */
-  --brand-primary: #fb923c;
-  /* orange-400 (Tailwind) */
-  --brand-fire: #F42B03;
-  /* Vibrant fiery orange */
-  --brand-deep: #D84A05;
-  /* Deep warm orange */
-
-  /* Neutrals & Backgrounds */
-  --bg-primary: #F7F4F3;
-  /* Warm off-white */
-  --bg-surface: #ECE2D0;
-  /* Soft neutral beige */
-  --bg-card: rgba(236, 226, 208, 0.7);
-  /* Glassmorphism surface */
-
-  /* Accent Tones */
-  --accent-gold: #DCC48E;
-  /* Soft gold-beige */
-  --accent-bronze: #C69C72;
-  /* Muted bronze */
-
-  /* Text Hierarchy */
-  --text-primary: #252627;
-  /* Dark charcoal */
-  --text-secondary: #3F3F3F;
-  /* Muted charcoal */
-  --text-muted: #8B7A6F;
-  /* Soft grey-brown */
-
-  /* Hero-Specific Gradients */
-  --gradient-warm: linear-gradient(135deg, #fb923c 0%, #D84A05 100%);
-  --gradient-subtle: linear-gradient(180deg, rgba(247, 244, 243, 0) 0%, rgba(236, 226, 208, 0.3) 100%);
-  --gradient-glow: radial-gradient(circle at center, rgba(251, 146, 60, 0.15) 0%, transparent 70%);
-
-  /* Hero Shadows & Effects */
-  --hero-glow: 0 0 40px rgba(251, 146, 60, 0.4);
-  --hero-glow-pulse: 0 0 60px rgba(251, 146, 60, 0.6);
+  /* ── Shadows & Glows ── */
+  --shadow-glow: 0 0 20px rgba(241, 115, 0, 0.25);
+  --shadow-glow-strong: 0 0 30px rgba(241, 115, 0, 0.35), 0 0 60px rgba(241, 115, 0, 0.15);
+  --shadow-soft: 0 20px 60px rgba(0, 0, 0, 0.12);
+  --hero-glow: 0 0 40px rgba(247, 147, 76, 0.35);
   --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+
+  /* ── Monte-Cafe Theme ── */
+  --hero-bg: #B54A3F;
+  --hero-text: #F5F0E8;
+  --body-bg: var(--app-bg-light);
+  --body-text: var(--app-text-dark);
+  --terracotta: var(--app-bg-main);
+  --cream: var(--app-bg-light);
+
+  /* Global dynamic theme tokens - LIGHT THEME (DEFAULT) */
+  --theme-bg-current: #F0E7D5;
+  /* VANILLA CREAM */
+  --theme-text-current: #2F1000;
+  --theme-surface-current: #E4D8C7;
+  /* Cream variant */
+  --theme-surface-elevated: #F5EFE4;
+  /* Lighter cream */
+  --theme-border-current: #B54A3F;
+  --theme-accent-main: #B54A3F;
+  --theme-accent-primary: #B54A3F;
+  --theme-accent-secondary: #C8553D;
+  --theme-accent-contrast: #945600;
+  --theme-progress: #C8553D;
+  --theme-navbar-bg: rgba(240, 231, 213, 0.9);
+  --theme-indicator-bg: rgba(240, 231, 213, 0.86);
+  --theme-indicator-border: rgba(181, 74, 63, 0.45);
+  --theme-shadow: 0 16px 40px rgba(47, 16, 0, 0.08);
+  --theme-transition-duration: 650ms;
+  --theme-transition-ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Bind Tailwind color tokens to dynamic theme */
+  --color-sand-100: var(--theme-bg-current);
+  --color-sand-200: var(--theme-surface-current);
+  --color-sand-300: var(--theme-border-current);
+  --color-charcoal: var(--theme-text-current);
+  --color-bronze-400: var(--theme-accent-secondary);
+  --color-orange-100: var(--theme-surface-elevated);
+  --color-orange-400: var(--theme-accent-primary);
+  --color-orange-500: var(--theme-accent-main);
+  --color-orange-600: var(--theme-accent-secondary);
+  --color-orange-700: var(--theme-accent-contrast);
+}
+
+:root[data-theme-mode="dark"],
+body[data-theme-mode="dark"] {
+  --theme-bg-current: #212842;
+  /* MIDNIGHT INDIGO */
+  --theme-text-current: #FFFFFF;
+  --theme-surface-current: #1A1F35;
+  /* Deep indigo overlay */
+  --theme-surface-elevated: #2A3450;
+  /* Elevated deep indigo */
+  --theme-border-current: #3D4560;
+  --theme-accent-main: #F17300;
+  /* Warm rust/terracotta accent */
+  --theme-accent-primary: #F17300;
+  --theme-accent-secondary: #C8553D;
+  --theme-accent-contrast: #B54A3F;
+  --theme-progress: #F17300;
+  --theme-navbar-bg: rgba(33, 40, 66, 0.9);
+  --theme-indicator-bg: rgba(33, 40, 66, 0.72);
+  --theme-indicator-border: rgba(241, 115, 0, 0.6);
+  --theme-shadow: 0 20px 48px rgba(16, 4, 0, 0.32);
+}
+
+/* Scope requested palette to non-hero sections only */
+.section-theme {
+  --color-sand-100: var(--theme-bg-current);
+  --color-sand-200: var(--theme-surface-current);
+  --color-sand-300: var(--theme-border-current);
+  --color-charcoal: var(--theme-text-current);
+  --color-bronze-400: var(--theme-accent-secondary);
+  --color-orange-100: var(--theme-surface-elevated);
+  --color-orange-400: var(--theme-accent-primary);
+  --color-orange-500: var(--theme-accent-main);
+  --color-orange-600: var(--theme-accent-secondary);
+  --color-orange-700: var(--theme-accent-contrast);
+  background-color: var(--theme-bg-current);
+  color: var(--theme-text-current);
+  transition:
+    background-color var(--theme-transition-duration) var(--theme-transition-ease),
+    color var(--theme-transition-duration) var(--theme-transition-ease);
+}
+
+/* Enhanced theme transition system with GPU acceleration */
+:where(.theme-transition-scope),
+:where(.theme-transition-scope *) {
+  transition-property: background-color, color, border-color, box-shadow, fill, stroke;
+  transition-duration: var(--theme-transition-duration);
+  transition-timing-function: var(--theme-transition-ease);
+  transform: translateZ(0);
+  /* GPU acceleration */
+  will-change: background-color, color;
+  /* Optimize for theme changes */
+}
+
+/* Smooth transitions for all theme-aware elements */
+html,
+body,
+#root {
+  transition:
+    background-color var(--theme-transition-duration) var(--theme-transition-ease),
+    color var(--theme-transition-duration) var(--theme-transition-ease);
+  transform: translateZ(0);
+  /* GPU acceleration */
+}
+
+/* Force theme application - debug styles */
+html[data-theme-mode="light"],
+body[data-theme-mode="light"] {
+  background-color: #F0E7D5 !important;
+  color: #2F1000 !important;
+}
+
+html[data-theme-mode="dark"],
+body[data-theme-mode="dark"] {
+  background-color: #212842 !important;
+  color: #FFFFFF !important;
+}
+
+/* Navbar smooth theme transition */
+header {
+  transition:
+    background-color var(--theme-transition-duration) var(--theme-transition-ease),
+    box-shadow var(--theme-transition-duration) var(--theme-transition-ease);
+}
+
+/* Card and surface transitions */
+.section-theme,
+.theme-section {
+  transition:
+    background-color var(--theme-transition-duration) var(--theme-transition-ease),
+    color var(--theme-transition-duration) var(--theme-transition-ease),
+    border-color var(--theme-transition-duration) var(--theme-transition-ease);
+}
+
+/* Scroll progress bar */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: var(--theme-progress, #C8553D);
+  z-index: 9999;
+  transform-origin: left;
+  transition: background-color var(--theme-transition-duration) var(--theme-transition-ease);
+}
+
+.theme-state-indicator {
+  position: fixed;
+  top: 5.75rem;
+  right: 1rem;
+  z-index: 60;
+  pointer-events: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.6rem;
+  border-radius: 9999px;
+  border: 1px solid var(--theme-indicator-border);
+  background: var(--theme-indicator-bg);
+  color: var(--theme-text-current);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--theme-shadow);
+  transition:
+    background-color var(--theme-transition-duration) var(--theme-transition-ease),
+    border-color var(--theme-transition-duration) var(--theme-transition-ease),
+    color var(--theme-transition-duration) var(--theme-transition-ease),
+    box-shadow var(--theme-transition-duration) var(--theme-transition-ease);
+}
+
+.theme-state-indicator__dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 9999px;
+  background: var(--theme-accent-main);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--theme-accent-main) 20%, transparent);
+  transition: background-color var(--theme-transition-duration) var(--theme-transition-ease);
+}
+
+.theme-state-indicator__label {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  line-height: 1;
+}
+
+/* Slow spin for circular text */
+@keyframes spinSlow {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Dark theme overrides */
@@ -656,7 +825,7 @@ body,
 }
 
 .focus-ring:focus-visible {
-  outline: 2px solid #fb923c;
+  outline: 2px solid var(--app-accent-primary);
   outline-offset: 2px;
 }
 
@@ -707,10 +876,48 @@ body,
   will-change: transform;
 }
 
+/* CSS-only floating particles (replaces JS-driven Framer Motion) */
+@keyframes floatParticle {
+
+  0%,
+  100% {
+    transform: translate(0, 0);
+    opacity: var(--particle-opacity, 0.08);
+  }
+
+  25% {
+    transform: translate(5px, -15px);
+  }
+
+  50% {
+    transform: translate(-3px, -30px);
+    opacity: calc(var(--particle-opacity, 0.08) * 0.5);
+  }
+
+  75% {
+    transform: translate(8px, -15px);
+  }
+}
+
 @keyframes draw {
   to {
     stroke-dashoffset: 0;
   }
+}
+
+/* Timeline scrollbar utilities */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.mask-gradient {
+  mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
 }
 
 /* Reduced motion support */

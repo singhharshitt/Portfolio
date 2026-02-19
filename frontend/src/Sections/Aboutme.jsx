@@ -30,6 +30,9 @@ const skills = [
 export default function Aboutme() {
     const sectionRef = useRef(null);
     const [isVisible, setIsVisible] = useState(false);
+    const revealTransitionClass = 'transition-all duration-700 ease-out';
+    const descriptionTextClass = 'text-base sm:text-lg leading-relaxed';
+    const skillCardClass = 'group p-5 rounded-xl border border-sand-200/70 bg-sand-200/35 hover:bg-white/90 hover:border-orange-400/30 hover:shadow-md hover:-translate-y-1 transition-all duration-300';
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -53,34 +56,41 @@ export default function Aboutme() {
         <section
             id="about"
             ref={sectionRef}
-            className="relative py-24 lg:py-32 bg-sand-100 overflow-hidden"
+            className="relative py-24 lg:py-32 bg-sand-100 overflow-x-hidden"
         >
             {/* Background decoration */}
-            <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-sand-200/30 to-transparent" />
+            <div className="absolute inset-0 pointer-events-none">
+                <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-sand-200/30 to-transparent" />
+                <div className="absolute -top-16 -left-24 w-72 h-72 rounded-full bg-orange-400/10 blur-3xl" />
+                <div className="absolute -bottom-16 right-0 w-80 h-80 rounded-full bg-[var(--app-accent-secondary)]/10 blur-3xl" />
+            </div>
 
-            <div className="relative z-10 px-6 sm:px-8 lg:px-12 max-w-7xl mx-auto">
-                <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+            <div className="relative z-10 px-5 sm:px-8 lg:px-12 max-w-7xl mx-auto">
+                <div className="grid lg:grid-cols-2 gap-14 lg:gap-20 items-center">
                     {/* Left Column - Image */}
                     <div
-                        className={`relative transition-all duration-700 ease-out ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'
+                        className={`relative min-w-0 ${revealTransitionClass} ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
                             }`}
                     >
                         <div className="relative">
                             {/* Main image */}
-                            <div className="relative aspect-[4/5] rounded-2xl overflow-hidden">
-                                <img
+                            <div
+                                className="relative aspect-square w-full max-w-[420px] mx-auto lg:mx-0 rounded-2xl overflow-hidden group/img border border-[var(--app-accent-secondary)]/25 bg-sand-200/45 shadow-[0_20px_45px_rgba(47,16,0,0.22)] transition-transform duration-500 hover:scale-[1.02]"
+                            >
+                                <motion.img
                                     src={me}
                                     alt="Portrait"
-                                    className="w-full h-full object-cover"
+                                    className="w-full h-full object-contain object-center transition-transform duration-500"
                                     loading="lazy"
                                 />
                                 {/* Overlay gradient */}
                                 <div className="absolute inset-0 bg-gradient-to-t from-charcoal/30 to-transparent" />
+                                <div className="absolute inset-0 pointer-events-none rounded-2xl ring-1 ring-[var(--app-accent-primary)]/12" />
                             </div>
 
                             {/* Floating card */}
                             <div
-                                className={`absolute -bottom-6 -right-6 lg:-right-12 bg-white rounded-xl p-6 shadow-xl transition-all duration-700 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                                className={`absolute z-20 bottom-3 right-3 sm:-bottom-5 sm:right-0 lg:-right-8 bg-sand-100/95 backdrop-blur-sm border border-sand-200 rounded-xl p-4 sm:p-6 shadow-xl max-w-[180px] sm:max-w-none transition-all duration-700 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
                                     }`}
                             >
                                 <div className="flex items-center gap-4">
@@ -102,53 +112,20 @@ export default function Aboutme() {
 
                     {/* Right Column - Content */}
                     <div
-                        className={`transition-all duration-700 delay-200 ease-out ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'
+                        className={`min-w-0 ${revealTransitionClass} delay-200 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'
                             }`}
                     >
-                        {/* Scroll-based Intro */}
-                        {/* <div className="mb-8">
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: false, amount: 0.5 }}
-                                transition={{ duration: 0.5 }}
-                            >
-                                <h3 className="font-snpro font-bold text-2xl text-charcoal mb-1">
-                                    Hey, I am <span className="text-orange-400">Harshit</span>
-                                </h3>
-                                <h2 className="lexend-exa-bold text-3xl sm:text-4xl text-charcoal">
-                                    FULL STACK DEVELOPER
-                                </h2>
-                            </motion.div>
-                        </div> */}
 
-                        {/* Section label */}
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full  mb-6">
-                            {/* <span className="w-2 h-2 bg-orange-400 rounded-full" /> */}
-                            {/* <span className="text-sm font-medium text-charcoal/70">About Me</span> */}
-                            <motion.h2
-                                className="text-2xl sm:text-3xl lg:text-5xl lexend-exa-bold  text-charcoal/70"
-                                initial={{ opacity: 0, y: 30 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.5 }}
-                            >
-                                ABOUT ME<span className="text-orange-400">.</span>
-                            </motion.h2>
-                        </div>
-
-                        {/* Heading */}
-                        {/* <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-charcoal leading-tight mb-6">
-                            Passionate about creating{' '}
-                            <span className="text-orange-400">meaningful</span> digital experiences
-                        </h2> */}
                         <motion.div
-                        // initial={{ opacity: 0, y: 20 }}
-                        // whileInView={{ opacity: 1, y: 0 }}
-                        // viewport={{ once: false, amount: 0.5 }}
-                        // transition={{ duration: 0.5 }}
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, amount: 0.4 }}
+                            transition={{ duration: 0.6, ease: "easeOut" }}
                         >
-                            <h3 className="font-serif  text-3xl text-charcoal mb-1">
+                            <span className="inline-flex items-center px-4 py-1.5 rounded-full text-xs sm:text-sm tracking-[0.18em] plus-jakarta-sans-semibold text-charcoal/70 bg-sand-200/60 border border-sand-300/70">
+                                ABOUT ME
+                            </span>
+                            <h3 className="font-serif text-2xl sm:text-3xl text-charcoal mt-6 mb-2">
                                 Hey, I am <span className="text-orange-400">Harshit</span>
                             </h3>
                             <h2 className="lexend-exa-bold text-3xl sm:text-4xl lg:text-5xl text-charcoal leading-tight mb-6">
@@ -157,26 +134,37 @@ export default function Aboutme() {
                         </motion.div>
 
                         {/* Description */}
-                        <div className="space-y-4 text-charcoal/70 mb-10">
-                            <p className="text-lg leading-relaxed">
-                                with over 3 years of experience
-                                crafting digital products that make a difference. My approach combines
+                        <motion.div
+                            className="space-y-4 text-charcoal/70 mb-10 max-w-xl"
+                            initial={{ opacity: 0, y: 14 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, amount: 0.35 }}
+                            transition={{ duration: 0.55, ease: 'easeOut', delay: 0.1 }}
+                        >
+                            <p className={descriptionTextClass}>
+                                With over 3 years of experience, I craft digital products that make a difference. My approach combines
                                 technical expertise with a keen eye for design, ensuring every project
                                 is both functional and beautiful.
                             </p>
-                            <p className="text-lg leading-relaxed">
+                            <p className={descriptionTextClass}>
                                 I believe in the power of thoughtful design and clean code to solve
                                 real problems. Whether it's a complex web application or a simple
                                 landing page, I bring the same level of dedication and attention to detail.
                             </p>
-                        </div>
+                        </motion.div>
 
                         {/* Skills Grid */}
-                        <div className="grid sm:grid-cols-2 gap-6">
+                        <motion.div
+                            className="grid sm:grid-cols-2 gap-6"
+                            initial={{ opacity: 0, y: 16 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, amount: 0.25 }}
+                            transition={{ duration: 0.55, ease: 'easeOut', delay: 0.18 }}
+                        >
                             {skills.map((skill, index) => (
                                 <div
                                     key={skill.title}
-                                    className={`group p-5 rounded-xl bg-sand-200/30 hover:bg-white hover:shadow-lg transition-all duration-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                                    className={`${skillCardClass} ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
                                         }`}
                                     style={{ transitionDelay: `${400 + index * 100}ms` }}
                                 >
@@ -187,7 +175,7 @@ export default function Aboutme() {
                                     <p className="text-sm text-charcoal/60">{skill.description}</p>
                                 </div>
                             ))}
-                        </div>
+                        </motion.div>
                     </div>
                 </div>
             </div>

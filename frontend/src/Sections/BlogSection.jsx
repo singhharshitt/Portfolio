@@ -1,6 +1,11 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 
 const BlogSection = () => {
+    const cardBaseClass = 'plus-jakarta-sans-medium bg-sand-100 shadow-md rounded-xl overflow-hidden border-b-4 border-r-4 border-orange-400 group transition-all duration-500 ease-in-out hover:scale-105 hover:rounded-none hover:shadow-xl relative';
+    const hoverBorderClass = 'absolute inset-0 border-2 border-orange-400 opacity-0 rotate-6 transition-all duration-500 ease-in-out group-hover:inset-4 group-hover:opacity-100 group-hover:rotate-0';
+    const badgeClass = 'inline-block px-3 py-1 text-xs font-bold text-orange-400 border border-orange-400 rounded-full';
+
     const blogPosts = [
         {
             id: 1,
@@ -59,19 +64,23 @@ const BlogSection = () => {
     ];
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 sm:px-6 lg:px-8 pb-8">
-            {blogPosts.map((post) => (
-                <article
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 sm:px-6 lg:px-8 pb-12">
+            {blogPosts.map((post, index) => (
+                <motion.article
                     key={post.id}
-                    className="plus-jakarta-sans-medium bg-sand-100 shadow-md rounded-xl overflow-hidden border-b-4 border-r-4 border-orange-400 group transition-all duration-500 ease-in-out hover:scale-105 hover:rounded-none hover:shadow-xl relative"
+                    initial={{ opacity: 0, y: 50 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ duration: 0.6, delay: index * 0.08, ease: "easeOut" }}
+                    className={cardBaseClass}
                 >
                     {/* Hover border effect */}
-                    <div className="absolute inset-0 border-2 border-orange-400 opacity-0 rotate-6 transition-all duration-500 ease-in-out group-hover:inset-4 group-hover:opacity-100 group-hover:rotate-0"></div>
+                    <div className={hoverBorderClass}></div>
 
                     <div className="relative z-10 p-6 flex flex-col h-full">
                         {/* Category badge */}
                         <div className="mb-3">
-                            <span className="inline-block px-3 py-1 text-xs font-bold text-orange-400 border border-orange-400 rounded-full">
+                            <span className={badgeClass}>
                                 {post.category}
                             </span>
                         </div>
@@ -82,7 +91,7 @@ const BlogSection = () => {
                         </h3>
 
                         {/* Excerpt */}
-                        <p className="text-gray-600 text-sm mb-4 flex-grow line-clamp-3">
+                        <p className="text-charcoal/70 text-sm mb-4 flex-grow line-clamp-3">
                             {post.excerpt}
                         </p>
 
@@ -99,7 +108,7 @@ const BlogSection = () => {
                         </div>
 
                         {/* Footer */}
-                        <div className="flex items-center justify-between text-xs text-gray-500 pt-3 border-t border-gray-200">
+                        <div className="flex items-center justify-between text-xs text-charcoal/60 pt-3 border-t border-sand-200">
                             <time dateTime={post.date} className="font-medium">
                                 {new Date(post.date).toLocaleDateString('en-US', {
                                     month: 'short',
@@ -132,7 +141,7 @@ const BlogSection = () => {
                             </svg>
                         </button>
                     </div>
-                </article>
+                </motion.article>
             ))}
         </div>
     );

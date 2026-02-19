@@ -7,21 +7,18 @@ const ConnectSection = () => {
             name: 'GitHub',
             icon: SiGithub,
             url: 'https://github.com/singhharshitt',
-            color: 'hover:text-gray-800',
             label: 'Visit my GitHub profile'
         },
         {
             name: 'LinkedIn',
             icon: SiLinkedin,
             url: 'https://linkedin.com/in/singh-harshit-',
-            color: 'hover:text-blue-600',
             label: 'Connect with me on LinkedIn'
         },
         {
             name: 'Twitter',
             icon: SiX,
             url: 'https://twitter.com/singhharshitt',
-            color: 'hover:text-blue-400',
             label: 'Follow me on Twitter'
         }
     ];
@@ -30,10 +27,12 @@ const ConnectSection = () => {
         window.location.href = 'mailto:singhharshit2410@gmail.com';
     };
 
+    const cardContainerClass = 'flex-1 plus-jakarta-sans-medium bg-sand-100 shadow-md rounded-xl overflow-hidden border-b-4 border-r-4 border-orange-400 group p-8 transition-all duration-500 ease-in-out hover:scale-105 hover:rounded-none hover:shadow-xl relative';
+
     return (
         <div className="flex flex-col lg:flex-row gap-8 px-4 sm:px-6 lg:px-12 pb-12">
             {/* Left side - Message */}
-            <div className="flex-1 plus-jakarta-sans-medium bg-sand-100 shadow-md rounded-xl overflow-hidden border-b-4 border-r-4 border-orange-400 group p-8 transition-all duration-500 ease-in-out hover:scale-105 hover:rounded-none hover:shadow-xl relative">
+            <div className={cardContainerClass}>
                 <div className="absolute inset-0 border-2 border-orange-400 opacity-0 rotate-6 transition-all duration-500 ease-in-out group-hover:inset-4 group-hover:opacity-100 group-hover:rotate-0"></div>
 
                 <div className="relative z-10">
@@ -41,10 +40,10 @@ const ConnectSection = () => {
                         Let's Build Something{' '}
                         <span className="text-orange-400">Amazing</span> Together
                     </h3>
-                    <p className="text-gray-700 text-base sm:text-lg leading-relaxed mb-6">
+                    <p className="text-charcoal/75 text-base sm:text-lg leading-relaxed mb-6">
                         I'm always excited to collaborate on innovative projects, discuss
                         new technologies, or explore opportunities. Whether you have a
-                        project in mind, need a developer, or just want to connect —{' '}
+                        project in mind, need a developer, or just want to connect -{' '}
                         <span className="font-bold text-orange-400">
                             I'd love to hear from you!
                         </span>
@@ -80,7 +79,7 @@ const ConnectSection = () => {
                             <span className="absolute w-full h-[10%] bottom-0 bg-orange-400 z-0 transition-all duration-300 ease-in-out group-hover/btn:h-[80%] clip-wave group-hover/btn:clip-wave-hover"></span>
                         </button>
 
-                        <span className="text-sm text-gray-500">or connect via social media</span>
+                        <span className="text-sm text-charcoal/60">or connect via social media</span>
                     </div>
                 </div>
 
@@ -90,7 +89,7 @@ const ConnectSection = () => {
             </div>
 
             {/* Right side - Social Links */}
-            <div className="flex-1 plus-jakarta-sans-medium bg-sand-100 shadow-md rounded-xl overflow-hidden border-b-4 border-r-4 border-orange-400 group p-8 transition-all duration-500 ease-in-out hover:scale-105 hover:rounded-none hover:shadow-xl relative">
+            <div className={cardContainerClass}>
                 <div className="absolute inset-0 border-2 border-orange-400 opacity-0 rotate-6 transition-all duration-500 ease-in-out group-hover:inset-4 group-hover:opacity-100 group-hover:rotate-0"></div>
 
                 <div className="relative z-10">
@@ -111,15 +110,15 @@ const ConnectSection = () => {
                                     className="flex items-center gap-4 p-4 rounded-lg border-2 border-transparent hover:border-orange-400 transition-all duration-300 group/link"
                                 >
                                     <div className="flex items-center justify-center w-12 h-12 bg-orange-100 rounded-lg group-hover/link:bg-orange-400 transition-colors duration-300">
-                                        <Icon className={`w-6 h-6 text-orange-400 group-hover/link:text-white transition-colors duration-300`} />
+                                        <Icon className="w-6 h-6 text-orange-400 group-hover/link:text-white transition-colors duration-300" />
                                     </div>
                                     <div className="flex-1">
                                         <p className="font-bold text-charcoal">{social.name}</p>
-                                        <p className="text-sm text-gray-500">@singhharshitt</p>
+                                        <p className="text-sm text-charcoal/60">@singhharshitt</p>
                                     </div>
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
-                                        className="h-5 w-5 text-gray-400 group-hover/link:text-orange-400 group-hover/link:translate-x-1 transition-all duration-300"
+                                        className="h-5 w-5 text-charcoal/45 group-hover/link:text-orange-400 group-hover/link:translate-x-1 transition-all duration-300"
                                         fill="none"
                                         viewBox="0 0 24 24"
                                         stroke="currentColor"
@@ -137,10 +136,10 @@ const ConnectSection = () => {
                     </div>
 
                     {/* Additional Contact Info */}
-                    <div className="mt-6 pt-6 border-t border-gray-200">
-                        <p className="text-sm text-gray-600 text-center">
+                    <div className="mt-6 pt-6 border-t border-sand-200">
+                        <p className="text-sm text-charcoal/70 text-center">
                             <span className="font-bold text-orange-400">Available for:</span>{' '}
-                            Freelance Projects · Full-time Opportunities · Collaborations
+                            Freelance Projects - Full-time Opportunities - Collaborations
                         </p>
                     </div>
                 </div>

@@ -10,21 +10,21 @@ export function HamburgerButton({ isOpen, onClick, isScrolled }) {
                 {/* Top line */}
                 <span
                     className={`block h-[3px] w-full rounded-full transition-all duration-300 ease-out origin-left ${isOpen
-                        ? 'bg-sand-100 rotate-45 translate-x-px -translate-y-px'
+                        ? 'bg-[var(--app-text-light)] rotate-45 translate-x-px -translate-y-px'
                         : 'bg-charcoal'
                         }`}
                 />
                 {/* Middle line */}
                 <span
                     className={`block h-[3px] rounded-full transition-all duration-300 ease-out ${isOpen
-                        ? 'bg-sand-100 w-0 opacity-0'
+                        ? 'bg-[var(--app-text-light)] w-0 opacity-0'
                         : 'bg-charcoal w-full'
                         }`}
                 />
                 {/* Bottom line */}
                 <span
                     className={`block h-[3px] w-full rounded-full transition-all duration-300 ease-out origin-left ${isOpen
-                        ? 'bg-sand-100 -rotate-45 translate-x-px translate-y-px'
+                        ? 'bg-[var(--app-text-light)] -rotate-45 translate-x-px translate-y-px'
                         : 'bg-charcoal'
                         }`}
                 />

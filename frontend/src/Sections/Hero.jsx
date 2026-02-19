@@ -2,6 +2,7 @@
 import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowDown, Sparkles } from 'lucide-react';
+import CircularText from '../components/CircularText.jsx';
 
 export default function Hero() {
     const heroRef = useRef(null);
@@ -34,35 +35,38 @@ export default function Hero() {
         <section
             id="hero"
             ref={heroRef}
-            className="relative min-h-screen flex items-center justify-center overflow-hidden bg-sand-100"
+            className="relative min-h-screen flex items-center justify-center overflow-hidden"
             style={{
                 '--mouse-x': '0px',
                 '--mouse-y': '0px',
+                backgroundColor: 'var(--hero-bg)',
             }}
         >
             {/* Background Elements */}
             <div className="absolute inset-0 overflow-hidden">
-                {/* Gradient orbs */}
+                {/* Gradient orbs — terracotta tones */}
                 <div
-                    className="absolute top-1/4 -left-32 w-96 h-96 bg-orange-400/10 rounded-full blur-3xl transition-transform duration-1000 ease-out"
+                    className="absolute top-1/4 -left-32 w-96 h-96 rounded-full blur-3xl transition-transform duration-1000 ease-out"
                     style={{
+                        backgroundColor: 'rgba(181, 74, 63, 0.3)',
                         transform: 'translate(var(--mouse-x), var(--mouse-y))',
                     }}
                 />
                 <div
-                    className="absolute bottom-1/4 -right-32 w-96 h-96 bg-bronze-400/10 rounded-full blur-3xl transition-transform duration-1000 ease-out"
+                    className="absolute bottom-1/4 -right-32 w-96 h-96 rounded-full blur-3xl transition-transform duration-1000 ease-out"
                     style={{
+                        backgroundColor: 'rgba(245, 240, 232, 0.08)',
                         transform: 'translate(calc(var(--mouse-x) * -1), calc(var(--mouse-y) * -1))',
                     }}
                 />
 
                 {/* Grid pattern */}
                 <div
-                    className="absolute inset-0 opacity-[0.03]"
+                    className="absolute inset-0 opacity-[0.04]"
                     style={{
                         backgroundImage: `
-              linear-gradient(to right, #252627 1px, transparent 1px),
-              linear-gradient(to bottom, #252627 1px, transparent 1px)
+              linear-gradient(to right, #F5F0E8 1px, transparent 1px),
+              linear-gradient(to bottom, #F5F0E8 1px, transparent 1px)
             `,
                         backgroundSize: '60px 60px',
                     }}
@@ -78,15 +82,19 @@ export default function Hero() {
                 transition={{ duration: 0.6, ease: "easeOut" }}
             >
                 {/* Badge */}
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-sand-200/50 border border-sand-200 mb-8 animate-fade-in-up">
-                    <Sparkles className="w-4 h-4 text-orange-400" />
-                    <span className="text-sm font-medium text-charcoal/80">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-8 animate-fade-in-up"
+                    style={{ backgroundColor: 'rgba(245, 240, 232, 0.15)', border: '1px solid rgba(245, 240, 232, 0.25)' }}
+                >
+                    <Sparkles className="w-4 h-4" style={{ color: '#F7B05B' }} />
+                    <span className="text-sm font-medium" style={{ color: 'rgba(245, 240, 232, 0.85)' }}>
                         Available for freelance work
                     </span>
                 </div>
 
                 {/* Main Headline */}
-                <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-charcoal leading-[1.1] mb-6 animate-fade-in-up" style={{ animationDelay: '100ms' }}>
+                <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-[1.1] mb-6 animate-fade-in-up"
+                    style={{ animationDelay: '100ms', color: 'var(--hero-text)' }}
+                >
                     Crafting digital
                     <br />
                     <span className="relative inline-block">
@@ -100,7 +108,7 @@ export default function Hero() {
                         >
                             <path
                                 d="M2 8C100 2 300 2 398 8"
-                                stroke="#F42B03"
+                                stroke="#F7B05B"
                                 strokeWidth="3"
                                 strokeLinecap="round"
                                 className="animate-[draw_1s_ease-out_0.5s_forwards]"
@@ -114,7 +122,9 @@ export default function Hero() {
                 </h1>
 
                 {/* Subtitle */}
-                <p className="text-lg sm:text-xl text-charcoal/60 max-w-2xl mx-auto mb-12 animate-fade-in-up" style={{ animationDelay: '200ms' }}>
+                <p className="text-lg sm:text-xl max-w-2xl mx-auto mb-12 animate-fade-in-up"
+                    style={{ animationDelay: '200ms', color: 'rgba(245, 240, 232, 0.7)' }}
+                >
                     I'm a full-stack developer and UI/UX designer passionate about creating
                     beautiful, functional, and user-centered digital experiences.
                 </p>
@@ -123,9 +133,12 @@ export default function Hero() {
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up" style={{ animationDelay: '300ms' }}>
                     <button
                         onClick={scrollToProjects}
-                        className="group px-8 py-4 bg-charcoal text-sand-100 rounded-full font-medium transition-all duration-300 hover:bg-orange-400 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/50"
+                        className="group relative px-8 py-4 rounded-full font-medium transition-all duration-300 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F7B05B]/50 overflow-hidden"
+                        style={{ backgroundColor: 'var(--hero-text)', color: 'var(--hero-bg)' }}
                     >
-                        <span className="flex items-center gap-2">
+                        {/* Pill fill sweep on hover */}
+                        <span className="absolute inset-0 bg-[#F7B05B] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-out" />
+                        <span className="relative flex items-center gap-2">
                             View My Work
                             <ArrowDown className="w-4 h-4 transition-transform duration-300 group-hover:translate-y-1" />
                         </span>
@@ -136,7 +149,8 @@ export default function Hero() {
                             e.preventDefault();
                             document.getElementById('connect')?.scrollIntoView({ behavior: 'smooth' });
                         }}
-                        className="px-8 py-4 border-2 border-charcoal/20 text-charcoal rounded-full font-medium transition-all duration-300 hover:border-orange-400 hover:text-orange-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/50"
+                        className="px-8 py-4 border-2 rounded-full font-medium transition-all duration-300 hover:border-[#F7B05B] hover:text-[#F7B05B] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F7B05B]/50"
+                        style={{ borderColor: 'rgba(245, 240, 232, 0.3)', color: 'var(--hero-text)' }}
                     >
                         Get in Touch
                     </a>
@@ -150,14 +164,19 @@ export default function Hero() {
                         { value: '2+', label: 'Happy Clients' },
                     ].map((stat, index) => (
                         <div key={index} className="text-center">
-                            <div className="text-2xl sm:text-3xl font-serif font-bold text-charcoal mb-1">
+                            <div className="text-2xl sm:text-3xl font-serif font-bold mb-1" style={{ color: 'var(--hero-text)' }}>
                                 {stat.value}
                             </div>
-                            <div className="text-xs sm:text-sm text-charcoal/50">
+                            <div className="text-xs sm:text-sm" style={{ color: 'rgba(245, 240, 232, 0.55)' }}>
                                 {stat.label}
                             </div>
                         </div>
                     ))}
+                </div>
+
+                {/* Decorative circular text */}
+                <div className="hidden lg:block absolute right-0 bottom-8 text-[#F5F0E8]/30">
+                    <CircularText text="DEVELOPER · DESIGNER · CREATOR · " size={160} />
                 </div>
             </motion.div>
 

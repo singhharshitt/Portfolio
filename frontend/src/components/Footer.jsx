@@ -44,22 +44,22 @@ const Footer = () => {
     ];
 
     return (
-        <footer className="bg-[#111827] text-white border-t-4 border-orange-400">
+        <footer className="bg-[var(--app-bg-main)] text-[var(--app-text-light)] border-t-4 border-[var(--app-accent-primary)]">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
                     {/* Brand Section */}
                     <div className="flex flex-col items-center md:items-start">
                         <h3 className="font-fliege text-3xl font-extrabold mb-2">
-                            HARSHIT<span className="text-orange-400">.</span>
+                            HARSHIT<span className="text-[var(--app-accent-primary)]">.</span>
                         </h3>
-                        <p className="font-snpro text-gray-400 text-sm text-center md:text-left">
+                        <p className="font-snpro text-white/80 text-sm text-center md:text-left">
                             Full Stack Developer crafting digital experiences with code
                         </p>
                     </div>
 
                     {/* Quick Links */}
                     <div className="flex flex-col items-center">
-                        <h4 className="plus-jakarta-sans-bold text-lg mb-4 text-orange-400">
+                        <h4 className="plus-jakarta-sans-bold text-lg mb-4 text-[var(--app-accent-primary)]">
                             Quick Links
                         </h4>
                         <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2">
@@ -67,7 +67,7 @@ const Footer = () => {
                                 <button
                                     key={index}
                                     onClick={link.action}
-                                    className="text-gray-300 hover:text-orange-400 transition-colors duration-200 text-sm plus-jakarta-sans-medium"
+                                    className="text-white/85 hover:text-[var(--app-accent-primary)] transition-colors duration-200 text-sm plus-jakarta-sans-medium"
                                 >
                                     {link.name}
                                 </button>
@@ -77,7 +77,7 @@ const Footer = () => {
 
                     {/* Social Links */}
                     <div className="flex flex-col items-center md:items-end">
-                        <h4 className="plus-jakarta-sans-bold text-lg mb-4 text-orange-400">
+                        <h4 className="plus-jakarta-sans-bold text-lg mb-4 text-[var(--app-accent-primary)]">
                             Connect
                         </h4>
                         <div className="flex gap-4">
@@ -90,9 +90,9 @@ const Footer = () => {
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         aria-label={social.label}
-                                        className="w-10 h-10 flex items-center justify-center bg-gray-700 rounded-lg hover:bg-orange-400 transition-all duration-300 group"
+                                        className="w-10 h-10 flex items-center justify-center bg-[var(--app-accent-secondary)] rounded-lg hover:bg-[var(--app-accent-primary)] transition-all duration-300 group"
                                     >
-                                        <Icon className="w-5 h-5 text-gray-300 group-hover:text-white transition-colors duration-300" />
+                                        <Icon className="w-5 h-5 text-white/85 group-hover:text-white transition-colors duration-300" />
                                     </a>
                                 );
                             })}
@@ -101,17 +101,17 @@ const Footer = () => {
                 </div>
 
                 {/* Divider */}
-                <div className="border-t border-gray-700 pt-8">
+                <div className="border-t border-white/25 pt-8">
                     <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
                         {/* Copyright */}
-                        <p className="text-sm text-gray-400 plus-jakarta-sans-normal text-center sm:text-left">
+                        <p className="text-sm text-white/80 plus-jakarta-sans-normal text-center sm:text-left">
                             © {currentYear} Harshit Singh. All rights reserved.
                         </p>
 
                         {/* Back to Top */}
                         <button
                             onClick={scrollToTop}
-                            className="flex items-center gap-2 text-sm text-gray-400 hover:text-orange-400 transition-colors duration-200 plus-jakarta-sans-medium group"
+                            className="flex items-center gap-2 text-sm text-white/80 hover:text-[var(--app-accent-primary)] transition-colors duration-200 plus-jakarta-sans-medium group"
                             aria-label="Back to top"
                         >
                             Back to Top
@@ -133,8 +133,8 @@ const Footer = () => {
                     </div>
 
                     {/* Additional Info */}
-                    <p className="text-xs text-gray-500 text-center mt-4 plus-jakarta-sans-normal">
-                        Built with React, Tailwind CSS, and ❤️ · Deployed with Vite
+                    <p className="text-xs text-white/65 text-center mt-4 plus-jakarta-sans-normal">
+                        Built with React, Tailwind CSS, and love - Deployed with Vite
                     </p>
                 </div>
             </div>

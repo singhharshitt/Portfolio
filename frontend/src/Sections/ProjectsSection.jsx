@@ -1,6 +1,17 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { SiGithub, SiReact, SiNodedotjs, SiMongodb, SiExpress, SiTailwindcss, SiTypescript, SiNextdotjs, SiPython, SiDocker } from 'react-icons/si';
+import {
+    SiGithub,
+    SiReact,
+    SiNodedotjs,
+    SiMongodb,
+    SiExpress,
+    SiTailwindcss,
+    SiTypescript,
+    SiNextdotjs,
+    SiPython,
+    SiDocker
+} from 'react-icons/si';
 
 const ProjectsSection = () => {
     const projects = [
@@ -97,28 +108,23 @@ const ProjectsSection = () => {
                         transition={{ duration: 0.5, delay: index * 0.1 }}
                         className="plus-jakarta-sans-medium bg-sand-100 shadow-md rounded-xl overflow-hidden border-b-4 border-r-4 border-orange-400 group transition-all duration-500 ease-in-out hover:scale-105 hover:rounded-none hover:shadow-xl relative flex flex-col h-full"
                     >
-                        {/* Hover border effect */}
-                        <div className="absolute inset-0 border-2 border-orange-400 opacity-0 rotate-6 transition-all duration-500 ease-in-out group-hover:inset-4 group-hover:opacity-100 group-hover:rotate-0"></div>
+                        <div className="absolute inset-0 border-2 border-orange-400 opacity-0 rotate-6 transition-all duration-500 ease-in-out group-hover:inset-4 group-hover:opacity-100 group-hover:rotate-0" />
 
                         <div className="relative z-10 p-6 flex flex-col h-full">
-                            {/* Category badge */}
                             <div className="mb-3">
                                 <span className="inline-block px-3 py-1 text-xs font-bold text-orange-400 border border-orange-400 rounded-full">
                                     {project.category}
                                 </span>
                             </div>
 
-                            {/* Title */}
                             <h3 className="text-xl font-bold text-charcoal mb-3 line-clamp-2">
                                 {project.title}
                             </h3>
 
-                            {/* Description */}
-                            <p className="text-gray-600 text-sm mb-4 flex-grow line-clamp-3">
+                            <p className="text-charcoal/70 text-sm mb-4 flex-grow line-clamp-3">
                                 {project.description}
                             </p>
 
-                            {/* Tech Stack */}
                             <div className="flex flex-wrap gap-3 mb-4">
                                 {project.tech.map((tech, techIndex) => {
                                     const Icon = tech.icon;
@@ -135,8 +141,7 @@ const ProjectsSection = () => {
                                 })}
                             </div>
 
-                            {/* Links */}
-                            <div className="flex gap-3 pt-3 border-t border-gray-200 mt-auto">
+                            <div className="flex gap-3 pt-3 border-t border-sand-200 mt-auto">
                                 <a
                                     href={project.github}
                                     target="_blank"

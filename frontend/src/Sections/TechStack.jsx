@@ -2,21 +2,15 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import LogoLoop from '../components/LogoLoop.jsx';
 import AnimatedFile from '../components/AnimatedFile.jsx';
+import SectionHeading from '../components/SectionHeading.jsx';
 import {
   SiHtml5, SiCss3, SiNodedotjs, SiCplusplus, SiJavascript, SiC, SiOpenjdk, SiMongodb,
   SiExpress, SiPython, SiPhp, SiDocker, SiGithub, SiReact, SiNextdotjs, SiTypescript, SiTailwindcss
 } from 'react-icons/si';
 
 export default function TechStack({ techLogos }) {
-  // Animation variants
-  const titleVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6, ease: "easeOut" }
-    }
-  };
+  const categoryHeadingClass = 'text-xl sm:text-2xl font-semibold mb-4 text-charcoal tracking-wide';
+  const categoryBodyClass = 'flex justify-center md:justify-start';
 
   const logoContainerVariants = {
     hidden: { opacity: 0, scale: 0.95 },
@@ -46,21 +40,12 @@ export default function TechStack({ techLogos }) {
   };
 
   return (
-    <section id="techstack" className="my-20 lg:my-28 mx-4 lg:mx-10  backdrop-blur-md">
-      <motion.h2
-        className="text-3xl sm:text-4xl lg:text-6xl lexend-exa-bold m-6 mt-10 ml-6 sm:ml-12 mb-8"
-        variants={titleVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-50px" }}
-      >
-        TECH STACK<span className="text-orange-400">.</span>
-      </motion.h2>
+    <section id="techstack" className="my-20 lg:my-28 mx-4 lg:mx-8 backdrop-blur-md overflow-x-hidden">
+      <SectionHeading text="TECH STACK" />
 
       {/* Scrolling Logos */}
       <motion.div
-        className="mt-4 mx-6 sm:mx-10 overflow-hidden"
-        style={{ height: "200px", position: "relative" }}
+        className="mt-6 mx-4 sm:mx-8 lg:mx-12 h-[160px] sm:h-[185px] relative overflow-hidden rounded-2xl border border-sand-200/75 bg-sand-100/55 px-2 sm:px-4"
         variants={logoContainerVariants}
         initial="hidden"
         whileInView="visible"
@@ -70,20 +55,20 @@ export default function TechStack({ techLogos }) {
           logos={techLogos}
           speed={30}
           direction="left"
-          logoHeight={110}
-          gap={40}
+          logoHeight={88}
+          gap={34}
           pauseOnHover
           scaleOnHover
           fadeOut
-          fadeOutColor="#ffffff"
+          fadeOutColor="var(--theme-bg-current, #F0E7D5)"
           ariaLabel="Technology partners"
         />
       </motion.div>
 
       {/* Tech Folders Grid */}
-      <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-16 px-4 sm:px-8 lg:px-12 pb-12">
+      <div className="mt-14 grid grid-cols-1 md:grid-cols-2 gap-x-8 lg:gap-x-10 gap-y-14 px-4 sm:px-8 lg:px-12 pb-12">
         {/* Left Column */}
-        <div className="flex flex-col gap-16">
+        <div className="flex flex-col gap-14">
           <motion.div
             variants={folderContainerVariants}
             initial="hidden"
@@ -91,7 +76,7 @@ export default function TechStack({ techLogos }) {
             viewport={{ once: true, margin: "-50px" }}
           >
             <motion.h3
-              className="text-xl sm:text-2xl font-semibold mb-3 text-slate-800 tracking-wide"
+              className={categoryHeadingClass}
               variants={sectionHeaderVariants}
               initial="hidden"
               whileInView="visible"
@@ -100,7 +85,7 @@ export default function TechStack({ techLogos }) {
               FRONTEND
             </motion.h3>
 
-            <div className="flex justify-start">
+            <div className={categoryBodyClass}>
               <AnimatedFile
                 title="Frontend"
                 type="frontend"
@@ -123,7 +108,7 @@ export default function TechStack({ techLogos }) {
             viewport={{ once: true, margin: "-50px" }}
           >
             <motion.h3
-              className="text-xl sm:text-2xl font-semibold mb-3 text-slate-800 tracking-wide"
+              className={categoryHeadingClass}
               variants={sectionHeaderVariants}
               initial="hidden"
               whileInView="visible"
@@ -132,7 +117,7 @@ export default function TechStack({ techLogos }) {
               BACKEND
             </motion.h3>
 
-            <div className="flex justify-start">
+            <div className={categoryBodyClass}>
               <AnimatedFile
                 title="Backend"
                 type="backend"
@@ -149,7 +134,7 @@ export default function TechStack({ techLogos }) {
         </div>
 
         {/* Right Column */}
-        <div className="flex flex-col gap-16">
+        <div className="flex flex-col gap-14">
           <motion.div
             variants={folderContainerVariants}
             initial="hidden"
@@ -157,7 +142,7 @@ export default function TechStack({ techLogos }) {
             viewport={{ once: true, margin: "-50px" }}
           >
             <motion.h3
-              className="text-xl sm:text-2xl font-semibold mb-3 text-slate-800 tracking-wide"
+              className={categoryHeadingClass}
               variants={sectionHeaderVariants}
               initial="hidden"
               whileInView="visible"
@@ -166,7 +151,7 @@ export default function TechStack({ techLogos }) {
               DEVOPS & TOOLS
             </motion.h3>
 
-            <div className="flex justify-start">
+            <div className={categoryBodyClass}>
               <AnimatedFile
                 title="DevOps"
                 type="devops"
@@ -185,7 +170,7 @@ export default function TechStack({ techLogos }) {
             viewport={{ once: true, margin: "-50px" }}
           >
             <motion.h3
-              className="text-xl sm:text-2xl font-semibold mb-3 text-slate-800 tracking-wide"
+              className={categoryHeadingClass}
               variants={sectionHeaderVariants}
               initial="hidden"
               whileInView="visible"
@@ -194,7 +179,7 @@ export default function TechStack({ techLogos }) {
               CORE LANGUAGES
             </motion.h3>
 
-            <div className="flex justify-start">
+            <div className={categoryBodyClass}>
               <AnimatedFile
                 title="Languages"
                 type="core"

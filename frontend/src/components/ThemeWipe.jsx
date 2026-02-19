@@ -9,7 +9,7 @@ import { motion, AnimatePresence } from 'framer-motion';
  */
 export default function ThemeWipe({ sectionIds = [] }) {
     const [isWiping, setIsWiping] = useState(false);
-    const [wipeColor, setWipeColor] = useState('var(--color-charcoal)');
+    const [wipeColor, setWipeColor] = useState('var(--app-bg-main)');
     const prevSection = useRef(null);
 
     useEffect(() => {
@@ -28,7 +28,7 @@ export default function ThemeWipe({ sectionIds = [] }) {
                         if (prevSection.current) {
                             const prevTheme = sectionIds.find(s => s.id === prevSection.current)?.theme;
                             if (prevTheme !== sectionId.theme) {
-                                setWipeColor(sectionId.theme === 'dark' ? 'var(--color-charcoal)' : 'var(--color-sand-100)');
+                                setWipeColor(sectionId.theme === 'dark' ? 'var(--app-bg-main, #B54A3F)' : 'var(--app-bg-light, #F2F7F2)');
                                 setIsWiping(true);
                                 setTimeout(() => setIsWiping(false), 600);
                             }

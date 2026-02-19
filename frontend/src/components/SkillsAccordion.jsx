@@ -11,39 +11,52 @@ import { ChevronDown } from 'lucide-react';
  */
 export default function SkillsAccordion({ skills = [] }) {
     const [activeIndex, setActiveIndex] = useState(null);
+    const itemRevealVariants = {
+        hidden: { opacity: 0, y: 14 },
+        visible: (index) => ({
+            opacity: 1,
+            y: 0,
+            transition: { duration: 0.35, ease: 'easeOut', delay: index * 0.06 },
+        }),
+    };
 
     const toggle = (index) => {
         setActiveIndex(activeIndex === index ? null : index);
     };
 
     return (
-        <div className="w-full">
+        <div className="w-full rounded-2xl border border-sand-200/80 bg-sand-100/45 overflow-hidden">
             {skills.map((skill, index) => {
                 const isActive = activeIndex === index;
 
                 return (
-                    <div
+                    <motion.div
                         key={skill.id || index}
-                        className={`border-b border-[#ECE2D0] transition-all duration-300 ${isActive ? 'border-l-4 border-l-orange-400 pl-4' : 'pl-0'
+                        custom={index}
+                        variants={itemRevealVariants}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, amount: 0.2 }}
+                        className={`border-b border-sand-200/90 border-l-4 transition-all duration-300 ${isActive ? 'border-l-orange-400 bg-white/65' : 'border-l-transparent hover:border-l-orange-400/70 hover:bg-white/45'
                             }`}
                     >
                         <button
                             onClick={() => toggle(index)}
-                            className="w-full flex items-center justify-between py-6 text-left focus-ring group cursor-pointer"
+                            className="w-full flex items-center justify-between gap-4 py-5 px-3 sm:px-4 text-left focus-ring group cursor-pointer"
                             aria-expanded={isActive}
                         >
-                            <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-4 min-w-0">
                                 {skill.icon && (
-                                    <span className="text-2xl text-[#C69C72] group-hover:text-orange-400 transition-colors">
+                                    <span className="text-2xl text-bronze-400 group-hover:text-orange-400 transition-colors">
                                         {skill.icon}
                                     </span>
                                 )}
-                                <div>
-                                    <h3 className="font-playfair text-xl md:text-2xl font-bold text-[#252627] group-hover:text-orange-400 transition-colors">
+                                <div className="min-w-0">
+                                    <h3 className="font-playfair text-xl md:text-2xl font-bold text-charcoal group-hover:text-orange-400 transition-colors leading-snug">
                                         {skill.title}
                                     </h3>
                                     {skill.subtitle && (
-                                        <p className="text-sm text-[#C69C72] mt-1">{skill.subtitle}</p>
+                                        <p className="text-sm text-bronze-400/95 mt-1 leading-relaxed">{skill.subtitle}</p>
                                     )}
                                 </div>
                             </div>
@@ -52,7 +65,7 @@ export default function SkillsAccordion({ skills = [] }) {
                                 animate={{ rotate: isActive ? 180 : 0 }}
                                 transition={{ duration: 0.3 }}
                             >
-                                <ChevronDown className="w-6 h-6 text-[#C69C72]" />
+                                <ChevronDown className={`w-6 h-6 transition-colors ${isActive ? 'text-orange-400' : 'text-bronze-400'}`} />
                             </motion.div>
                         </button>
 
@@ -65,17 +78,17 @@ export default function SkillsAccordion({ skills = [] }) {
                                     transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
                                     className="overflow-hidden"
                                 >
-                                    <div className="pb-6 flex flex-col md:flex-row gap-6">
+                                    <div className="pb-6 px-3 sm:px-4 flex flex-col md:flex-row gap-6">
                                         <div className="flex-1">
-                                            <p className="text-[#252627]/80 leading-relaxed mb-4">
+                                            <p className="text-charcoal/80 text-sm sm:text-base leading-relaxed mb-4">
                                                 {skill.description}
                                             </p>
                                             {skill.technologies && (
-                                                <div className="flex flex-wrap gap-2">
+                                                <div className="flex flex-wrap gap-2.5">
                                                     {skill.technologies.map((tech, i) => (
                                                         <span
                                                             key={i}
-                                                            className="px-3 py-1 bg-[#ECE2D0] text-[#252627] text-xs font-medium rounded-full"
+                                                            className="px-3 py-1 bg-sand-200/85 border border-sand-300/80 text-charcoal text-xs font-medium rounded-full"
                                                         >
                                                             {tech}
                                                         </span>
@@ -89,7 +102,7 @@ export default function SkillsAccordion({ skills = [] }) {
                                                 initial={{ opacity: 0, scale: 0.95 }}
                                                 animate={{ opacity: 1, scale: 1 }}
                                                 transition={{ delay: 0.2, duration: 0.4 }}
-                                                className="w-full md:w-48 aspect-[4/3] rounded-xl overflow-hidden"
+                                                className="w-full md:w-48 aspect-[4/3] rounded-xl overflow-hidden border border-sand-200/80 shadow-sm"
                                             >
                                                 <img
                                                     src={skill.previewImage}
@@ -103,7 +116,7 @@ export default function SkillsAccordion({ skills = [] }) {
                                 </motion.div>
                             )}
                         </AnimatePresence>
-                    </div>
+                    </motion.div>
                 );
             })}
         </div>

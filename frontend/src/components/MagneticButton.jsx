@@ -35,13 +35,13 @@ export default function MagneticButton({
     const baseClasses = `
         relative overflow-hidden rounded-full px-8 py-4
         font-medium text-base cursor-pointer
-        transition-colors duration-300
+        transition-colors duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]
         focus-ring active-press
     `;
 
     const variantClasses = variant === 'primary'
-        ? `border-2 border-[#252627] ${isHovered ? 'text-[#F7F4F3]' : 'text-[#252627]'}`
-        : `border-2 border-[#252627]/20 ${isHovered ? 'text-[#F7F4F3]' : 'text-[#252627]'}`;
+        ? `border-2 border-[var(--theme-text-current)] ${isHovered ? 'text-[var(--app-text-light)]' : 'text-[var(--theme-text-current)]'}`
+        : `border-2 border-[var(--theme-text-current)] ${isHovered ? 'text-[var(--app-text-light)]' : 'text-[var(--theme-text-current)]'}`;
 
     const Tag = href ? 'a' : 'button';
     const linkProps = href ? { href, target: href.startsWith('http') ? '_blank' : undefined, rel: href.startsWith('http') ? 'noopener noreferrer' : undefined } : {};
@@ -62,14 +62,14 @@ export default function MagneticButton({
             >
                 {/* Fill sweep background */}
                 <span
-                    className="absolute inset-0 bg-[#252627] origin-left transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]"
+                    className="absolute inset-0 bg-[var(--theme-accent-primary)] origin-left transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]"
                     style={{
                         transform: isHovered ? 'scaleX(1)' : 'scaleX(0)',
                     }}
                 />
 
-                {/* Content */}
-                <span className="relative z-10 flex items-center gap-2">
+                {/* Content — children arrows rotate 45°→0° on hover */}
+                <span className={`relative z-10 flex items-center gap-2 [&>svg]:transition-transform [&>svg]:duration-300 ${isHovered ? '[&>svg]:rotate-0' : '[&>svg]:-rotate-45'}`}>
                     {children}
                 </span>
             </Tag>

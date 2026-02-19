@@ -115,7 +115,7 @@ export default function MenuOverlay({ isOpen, onClose, onNavigate }) {
                                 >
                                     {/* CTA Button */}
                                     <button
-                                        onClick={() => handleNavClick('contact')}
+                                        onClick={() => handleNavClick('connect')}
                                         className="group relative px-6 py-3 bg-[#F7F4F3] text-[#252627] rounded-full font-medium text-sm transition-all duration-300 hover:bg-orange-400 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/50 overflow-hidden"
                                     >
                                         <span className="relative z-10 flex items-center gap-2">
