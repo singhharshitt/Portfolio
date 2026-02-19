@@ -580,115 +580,49 @@ body,
   --terracotta: var(--app-bg-main);
   --cream: var(--app-bg-light);
 
-  /* Global dynamic theme tokens - LIGHT THEME (DEFAULT) */
-  --theme-bg-current: #F0E7D5;
-  /* VANILLA CREAM */
-  --theme-text-current: #2F1000;
-  --theme-surface-current: #E4D8C7;
-  /* Cream variant */
-  --theme-surface-elevated: #F5EFE4;
-  /* Lighter cream */
+  /* Global theme tokens — unified warm cream */
+  --theme-bg-current: #F5E5CA;
+  --theme-text-current: #3E000D;
+  --theme-surface-current: #EDD9BC;
+  --theme-surface-elevated: #FAF0E2;
   --theme-border-current: #B54A3F;
   --theme-accent-main: #B54A3F;
   --theme-accent-primary: #B54A3F;
   --theme-accent-secondary: #C8553D;
   --theme-accent-contrast: #945600;
   --theme-progress: #C8553D;
-  --theme-navbar-bg: rgba(240, 231, 213, 0.9);
-  --theme-indicator-bg: rgba(240, 231, 213, 0.86);
+  --theme-navbar-bg: rgba(245, 229, 202, 0.92);
+  --theme-indicator-bg: rgba(245, 229, 202, 0.86);
   --theme-indicator-border: rgba(181, 74, 63, 0.45);
   --theme-shadow: 0 16px 40px rgba(47, 16, 0, 0.08);
   --theme-transition-duration: 650ms;
   --theme-transition-ease: cubic-bezier(0.4, 0, 0.2, 1);
 
-  /* Bind Tailwind color tokens to dynamic theme */
-  --color-sand-100: var(--theme-bg-current);
-  --color-sand-200: var(--theme-surface-current);
-  --color-sand-300: var(--theme-border-current);
-  --color-charcoal: var(--theme-text-current);
-  --color-bronze-400: var(--theme-accent-secondary);
-  --color-orange-100: var(--theme-surface-elevated);
-  --color-orange-400: var(--theme-accent-primary);
-  --color-orange-500: var(--theme-accent-main);
-  --color-orange-600: var(--theme-accent-secondary);
-  --color-orange-700: var(--theme-accent-contrast);
+  /* Bind Tailwind color tokens */
+  --color-sand-100: #F5E5CA;
+  --color-sand-200: #EDD9BC;
+  --color-sand-300: #B54A3F;
+  --color-charcoal: #3E000D;
+  --color-bronze-400: #C8553D;
+  --color-orange-100: #FAF0E2;
+  --color-orange-400: #B54A3F;
+  --color-orange-500: #B54A3F;
+  --color-orange-600: #C8553D;
+  --color-orange-700: #945600;
 }
 
-:root[data-theme-mode="dark"],
-body[data-theme-mode="dark"] {
-  --theme-bg-current: #212842;
-  /* MIDNIGHT INDIGO */
-  --theme-text-current: #FFFFFF;
-  --theme-surface-current: #1A1F35;
-  /* Deep indigo overlay */
-  --theme-surface-elevated: #2A3450;
-  /* Elevated deep indigo */
-  --theme-border-current: #3D4560;
-  --theme-accent-main: #F17300;
-  /* Warm rust/terracotta accent */
-  --theme-accent-primary: #F17300;
-  --theme-accent-secondary: #C8553D;
-  --theme-accent-contrast: #B54A3F;
-  --theme-progress: #F17300;
-  --theme-navbar-bg: rgba(33, 40, 66, 0.9);
-  --theme-indicator-bg: rgba(33, 40, 66, 0.72);
-  --theme-indicator-border: rgba(241, 115, 0, 0.6);
-  --theme-shadow: 0 20px 48px rgba(16, 4, 0, 0.32);
-}
-
-/* Scope requested palette to non-hero sections only */
+/* Section theme wrapper — uniform warm cream background */
 .section-theme {
-  --color-sand-100: var(--theme-bg-current);
-  --color-sand-200: var(--theme-surface-current);
-  --color-sand-300: var(--theme-border-current);
-  --color-charcoal: var(--theme-text-current);
-  --color-bronze-400: var(--theme-accent-secondary);
-  --color-orange-100: var(--theme-surface-elevated);
-  --color-orange-400: var(--theme-accent-primary);
-  --color-orange-500: var(--theme-accent-main);
-  --color-orange-600: var(--theme-accent-secondary);
-  --color-orange-700: var(--theme-accent-contrast);
-  background-color: var(--theme-bg-current);
-  color: var(--theme-text-current);
-  transition:
-    background-color var(--theme-transition-duration) var(--theme-transition-ease),
-    color var(--theme-transition-duration) var(--theme-transition-ease);
+  background-color: #F5E5CA;
+  color: #3E000D;
 }
 
-/* Enhanced theme transition system with GPU acceleration */
-:where(.theme-transition-scope),
-:where(.theme-transition-scope *) {
-  transition-property: background-color, color, border-color, box-shadow, fill, stroke;
-  transition-duration: var(--theme-transition-duration);
-  transition-timing-function: var(--theme-transition-ease);
-  transform: translateZ(0);
-  /* GPU acceleration */
-  will-change: background-color, color;
-  /* Optimize for theme changes */
-}
-
-/* Smooth transitions for all theme-aware elements */
+/* Smooth color transitions */
 html,
 body,
 #root {
-  transition:
-    background-color var(--theme-transition-duration) var(--theme-transition-ease),
-    color var(--theme-transition-duration) var(--theme-transition-ease);
-  transform: translateZ(0);
-  /* GPU acceleration */
-}
-
-/* Force theme application - debug styles */
-html[data-theme-mode="light"],
-body[data-theme-mode="light"] {
-  background-color: #F0E7D5 !important;
-  color: #2F1000 !important;
-}
-
-html[data-theme-mode="dark"],
-body[data-theme-mode="dark"] {
-  background-color: #212842 !important;
-  color: #FFFFFF !important;
+  background-color: #F5E5CA;
+  color: #3E000D;
 }
 
 /* Navbar smooth theme transition */
@@ -918,6 +852,21 @@ header {
 .mask-gradient {
   mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
   -webkit-mask-image: linear-gradient(to right, transparent, black 20%, black 80%, transparent);
+}
+
+/* SectionBackground floating orb animation */
+@keyframes sectionOrbFloat {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate(30px, -20px) scale(1.05);
+  }
+
+  100% {
+    transform: translate(-15px, 15px) scale(0.97);
+  }
 }
 
 /* Reduced motion support */

@@ -108,19 +108,10 @@ const InteractiveTimeline = () => {
   };
 
   return (
-    <div className={`min-h-[700px] w-full ${THEME.bg} flex flex-col items-center justify-center overflow-hidden relative font-sans selection:bg-orange-500 selection:text-white`}>
+    <div className={`min-h-[700px] w-full  flex flex-col items-center justify-center overflow-hidden relative font-sans selection:bg-orange-500 selection:text-white`}>
 
-      {/* Header Section */}
-      <div className="relative text-center z-10 px-4 pt-10 md:pt-16 pb-4">
-        <motion.h1
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-4xl md:text-6xl font-black text-white tracking-tighter mb-2 uppercase"
-        >
-          My Journey
-        </motion.h1>
-        <p className="text-gray-400 text-sm md:text-base tracking-widest uppercase">Education & Experience</p>
-      </div>
+    
+      
 
       {/* Main Timeline Container */}
       <div className="relative w-full max-w-7xl h-[580px] flex flex-col justify-end pb-16">
@@ -202,10 +193,7 @@ const InteractiveTimeline = () => {
                   className="relative flex flex-col items-center cursor-pointer group mx-4 md:mx-8"
                   style={{ width: '100px' }} // Fixed width for spacing
                 >
-                  {/* Date Content (Hidden until active logic handled by parent absolute position, 
-                      but we keep the structure for consistency) */}
 
-                  {/* The Dot & Year Container */}
                   <div className="relative flex flex-col items-center pt-8">
 
                     {/* Year Text */}

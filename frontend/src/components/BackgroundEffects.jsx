@@ -1,10 +1,6 @@
 import React, { useMemo } from 'react';
 
-/**
- * BackgroundEffects - Elegant ambient background animations
- * Uses pure CSS animations instead of JS-driven Framer Motion for 60fps perf
- * Reduced particle count, GPU-accelerated with will-change + contain
- */
+
 const BackgroundEffects = React.memo(() => {
     // Generate random particle positions (pure CSS animated, no JS loops)
     const particles = useMemo(() => {

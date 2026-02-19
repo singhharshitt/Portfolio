@@ -1,9 +1,7 @@
-
-
 import { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
 import { Code2, Palette, Lightbulb, Rocket } from 'lucide-react';
 import me from '../assets/me.jpg';
+
 const skills = [
     {
         icon: Code2,
@@ -30,7 +28,7 @@ const skills = [
 export default function Aboutme() {
     const sectionRef = useRef(null);
     const [isVisible, setIsVisible] = useState(false);
-    const revealTransitionClass = 'transition-all duration-700 ease-out';
+    const revealTransitionClass = 'transition-[opacity,transform] duration-700 ease-out';
     const descriptionTextClass = 'text-base sm:text-lg leading-relaxed';
     const skillCardClass = 'group p-5 rounded-xl border border-sand-200/70 bg-sand-200/35 hover:bg-white/90 hover:border-orange-400/30 hover:shadow-md hover:-translate-y-1 transition-all duration-300';
 
@@ -56,7 +54,7 @@ export default function Aboutme() {
         <section
             id="about"
             ref={sectionRef}
-            className="relative py-24 lg:py-32 bg-sand-100 overflow-x-hidden"
+            className="relative py-24 lg:py-32 bg-[#F5E5CA] overflow-x-hidden"
         >
             {/* Background decoration */}
             <div className="absolute inset-0 pointer-events-none">
@@ -69,15 +67,14 @@ export default function Aboutme() {
                 <div className="grid lg:grid-cols-2 gap-14 lg:gap-20 items-center">
                     {/* Left Column - Image */}
                     <div
-                        className={`relative min-w-0 ${revealTransitionClass} ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
-                            }`}
+                        className={`relative min-w-0 ${revealTransitionClass} ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
                     >
                         <div className="relative">
                             {/* Main image */}
                             <div
                                 className="relative aspect-square w-full max-w-[420px] mx-auto lg:mx-0 rounded-2xl overflow-hidden group/img border border-[var(--app-accent-secondary)]/25 bg-sand-200/45 shadow-[0_20px_45px_rgba(47,16,0,0.22)] transition-transform duration-500 hover:scale-[1.02]"
                             >
-                                <motion.img
+                                <img
                                     src={me}
                                     alt="Portrait"
                                     className="w-full h-full object-contain object-center transition-transform duration-500"
@@ -90,8 +87,7 @@ export default function Aboutme() {
 
                             {/* Floating card */}
                             <div
-                                className={`absolute z-20 bottom-3 right-3 sm:-bottom-5 sm:right-0 lg:-right-8 bg-sand-100/95 backdrop-blur-sm border border-sand-200 rounded-xl p-4 sm:p-6 shadow-xl max-w-[180px] sm:max-w-none transition-all duration-700 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                                    }`}
+                                className={`absolute z-20 bottom-3 right-3 sm:-bottom-5 sm:right-0 lg:-right-8 bg-sand-100/95 backdrop-blur-sm border border-sand-200 rounded-xl p-4 sm:p-6 shadow-xl max-w-[180px] sm:max-w-none transition-[opacity,transform] duration-700 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                             >
                                 <div className="flex items-center gap-4">
                                     <div className="w-12 h-12 bg-orange-400/10 rounded-full flex items-center justify-center">
@@ -112,16 +108,9 @@ export default function Aboutme() {
 
                     {/* Right Column - Content */}
                     <div
-                        className={`min-w-0 ${revealTransitionClass} delay-200 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'
-                            }`}
+                        className={`min-w-0 ${revealTransitionClass} delay-200 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'}`}
                     >
-
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, amount: 0.4 }}
-                            transition={{ duration: 0.6, ease: "easeOut" }}
-                        >
+                        <div>
                             <span className="inline-flex items-center px-4 py-1.5 rounded-full text-xs sm:text-sm tracking-[0.18em] plus-jakarta-sans-semibold text-charcoal/70 bg-sand-200/60 border border-sand-300/70">
                                 ABOUT ME
                             </span>
@@ -131,16 +120,10 @@ export default function Aboutme() {
                             <h2 className="lexend-exa-bold text-3xl sm:text-4xl lg:text-5xl text-charcoal leading-tight mb-6">
                                 FULL STACK DEVELOPER
                             </h2>
-                        </motion.div>
+                        </div>
 
                         {/* Description */}
-                        <motion.div
-                            className="space-y-4 text-charcoal/70 mb-10 max-w-xl"
-                            initial={{ opacity: 0, y: 14 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, amount: 0.35 }}
-                            transition={{ duration: 0.55, ease: 'easeOut', delay: 0.1 }}
-                        >
+                        <div className="space-y-4 text-charcoal/70 mb-10 max-w-xl">
                             <p className={descriptionTextClass}>
                                 With over 3 years of experience, I craft digital products that make a difference. My approach combines
                                 technical expertise with a keen eye for design, ensuring every project
@@ -151,21 +134,14 @@ export default function Aboutme() {
                                 real problems. Whether it's a complex web application or a simple
                                 landing page, I bring the same level of dedication and attention to detail.
                             </p>
-                        </motion.div>
+                        </div>
 
                         {/* Skills Grid */}
-                        <motion.div
-                            className="grid sm:grid-cols-2 gap-6"
-                            initial={{ opacity: 0, y: 16 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, amount: 0.25 }}
-                            transition={{ duration: 0.55, ease: 'easeOut', delay: 0.18 }}
-                        >
+                        <div className="grid sm:grid-cols-2 gap-6">
                             {skills.map((skill, index) => (
                                 <div
                                     key={skill.title}
-                                    className={`${skillCardClass} ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                                        }`}
+                                    className={`${skillCardClass} ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                                     style={{ transitionDelay: `${400 + index * 100}ms` }}
                                 >
                                     <div className="w-10 h-10 bg-orange-400/10 rounded-lg flex items-center justify-center mb-3 group-hover:bg-orange-400 group-hover:scale-110 transition-all duration-300">
@@ -175,7 +151,7 @@ export default function Aboutme() {
                                     <p className="text-sm text-charcoal/60">{skill.description}</p>
                                 </div>
                             ))}
-                        </motion.div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -1,13 +1,7 @@
 import { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 
-/**
- * MagneticButton — Pill-shaped CTA with magnetic pull + fill sweep
- * - Rounded-full border pill
- * - Fill animation sweeps left → right on hover
- * - Subtle magnetic cursor pull via onMouseMove offset
- * - Text color inversion on hover
- */
+
 export default function MagneticButton({
     children,
     onClick,

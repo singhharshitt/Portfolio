@@ -1,27 +1,27 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import {
   SiHtml5, SiCss3, SiNodedotjs, SiCplusplus, SiJavascript, SiC, SiOpenjdk, SiMongodb,
   SiExpress, SiPython, SiPhp, SiSolidity, SiGithub, SiDocker, SiThreedotjs,
   SiReact, SiNextdotjs, SiTypescript, SiTailwindcss
 } from 'react-icons/si';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 import Navbar from "../components/Navbar.jsx";
 import Footer from "../components/Footer.jsx";
 import JourneyTimeline from "../components/TimeLine.jsx";
 import BackgroundEffects from "../components/BackgroundEffects.jsx";
 import SectionHeading from "../components/SectionHeading.jsx";
-import ScrollThemeMorph from "../components/ScrollThemeMorph.jsx";
+import SectionBackground from "../components/SectionBackground.jsx";
 import ScrollProgress from "../components/ScrollProgress.jsx";
-import ThemeStateIndicator from "../components/ThemeStateIndicator.jsx";
 
 // Premium components
-import ThemeSection from "../components/ThemeSection.jsx";
+
 import StaggeredText from "../components/StaggeredText.jsx";
 import HorizontalGallery from "../components/HorizontalGallery.jsx";
 import SkillsAccordion from "../components/SkillsAccordion.jsx";
 import MagneticButton from "../components/MagneticButton.jsx";
 import ParallaxShowcase from "../components/ParallaxShowcase.jsx";
-import ThemeWipe from "../components/ThemeWipe.jsx";
+
 
 import Hero from "../Sections/Hero.jsx";
 import Aboutme from "../Sections/Aboutme.jsx";
@@ -72,12 +72,7 @@ const galleryItems = [
   { id: 5, title: 'Blog Platform', category: 'CMS', description: 'Headless CMS with markdown editing' },
 ];
 
-// Theme wipe section config
-const wipeConfig = [
-  { id: 'about', theme: 'light' },
-  { id: 'projects-showcase', theme: 'dark' },
-  { id: 'blog', theme: 'light' },
-];
+
 
 // Tech logos (static, outside component to avoid re-creation)
 const techLogos = [
@@ -105,216 +100,141 @@ const techLogos = [
 const BASE_SECTION_CLASS = 'my-20 lg:my-28 mx-4 lg:mx-8';
 
 function Home() {
-  const [currentTheme, setCurrentTheme] = useState('light');
+  // Hero shutter scroll animation
+  const heroWrapperRef = useRef(null);
+  const { scrollYProgress: heroScrollProgress } = useScroll({
+    target: heroWrapperRef,
+    offset: ['start start', 'end start'],
+  });
+  const heroY = useTransform(heroScrollProgress, [0, 1], ['0%', '-30%']);
+  const heroOpacity = useTransform(heroScrollProgress, [0, 0.8, 1], [1, 0.6, 0]);
+  const heroScale = useTransform(heroScrollProgress, [0, 1], [1, 0.97]);
+
+  // Respect prefers-reduced-motion
+  const [reducedMotion, setReducedMotion] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setReducedMotion(mq.matches);
+    const handler = (e) => setReducedMotion(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
 
   // Scroll to section handler
   const scrollToSection = (sectionId) => {
     document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  useEffect(() => {
-    const rootEl = document.documentElement;
-    const bodyEl = document.body;
-    
-    // Get target sections
-    const journeySection = document.getElementById('journey');
-    const certificatesSection = document.getElementById('certificates-section');
-    
-    console.log('Theme sections found:', { journeySection, certificatesSection });
-    
-    if (!journeySection || !certificatesSection) {
-      console.error('Missing sections for theme switching');
-      return undefined;
-    }
-
-    // Performance optimization: Track current theme to avoid unnecessary DOM updates
-    let currentAppliedTheme = 'light';
-    
-    // Optimized theme application with debouncing and deduplication
-    let themeTimeout;
-    const applyTheme = (theme) => {
-      if (currentAppliedTheme === theme) {
-        console.log('Theme already applied:', theme);
-        return; // Skip if already applied
-      }
-      
-      console.log('Applying theme:', theme);
-      clearTimeout(themeTimeout);
-      themeTimeout = setTimeout(() => {
-        rootEl.setAttribute('data-theme-mode', theme);
-        bodyEl.setAttribute('data-theme-mode', theme);
-        currentAppliedTheme = theme;
-        setCurrentTheme(theme);
-      }, 50); // Small debounce to prevent rapid switching
-    };
-
-    // High-performance Intersection Observer with minimal callbacks
-    const observerOptions = {
-      threshold: [0.5], // Only trigger at exactly 50% visibility
-      rootMargin: '0px'
-    };
-
-    const handleIntersection = (entries) => {
-      // Use requestAnimationFrame for smooth performance
-      requestAnimationFrame(() => {
-        entries.forEach(entry => {
-          console.log('Intersection:', entry.target.id, entry.intersectionRatio);
-          if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
-            const sectionId = entry.target.id;
-            
-            // Journey section triggers DARK theme
-            if (sectionId === 'journey') {
-              console.log('Journey section visible - applying dark theme');
-              applyTheme('dark');
-            }
-            // Certificates section triggers LIGHT theme
-            else if (sectionId === 'certificates-section') {
-              console.log('Certificates section visible - applying light theme');
-              applyTheme('light');
-            }
-          }
-        });
-      });
-    };
-
-    const observer = new IntersectionObserver(handleIntersection, observerOptions);
-    
-    // Observe both sections
-    observer.observe(journeySection);
-    observer.observe(certificatesSection);
-
-    // Set initial theme based on current scroll position
-    const checkInitialTheme = () => {
-      const viewportHeight = window.innerHeight;
-      const journeyRect = journeySection.getBoundingClientRect();
-      const certificatesRect = certificatesSection.getBoundingClientRect();
-      
-      // Calculate visibility percentages
-      const journeyVisible = Math.max(0, Math.min(journeyRect.bottom, viewportHeight) - Math.max(journeyRect.top, 0)) / viewportHeight;
-      const certificatesVisible = Math.max(0, Math.min(certificatesRect.bottom, viewportHeight) - Math.max(certificatesRect.top, 0)) / viewportHeight;
-      
-      console.log('Initial visibility:', { journeyVisible, certificatesVisible });
-      
-      // Apply theme based on most visible section at 50%+ visibility
-      if (journeyVisible >= 0.5) {
-        applyTheme('dark');
-      } else if (certificatesVisible >= 0.5) {
-        applyTheme('light');
-      } else {
-        applyTheme('light'); // Default to light
-      }
-    };
-
-    // Use requestAnimationFrame for initial check
-    requestAnimationFrame(checkInitialTheme);
-
-    return () => {
-      observer.disconnect();
-      clearTimeout(themeTimeout);
-      // Reset to light theme on cleanup
-      rootEl.setAttribute('data-theme-mode', 'light');
-      bodyEl.setAttribute('data-theme-mode', 'light');
-    };
-  }, []);
-
   return (
     <>
       {/* Scroll Progress Bar */}
+
       <ScrollProgress />
-      
+
 
       {/* Background Effects Layer */}
       <BackgroundEffects />
-
-      {/* Scroll theme morph: terracotta → cream */}
-      <ScrollThemeMorph />
-
-
-      {/* Theme Wipe Overlay */}
-      <ThemeWipe sectionIds={wipeConfig} />
 
       <Navbar onNavigate={scrollToSection} />
 
       <div className="relative z-10">
 
-        <Hero />
-
-        <div className="section-theme theme-transition-scope">
-
-        {/* ABOUT ME */}
-        <div className="relative z-10">
-          <Aboutme />
+        {/* Hero with shutter scroll animation */}
+        <div
+          ref={heroWrapperRef}
+          className="relative overflow-hidden"
+          style={{ minHeight: '100vh' }}
+        >
+          <motion.div
+            style={reducedMotion ? {} : {
+              y: heroY,
+              opacity: heroOpacity,
+              scale: heroScale,
+            }}
+            className="will-change-transform origin-top"
+          >
+            <Hero />
+          </motion.div>
         </div>
 
-        {/* SKILLS ACCORDION */}
-        <section id="skills" className={`${BASE_SECTION_CLASS} min-h-[400px]`}>
-          <StaggeredText
-            text={"MY SKILLS"}
-            as="span"
-            className="text-3xl sm:text-4xl lg:text-6xl lexend-exa-bold m-4 mt-10 ml-6 sm:ml-12 mb-8"
-            splitBy="word"
-          />
-          <div className="px-4 sm:px-6 lg:px-12 mt-8">
-            <SkillsAccordion skills={skillsData} />
+        <div className="section-theme relative">
+
+          {/* Animated background pattern for all non-Hero sections */}
+          <SectionBackground />
+          {/* ABOUT ME */}
+          <div className="relative z-10">
+            <Aboutme />
           </div>
-        </section>
-        <TechStack techLogos={techLogos} />
 
-        {/* PARALLAX CODE SHOWCASE */}
-        <section id="code-showcase" className={BASE_SECTION_CLASS}>
-          <SectionHeading text="CODE" />
-          <ParallaxShowcase />
-        </section>
+          {/* SKILLS ACCORDION */}
+          <section id="skills" className={`${BASE_SECTION_CLASS} min-h-[400px]`}>
+            <StaggeredText
+              text={"MY SKILLS"}
+              as="span"
+              className="text-3xl sm:text-4xl lg:text-6xl lexend-exa-bold m-4 mt-10 ml-6 sm:ml-12 mb-8"
+              splitBy="word"
+            />
+            <div className="px-4 sm:px-6 lg:px-12 mt-8">
+              <SkillsAccordion skills={skillsData} />
+            </div>
+          </section>
+          <TechStack techLogos={techLogos} />
 
-        <section id="journey" className={`${BASE_SECTION_CLASS} min-h-[500px] lg:min-h-[650px]`}>
-          <SectionHeading text="MY JOURNEY" />
-          <JourneyTimeline />
-        </section>
+          {/* PARALLAX CODE SHOWCASE */}
+          <section id="code-showcase" className={BASE_SECTION_CLASS}>
+            <SectionHeading text="CODE" />
+            <ParallaxShowcase />
+          </section>
 
-        {/* PROJECTS — Dark theme section */}
-        <ThemeSection theme="dark" id="projects-showcase" className="py-20 lg:py-28 px-4 lg:px-8">
-          <SectionHeading text="PROJECTS" light className="mb-2" />
-          <p className="text-[var(--theme-accent-secondary)] text-lg ml-6 sm:ml-12 mb-12 plus-jakarta-sans-medium">
-            Scroll to explore my work
-          </p>
-          <HorizontalGallery items={galleryItems} />
-        </ThemeSection>
+          <section id="journey" className={`${BASE_SECTION_CLASS} min-h-[500px] lg:min-h-[650px]`}>
+            <SectionHeading text="MY JOURNEY" />
+            <JourneyTimeline />
+          </section>
 
-        {/* Original projects grid */}
-        {/* <section id="projects" className={`${BASE_SECTION_CLASS} min-h-[500px] pb-8`}>
+          {/* PROJECTS — Dark theme section */}
+          <section id="projects-showcase" className="py-20 lg:py-28 px-4 lg:px-8">
+            <SectionHeading text="PROJECTS" className="mb-2" />
+            <p className="text-[#C8553D] text-lg ml-6 sm:ml-12 mb-12 plus-jakarta-sans-medium">
+              Scroll to explore my work
+            </p>
+            <HorizontalGallery items={galleryItems} />
+          </section>
+
+          {/* Original projects grid */}
+          {/* <section id="projects" className={`${BASE_SECTION_CLASS} min-h-[500px] pb-8`}>
           <SectionHeading text="ALL PROJECTS" />
           <ProjectsSection />
         </section> */}
 
-        <ThemeSection theme="dark" id="certificates-section" className="py-20 lg:py-28 px-4 lg:px-8">
-          <SectionHeading text="CERTIFICATES" light />
-          <Certificates />
-        </ThemeSection>
+          <section id="certificates-section" className="py-20 lg:py-28 px-4 lg:px-8">
+            <SectionHeading text="CERTIFICATES" />
+            <Certificates />
+          </section>
 
-        <section id="blog" className={`${BASE_SECTION_CLASS} min-h-[500px] pb-0`}>
-          <SectionHeading text="BLOG" />
-          <BlogSection />
-        </section>
+          <section id="blog" className={`${BASE_SECTION_CLASS} min-h-[500px] pb-0`}>
+            <SectionHeading text="BLOG" />
+            <BlogSection />
+          </section>
 
 
-        <section id="connect" className={`${BASE_SECTION_CLASS} min-h-[400px] pb-0`}>
-          <SectionHeading text="LET'S CONNECT" />
-          <ConnectSection />
-        </section>
+          <section id="connect" className={`${BASE_SECTION_CLASS} min-h-[400px] pb-0`}>
+            <SectionHeading text="LET'S CONNECT" />
+            <ConnectSection />
+          </section>
 
-        {/* Magnetic CTA before footer */}
-        <section className="flex items-center justify-center py-20">
-          <MagneticButton
-            onClick={() => window.location.href = 'mailto:singhharshit2410@gmail.com'}
-          >
-            <span className="font-playfair text-lg">Get in Touch</span>
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-            </svg>
-          </MagneticButton>
-        </section>
+          {/* Magnetic CTA before footer */}
+          <section className="flex items-center justify-center py-20">
+            <MagneticButton
+              onClick={() => window.location.href = 'mailto:singhharshit2410@gmail.com'}
+            >
+              <span className="font-playfair text-lg">Get in Touch</span>
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </MagneticButton>
+          </section>
 
-        <Footer />
+          <Footer />
         </div>
       </div>
     </>

@@ -5,15 +5,12 @@ import { motion } from 'framer-motion';
  * Slides in from left with opacity fade
  * Props:
  *   text — heading text
- *   light — true for dark bg sections (white text)
  *   className — extra classes
  */
-export default function SectionHeading({ text, light = false, className = '' }) {
-    const textColorClass = light ? 'text-[var(--app-text-light)]' : 'text-[var(--theme-text-current)]';
-
+export default function SectionHeading({ text, className = '' }) {
     return (
         <motion.h2
-            className={`text-3xl sm:text-4xl lg:text-6xl lexend-exa-bold m-4 mt-10 ml-6 sm:ml-12 mb-8 ${textColorClass} ${className}`}
+            className={`text-3xl sm:text-4xl lg:text-6xl lexend-exa-bold m-4 mt-10 ml-6 sm:ml-12 mb-8 text-[#3E000D] ${className}`}
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}

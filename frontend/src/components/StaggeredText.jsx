@@ -1,11 +1,7 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 
-/**
- * StaggeredText — Splits text into lines and reveals with stagger
- * Each line: opacity 0 → 1, translateY 40px → 0
- * Stagger: 100ms, duration: 600ms, easing: cubic-bezier(0.4, 0, 0.2, 1)
- */
+
 export default function StaggeredText({
     text,
     as: Tag = 'h2',

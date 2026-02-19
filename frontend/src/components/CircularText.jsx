@@ -1,13 +1,6 @@
 import React from 'react';
 
-/**
- * CircularText — Rotating SVG text on a circular path
- * Pure CSS rotation (no JS animation loop). Terracotta stroke, cream fill.
- * Props:
- *   text — the text to display (repeated around the circle)
- *   size — diameter in pixels (default 150)
- *   className — extra classes
- */
+
 export default function CircularText({ text = 'DEVELOPER · DESIGNER · CREATOR · ', size = 150, className = '' }) {
     const radius = size / 2 - 15;
     const id = `circular-text-${size}`;

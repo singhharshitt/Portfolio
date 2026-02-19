@@ -45,7 +45,7 @@ export default function TechStack({ techLogos }) {
 
       {/* Scrolling Logos */}
       <motion.div
-        className="mt-6 mx-4 sm:mx-8 lg:mx-12 h-[160px] sm:h-[185px] relative overflow-hidden rounded-2xl border border-sand-200/75 bg-sand-100/55 px-2 sm:px-4"
+        className="mt-6 mx-4 sm:mx-8 lg:mx-12 h-[160px] sm:h-[185px] relative overflow-hidden rounded-2xl border border-sand-200/75 bg-[#F5E5CA] px-2 sm:px-4"
         variants={logoContainerVariants}
         initial="hidden"
         whileInView="visible"

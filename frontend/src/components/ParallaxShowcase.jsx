@@ -1,12 +1,7 @@
 import { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
-/**
- * ParallaxShowcase — Layered code screenshots with depth parallax
- * Scroll multipliers: Rear 0.7x, Mid 1.0x, Front 1.3x
- * Background layers get depth blur
- * Disabled under prefers-reduced-motion
- */
+
 export default function ParallaxShowcase({ layers = [] }) {
     const containerRef = useRef(null);
     const [reducedMotion, setReducedMotion] = useState(false);

@@ -1,12 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-/**
- * ThemeWipe — Overlay scaleY wipe transition between sections
- * - Triggers between themed sections
- * - Duration: 600ms, origin: center
- * - Color matches destination theme
- */
+
 export default function ThemeWipe({ sectionIds = [] }) {
     const [isWiping, setIsWiping] = useState(false);
     const [wipeColor, setWipeColor] = useState('var(--app-bg-main)');
