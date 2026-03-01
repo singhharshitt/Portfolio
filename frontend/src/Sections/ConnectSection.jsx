@@ -3,18 +3,17 @@ import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-mo
 import { SiGithub, SiLinkedin, SiX } from 'react-icons/si';
 import { Mail, ArrowUpRight, Sparkles } from 'lucide-react';
 
-// Strict color palette
+// Warm Parchment palette
 const THEME = {
-  bubblegum: '#F66483',
-  marigold: '#C877BF',
-  lagoon: '#30B8B2',
-  brownSugar: '#A6480A',
-  malachite: '#15484C',
-  sand: {
-    100: '#FDF6F0',
-    200: '#F5EDE6',
-  },
-  charcoal: '#1A1A1A',
+  terracotta: '#C2743A',
+  gold: '#C9A66B',
+  sage: '#B7B77A',
+  olive: '#6E6B2F',
+  parchment: '#E9E2D6',
+  cream: '#F5F0E8',
+  textDark: '#4A4A3A',
+  textSecondary: '#6E6B2F',
+  textMuted: '#8A8570',
 };
 
 // Cinematic easing
@@ -29,7 +28,7 @@ const socialLinks = [
     icon: SiGithub,
     url: 'https://github.com/singhharshitt',
     label: 'Visit my GitHub profile',
-    color: THEME.malachite,
+    color: THEME.olive,
     handle: '@singhharshitt',
   },
   {
@@ -37,7 +36,7 @@ const socialLinks = [
     icon: SiLinkedin,
     url: 'https://linkedin.com/in/singh-harshit-',
     label: 'Connect with me on LinkedIn',
-    color: THEME.lagoon,
+    color: THEME.gold,
     handle: '@singh-harshit-',
   },
   {
@@ -45,18 +44,18 @@ const socialLinks = [
     icon: SiX,
     url: 'https://twitter.com/singhharshitt',
     label: 'Follow me on Twitter',
-    color: THEME.bubblegum,
+    color: THEME.terracotta,
     handle: '@singhharshitt',
   },
 ];
 
-// Animated wave button with enhanced interactions
+// Animated wave button
 const WaveButton = ({ onClick }) => {
   return (
     <motion.button
       onClick={onClick}
       className="relative overflow-hidden border-2 px-8 py-4 rounded-xl font-bold flex items-center justify-center cursor-pointer group"
-      style={{ borderColor: THEME.brownSugar }}
+      style={{ borderColor: THEME.terracotta }}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       transition={{ duration: 0.3, ease: EASE.smooth }}
@@ -64,34 +63,34 @@ const WaveButton = ({ onClick }) => {
       {/* Background fill animation */}
       <motion.div
         className="absolute inset-0 origin-bottom"
-        style={{ backgroundColor: THEME.brownSugar }}
+        style={{ backgroundColor: THEME.terracotta }}
         initial={{ scaleY: 0 }}
         whileHover={{ scaleY: 1 }}
         transition={{ duration: 0.4, ease: EASE.smooth }}
       />
 
-      <span className="relative z-10 flex items-center gap-3 transition-colors duration-300 group-hover:text-white">
+      <span className="relative z-10 flex items-center gap-3 transition-colors duration-300 group-hover:text-[#F5F0E8]" style={{ color: THEME.terracotta }}>
         <Mail className="w-5 h-5" />
         Drop me an Email
       </span>
 
-      {/* Wave effects preserved from your design */}
-      <span 
-        className="absolute w-full h-[15%] top-0 rotate-180 bg-[#A6480A] z-0 transition-all duration-500 ease-in-out group-hover:h-[85%]"
-        style={{ clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 50%, 10% 60%, 20% 50%, 30% 60%, 40% 50%, 50% 60%, 60% 50%, 70% 60%, 80% 50%, 90% 60%, 100% 50%)' }}
+      {/* Wave effects */}
+      <span
+        className="absolute w-full h-[15%] top-0 rotate-180 z-0 transition-all duration-500 ease-in-out group-hover:h-[85%]"
+        style={{ backgroundColor: THEME.terracotta, clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 50%, 10% 60%, 20% 50%, 30% 60%, 40% 50%, 50% 60%, 60% 50%, 70% 60%, 80% 50%, 90% 60%, 100% 50%)' }}
       />
-      <span 
-        className="absolute w-full h-[15%] bottom-0 bg-[#A6480A] z-0 transition-all duration-500 ease-in-out group-hover:h-[85%]"
-        style={{ clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 50%, 10% 60%, 20% 50%, 30% 60%, 40% 50%, 50% 60%, 60% 50%, 70% 60%, 80% 50%, 90% 60%, 100% 50%)' }}
+      <span
+        className="absolute w-full h-[15%] bottom-0 z-0 transition-all duration-500 ease-in-out group-hover:h-[85%]"
+        style={{ backgroundColor: THEME.terracotta, clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 50%, 10% 60%, 20% 50%, 30% 60%, 40% 50%, 50% 60%, 60% 50%, 70% 60%, 80% 50%, 90% 60%, 100% 50%)' }}
       />
     </motion.button>
   );
 };
 
-// Social link item with MAI-style hover
+// Social link item
 const SocialLink = ({ social, index }) => {
   const Icon = social.icon;
-  
+
   return (
     <motion.a
       href={social.url}
@@ -114,7 +113,7 @@ const SocialLink = ({ social, index }) => {
         style={{ backgroundColor: `${social.color}08` }}
       />
 
-      {/* Left border accent on hover */}
+      {/* Left border accent */}
       <motion.div
         className="absolute left-0 top-2 bottom-2 w-1 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300"
         style={{ backgroundColor: social.color }}
@@ -129,7 +128,7 @@ const SocialLink = ({ social, index }) => {
         whileHover={{ rotate: 360 }}
         transition={{ duration: 0.6 }}
       >
-        <Icon 
+        <Icon
           className="w-6 h-6 transition-colors duration-300"
           style={{ color: social.color }}
         />
@@ -137,10 +136,10 @@ const SocialLink = ({ social, index }) => {
 
       {/* Text content */}
       <div className="flex-1 relative z-10">
-        <p className="font-bold text-[#1A1A1A] group-hover:text-(--link-color) transition-colors duration-300" style={{ '--link-color': social.color }}>
+        <p className="font-bold transition-colors duration-300 group-hover:text-(--link-color)" style={{ color: THEME.textDark, '--link-color': social.color }}>
           {social.name}
         </p>
-        <p className="text-sm text-[#1A1A1A]/60 font-mono">{social.handle}</p>
+        <p className="text-sm font-mono" style={{ color: THEME.textMuted }}>{social.handle}</p>
       </div>
 
       {/* Arrow */}
@@ -149,7 +148,7 @@ const SocialLink = ({ social, index }) => {
         initial={{ x: 0, opacity: 0.5 }}
         whileHover={{ x: 4, opacity: 1 }}
       >
-        <ArrowUpRight 
+        <ArrowUpRight
           className="w-5 h-5 transition-colors duration-300"
           style={{ color: social.color }}
         />
@@ -158,7 +157,7 @@ const SocialLink = ({ social, index }) => {
   );
 };
 
-// Main card component with retro styling
+// Main card component
 const ConnectCard = ({ children, label, delay = 0 }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
@@ -169,7 +168,7 @@ const ConnectCard = ({ children, label, delay = 0 }) => {
       initial={{ opacity: 0, y: 60, rotateX: 5 }}
       animate={isInView ? { opacity: 1, y: 0, rotateX: 0 } : { opacity: 0, y: 60, rotateX: 5 }}
       transition={{ delay, duration: 0.9, ease: EASE.smooth }}
-      whileHover={{ 
+      whileHover={{
         y: -8,
         transition: { duration: 0.4, ease: EASE.smooth }
       }}
@@ -179,24 +178,23 @@ const ConnectCard = ({ children, label, delay = 0 }) => {
       {/* Glow effect */}
       <motion.div
         className="absolute -inset-2 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-xl"
-        style={{ backgroundColor: `${THEME.brownSugar}20` }}
+        style={{ backgroundColor: `${THEME.terracotta}15` }}
       />
 
       {/* Main card */}
       <div
-        className="relative h-full bg-[#FDF6F0] shadow-md rounded-xl overflow-hidden border-b-4 border-r-4 p-8 transition-all duration-500"
-        style={{ borderColor: THEME.brownSugar }}
+        className="relative h-full shadow-md rounded-xl overflow-hidden border-b-4 border-r-4 p-8 transition-all duration-500"
+        style={{ backgroundColor: THEME.cream, borderColor: THEME.terracotta, boxShadow: '0 4px 20px rgba(110, 107, 47, 0.08)' }}
       >
         {/* Hover border frame */}
         <motion.div
           className="absolute inset-0 border-2 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none"
-          style={{ 
-            borderColor: THEME.brownSugar,
+          style={{
+            borderColor: THEME.terracotta,
             margin: '16px',
           }}
         />
 
-        {/* Content */}
         <div className="relative z-10 h-full flex flex-col">
           {children}
         </div>
@@ -207,9 +205,9 @@ const ConnectCard = ({ children, label, delay = 0 }) => {
           animate={isInView ? { opacity: 0, y: 0 } : { opacity: 0, y: 10 }}
           whileHover={{ opacity: 1 }}
           className="absolute left-1/2 -translate-x-1/2 bottom-3 text-[9px] uppercase tracking-[0.5em] px-2 py-1 rounded-full transition-all duration-500 pointer-events-none"
-          style={{ 
-            color: THEME.brownSugar,
-            backgroundColor: '#FDF6F0',
+          style={{
+            color: THEME.terracotta,
+            backgroundColor: THEME.cream,
           }}
         >
           {label}
@@ -239,17 +237,16 @@ const ConnectSection = () => {
     <section
       ref={sectionRef}
       className="relative py-24 lg:py-32 overflow-hidden"
-      style={{ backgroundColor: THEME.sand[200] }}
+      style={{ backgroundColor: THEME.cream }}
     >
       {/* Background elements */}
       <motion.div
-       
         className="absolute top-20 right-20 w-72 h-72 rounded-full opacity-20 blur-3xl pointer-events-none"
-        style={{ backgroundColor: `${THEME.lagoon}25`, y: bgY }}
+        style={{ backgroundColor: `${THEME.gold}25`, y: bgY }}
       />
       <motion.div
         className="absolute bottom-20 left-20 w-96 h-96 rounded-full opacity-15 blur-3xl pointer-events-none"
-        style={{ backgroundColor: `${THEME.bubblegum}25`, y: useTransform(scrollYProgress, [0, 1], [0, -100])}}
+        style={{ backgroundColor: `${THEME.terracotta}15`, y: useTransform(scrollYProgress, [0, 1], [0, -100]) }}
       />
 
       <div className="relative z-10 max-w-7xl mx-auto">
@@ -263,7 +260,7 @@ const ConnectSection = () => {
           >
             <span
               className="text-xs font-mono uppercase tracking-[0.3em] mb-4 flex items-center justify-center gap-2"
-              style={{ color: THEME.brownSugar }}
+              style={{ color: THEME.olive }}
             >
               <Sparkles className="w-4 h-4" />
               Let's Collaborate
@@ -279,11 +276,11 @@ const ConnectSection = () => {
               transition={{ duration: 0.8, delay: 0.1, ease: EASE.smooth }}
               className="text-5xl sm:text-6xl font-serif"
               style={{
-                color: THEME.charcoal,
+                color: THEME.textDark,
                 fontFamily: "'Playfair Display', Georgia, serif",
               }}
             >
-              Get In <em className="italic" style={{ color: THEME.bubblegum }}>Touch</em>
+              Get In <em className="italic" style={{ color: THEME.terracotta }}>Touch</em>
             </motion.h2>
           </div>
 
@@ -293,7 +290,7 @@ const ConnectSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.3, ease: EASE.smooth }}
             className="mt-4 text-lg max-w-2xl mx-auto"
-            style={{ color: `${THEME.charcoal}99` }}
+            style={{ color: THEME.textMuted }}
           >
             Have a project in mind or just want to say hello? I'd love to hear from you.
           </motion.p>
@@ -309,10 +306,10 @@ const ConnectSection = () => {
               viewport={{ once: true }}
               transition={{ delay: 0.2, duration: 0.6 }}
               className="text-2xl sm:text-3xl font-bold mb-4"
-              style={{ color: THEME.charcoal }}
+              style={{ color: THEME.textDark }}
             >
               Let's Build Something{' '}
-              <span style={{ color: THEME.brownSugar }}>Amazing</span> Together
+              <span style={{ color: THEME.terracotta }}>Amazing</span> Together
             </motion.h3>
 
             <motion.p
@@ -320,25 +317,27 @@ const ConnectSection = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3, duration: 0.6 }}
-              className="text-[#1A1A1A]/75 text-base sm:text-lg leading-relaxed mb-8 grow"
+              className="text-base sm:text-lg leading-relaxed mb-8 grow"
+              style={{ color: THEME.textMuted }}
             >
               I'm always excited to collaborate on innovative projects, discuss
               new technologies, or explore opportunities. Whether you have a
               project in mind, need a developer, or just want to connect —{' '}
-              <span className="font-bold" style={{ color: THEME.brownSugar }}>
+              <span className="font-bold" style={{ color: THEME.terracotta }}>
                 I'd love to hear from you!
               </span>
             </motion.p>
 
             <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center mt-auto">
               <WaveButton onClick={handleEmailClick} />
-              
+
               <motion.span
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.5, duration: 0.6 }}
-                className="text-sm text-[#1A1A1A]/60"
+                className="text-sm"
+                style={{ color: THEME.textMuted }}
               >
                 or connect via social media →
               </motion.span>
@@ -353,9 +352,9 @@ const ConnectSection = () => {
               viewport={{ once: true }}
               transition={{ delay: 0.25, duration: 0.6 }}
               className="text-2xl sm:text-3xl font-bold mb-6"
-              style={{ color: THEME.charcoal }}
+              style={{ color: THEME.textDark }}
             >
-              Find Me <span style={{ color: THEME.brownSugar }}>Online</span>
+              Find Me <span style={{ color: THEME.terracotta }}>Online</span>
             </motion.h3>
 
             <div className="space-y-2">
@@ -371,10 +370,10 @@ const ConnectSection = () => {
               viewport={{ once: true }}
               transition={{ delay: 0.6, duration: 0.6 }}
               className="mt-6 pt-6 border-t"
-              style={{ borderColor: `${THEME.charcoal}15` }}
+              style={{ borderColor: `${THEME.sage}40` }}
             >
-              <p className="text-sm text-center" style={{ color: `${THEME.charcoal}99` }}>
-                <span className="font-bold" style={{ color: THEME.brownSugar }}>Available for:</span>{' '}
+              <p className="text-sm text-center" style={{ color: THEME.textMuted }}>
+                <span className="font-bold" style={{ color: THEME.terracotta }}>Available for:</span>{' '}
                 <span className="inline-flex gap-2 flex-wrap justify-center">
                   {['Freelance', 'Full-time', 'Collaborations'].map((item, i) => (
                     <motion.span
@@ -384,9 +383,9 @@ const ConnectSection = () => {
                       viewport={{ once: true }}
                       transition={{ delay: 0.7 + i * 0.1 }}
                       className="px-2 py-0.5 rounded-full text-xs"
-                      style={{ 
-                        backgroundColor: `${THEME.lagoon}15`,
-                        color: THEME.lagoon,
+                      style={{
+                        backgroundColor: `${THEME.gold}15`,
+                        color: THEME.olive,
                       }}
                     >
                       {item}

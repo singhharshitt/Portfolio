@@ -3,28 +3,26 @@ import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-mo
 import { Code2, Palette, Lightbulb, Rocket, ArrowUpRight } from 'lucide-react';
 import me from '../assets/me.jpg';
 
-// Retro color palette
+// Warm Parchment color palette
 const THEME = {
-  bubblegum: '#F66483',
-  marigold: '#C877BF',
-  lagoon: '#30B8B2',
-  brownSugar: '#A6480A',
-  malachite: '#15484C',
-  bgCream: '#FDF6F0',
-  bgSoftPink: '#FEF2F4',
-  bgSoftTeal: '#E8F6F5',
-  bgWarm: '#F5EDE6',
-  textDark: '#1A1A1A',
-  textWarm: '#4A3728',
-  textMuted: '#8B7355',
+  terracotta: '#C2743A',
+  gold: '#C9A66B',
+  sage: '#B7B77A',
+  olive: '#6E6B2F',
+  parchment: '#E9E2D6',
+  cream: '#F5F0E8',
+  bgSection: '#E9E2D6',
+  textDark: '#4A4A3A',
+  textSecondary: '#6E6B2F',
+  textMuted: '#8A8570',
 };
 
-// Cinematic easing curves from reference
+// Cinematic easing curves
 const EASING = {
-  smooth: [0.16, 1, 0.3, 1],      // Primary smooth ease
-  entrance: [0.25, 0.46, 0.45, 0.94], // Soft entrance
-  exit: [0.55, 0.085, 0.68, 0.53],    // Gentle exit
-  elastic: [0.68, -0.55, 0.265, 1.55], // Subtle bounce
+  smooth: [0.16, 1, 0.3, 1],
+  entrance: [0.25, 0.46, 0.45, 0.94],
+  exit: [0.55, 0.085, 0.68, 0.53],
+  elastic: [0.68, -0.55, 0.265, 1.55],
 };
 
 const skills = [
@@ -32,29 +30,29 @@ const skills = [
     icon: Code2,
     title: 'Development',
     description: 'Building robust, scalable applications with modern technologies.',
-    color: THEME.lagoon,
+    color: THEME.terracotta,
   },
   {
     icon: Palette,
     title: 'Design',
     description: 'Creating beautiful, intuitive interfaces that users love.',
-    color: THEME.bubblegum,
+    color: THEME.gold,
   },
   {
     icon: Lightbulb,
     title: 'Strategy',
     description: 'Solving complex problems with creative, effective solutions.',
-    color: THEME.marigold,
+    color: THEME.sage,
   },
   {
     icon: Rocket,
     title: 'Performance',
     description: 'Optimizing for speed, accessibility, and user experience.',
-    color: THEME.brownSugar,
+    color: THEME.olive,
   },
 ];
 
-// Enhanced Skill Card with MAI-style interactions
+// Enhanced Skill Card
 const SkillCard = ({ skill, index }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-50px" });
@@ -75,8 +73,8 @@ const SkillCard = ({ skill, index }) => {
       }}
       className="group relative p-6 rounded-2xl cursor-pointer overflow-hidden"
       style={{
-        backgroundColor: 'white',
-        boxShadow: '0 4px 20px rgba(0,0,0,0.04)',
+        backgroundColor: THEME.cream,
+        boxShadow: '0 4px 20px rgba(110, 107, 47, 0.06)',
       }}
     >
       {/* Animated border gradient on hover */}
@@ -87,7 +85,7 @@ const SkillCard = ({ skill, index }) => {
         }}
       />
 
-      {/* Top accent line with scale animation */}
+      {/* Top accent line */}
       <div className="absolute top-0 left-6 right-6 h-0.5 overflow-hidden rounded-full">
         <motion.div
           className="h-full w-full origin-left"
@@ -98,7 +96,7 @@ const SkillCard = ({ skill, index }) => {
         />
       </div>
 
-      {/* Icon container with subtle rotation on hover */}
+      {/* Icon container */}
       <motion.div
         className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 relative"
         style={{ backgroundColor: `${skill.color}12` }}
@@ -130,7 +128,7 @@ const SkillCard = ({ skill, index }) => {
         {skill.description}
       </p>
 
-      {/* Arrow reveal with stagger */}
+      {/* Arrow reveal */}
       <motion.div
         initial={{ opacity: 0, x: -10, scale: 0.8 }}
         whileHover={{ opacity: 1, x: 0, scale: 1 }}
@@ -153,21 +151,29 @@ const SkillCard = ({ skill, index }) => {
 };
 
 // Floating decorative element with parallax
-const FloatingElement = ({ children, className, delay = 0, direction = 'left', scrollYProgress }) => {
+const FloatingElement = ({ children, className, delay = 0, direction = 'left', speed = 1, scrollYProgress }) => {
+  const baseTravel = direction === 'left' ? -80 : -40;
   const y = useTransform(
     scrollYProgress,
     [0, 1],
-    direction === 'left' ? [0, -80] : [0, -40]
+    [0, baseTravel * speed]
   );
 
   const rotate = useTransform(
     scrollYProgress,
     [0, 1],
-    direction === 'left' ? [-3, 3] : [3, -3]
+    direction === 'left' ? [-2, 2] : [3, -3]
+  );
+
+  const scaleVal = useTransform(
+    scrollYProgress,
+    [0, 0.3, 0.7, 1],
+    [0.95, 1.05, 1.05, 0.98]
   );
 
   const springY = useSpring(y, { stiffness: 100, damping: 30 });
   const springRotate = useSpring(rotate, { stiffness: 100, damping: 30 });
+  const springScale = useSpring(scaleVal, { stiffness: 100, damping: 30 });
 
   return (
     <motion.div
@@ -175,7 +181,7 @@ const FloatingElement = ({ children, className, delay = 0, direction = 'left', s
       whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
       transition={{ delay, duration: 0.9, ease: EASING.smooth }}
-      style={{ y: springY, rotate: springRotate }}
+      style={{ y: springY, rotate: springRotate, scale: springScale, willChange: 'transform' }}
       className={className}
     >
       {children}
@@ -183,7 +189,7 @@ const FloatingElement = ({ children, className, delay = 0, direction = 'left', s
   );
 };
 
-// Text reveal component for staggered typography
+// Text reveal component
 const TextReveal = ({ children, delay = 0, className = "" }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
@@ -238,24 +244,24 @@ export default function Aboutme() {
       id="about"
       ref={sectionRef}
       className="relative py-32 lg:py-48 overflow-hidden"
-      style={{ backgroundColor: THEME.bgSoftTeal }}
+      style={{ backgroundColor: THEME.bgSection }}
     >
-      {/* MAI-style floating decorative elements with enhanced parallax */}
+      {/* Floating decorative elements */}
       <FloatingElement
         className="absolute top-24 left-8 lg:left-20 w-36 lg:w-52 h-44 lg:h-64 rounded-2xl overflow-hidden shadow-2xl hidden lg:block z-0"
         delay={0.3}
         direction="left"
+        speed={0.7}
         scrollYProgress={scrollYProgress}
       >
         <div
           className="w-full h-full relative"
-          style={{ backgroundColor: `${THEME.bubblegum}25` }}
+          style={{ backgroundColor: `${THEME.terracotta}15` }}
         >
-          {/* Subtle texture overlay */}
           <div
             className="absolute inset-0 opacity-30"
             style={{
-              backgroundImage: `radial-gradient(circle at 2px 2px, ${THEME.bubblegum}40 1px, transparent 0)`,
+              backgroundImage: `radial-gradient(circle at 2px 2px, ${THEME.terracotta}30 1px, transparent 0)`,
               backgroundSize: '20px 20px',
             }}
           />
@@ -266,16 +272,17 @@ export default function Aboutme() {
         className="absolute bottom-40 right-8 lg:right-28 w-44 lg:w-60 h-36 lg:h-48 rounded-2xl overflow-hidden shadow-2xl hidden lg:block z-0"
         delay={0.5}
         direction="right"
+        speed={1.1}
         scrollYProgress={scrollYProgress}
       >
         <div
           className="w-full h-full relative"
-          style={{ backgroundColor: `${THEME.lagoon}25` }}
+          style={{ backgroundColor: `${THEME.gold}15` }}
         >
           <div
             className="absolute inset-0 opacity-30"
             style={{
-              backgroundImage: `radial-gradient(circle at 2px 2px, ${THEME.lagoon}40 1px, transparent 0)`,
+              backgroundImage: `radial-gradient(circle at 2px 2px, ${THEME.gold}30 1px, transparent 0)`,
               backgroundSize: '20px 20px',
             }}
           />
@@ -292,12 +299,12 @@ export default function Aboutme() {
         <div
           className="w-full h-full rounded-full"
           style={{
-            background: `radial-gradient(circle, ${THEME.marigold}30 0%, transparent 70%)`,
+            background: `radial-gradient(circle, ${THEME.sage}30 0%, transparent 70%)`,
           }}
         />
       </FloatingElement>
 
-      {/* Subtle background pattern with fade */}
+      {/* Subtle background pattern */}
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
@@ -308,19 +315,19 @@ export default function Aboutme() {
         <div
           className="w-full h-full"
           style={{
-            backgroundImage: `radial-gradient(circle at 1px 1px, ${THEME.malachite} 1px, transparent 0)`,
+            backgroundImage: `radial-gradient(circle at 1px 1px, ${THEME.textDark} 1px, transparent 0)`,
             backgroundSize: '48px 48px',
           }}
         />
       </motion.div>
 
       <div className="relative z-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        {/* Section Header - MAI Style with Text Reveal */}
+        {/* Section Header */}
         <div className="text-center mb-20 lg:mb-32">
           <TextReveal delay={0}>
             <span
               className="text-xs font-mono uppercase tracking-[0.3em] mb-4 block"
-              style={{ color: THEME.brownSugar }}
+              style={{ color: THEME.olive }}
             >
               Get to know me
             </span>
@@ -334,20 +341,20 @@ export default function Aboutme() {
                 fontFamily: "'Playfair Display', Georgia, serif"
               }}
             >
-              About <em className="italic" style={{ color: THEME.lagoon }}>Me</em>
+              About <em className="italic" style={{ color: THEME.terracotta }}>Me</em>
             </h2>
           </TextReveal>
         </div>
 
         {/* Main Content Grid */}
         <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-          {/* Left Column - Image with enhanced parallax */}
+          {/* Left Column - Image */}
           <motion.div
             style={{ y: imageY, rotate: imageRotate, scale }}
             className="relative"
           >
             <div className="relative max-w-md mx-auto lg:mx-0">
-              {/* Main image container with reveal animation */}
+              {/* Main image container */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.9, y: 40 }}
                 whileInView={{ opacity: 1, scale: 1, y: 0 }}
@@ -355,7 +362,7 @@ export default function Aboutme() {
                 transition={{ duration: 1, ease: EASING.smooth }}
                 className="relative aspect-4/5 rounded-3xl overflow-hidden shadow-2xl group"
                 style={{
-                  border: `2px solid ${THEME.lagoon}25`,
+                  border: `2px solid ${THEME.gold}25`,
                 }}
               >
                 <motion.img
@@ -366,11 +373,11 @@ export default function Aboutme() {
                   transition={{ duration: 0.6 }}
                 />
 
-                {/* Gradient overlay that shifts on hover */}
+                {/* Gradient overlay */}
                 <motion.div
                   className="absolute inset-0"
                   style={{
-                    background: `linear-gradient(180deg, transparent 50%, ${THEME.malachite}40 100%)`,
+                    background: `linear-gradient(180deg, transparent 50%, ${THEME.olive}30 100%)`,
                   }}
                   initial={{ opacity: 0.3 }}
                   whileHover={{ opacity: 0.5 }}
@@ -381,12 +388,12 @@ export default function Aboutme() {
                 <motion.div
                   className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                   style={{
-                    boxShadow: `inset 0 0 0 2px ${THEME.lagoon}50`,
+                    boxShadow: `inset 0 0 0 2px ${THEME.gold}50`,
                   }}
                 />
               </motion.div>
 
-              {/* Floating stats card with spring animation */}
+              {/* Floating stats card */}
               <motion.div
                 initial={{ opacity: 0, x: 40, y: 20 }}
                 whileInView={{ opacity: 1, x: 0, y: 0 }}
@@ -394,23 +401,24 @@ export default function Aboutme() {
                 transition={{ delay: 0.5, duration: 0.8, ease: EASING.smooth }}
                 whileHover={{
                   y: -5,
-                  boxShadow: `0 25px 50px ${THEME.bubblegum}20`,
+                  boxShadow: `0 25px 50px ${THEME.terracotta}20`,
                 }}
-                className="absolute -bottom-8 -right-8 bg-white rounded-2xl p-6 shadow-xl"
+                className="absolute -bottom-8 -right-8 rounded-2xl p-6 shadow-xl"
                 style={{
-                  border: `1px solid ${THEME.bubblegum}20`,
+                  backgroundColor: THEME.cream,
+                  border: `1px solid ${THEME.terracotta}20`,
                 }}
               >
                 <div className="flex items-center gap-4">
                   <motion.div
                     className="w-14 h-14 rounded-xl flex items-center justify-center"
-                    style={{ backgroundColor: `${THEME.bubblegum}12` }}
+                    style={{ backgroundColor: `${THEME.terracotta}12` }}
                     whileHover={{ rotate: 360 }}
                     transition={{ duration: 0.6 }}
                   >
                     <Rocket
                       className="w-7 h-7"
-                      style={{ color: THEME.bubblegum }}
+                      style={{ color: THEME.terracotta }}
                     />
                   </motion.div>
                   <div>
@@ -434,7 +442,7 @@ export default function Aboutme() {
                 </div>
               </motion.div>
 
-              {/* Decorative corner elements with draw animation */}
+              {/* Decorative corner elements */}
               <motion.div
                 className="absolute -top-4 -left-4 w-24 h-24 hidden lg:block"
                 initial={{ pathLength: 0, opacity: 0 }}
@@ -445,7 +453,7 @@ export default function Aboutme() {
                 <svg width="96" height="96" viewBox="0 0 96 96" fill="none">
                   <motion.path
                     d="M0 96V0H96"
-                    stroke={THEME.lagoon}
+                    stroke={THEME.gold}
                     strokeWidth="2"
                     strokeLinecap="round"
                     initial={{ pathLength: 0 }}
@@ -462,7 +470,7 @@ export default function Aboutme() {
                 <svg width="96" height="96" viewBox="0 0 96 96" fill="none">
                   <motion.path
                     d="M96 0V96H0"
-                    stroke={THEME.bubblegum}
+                    stroke={THEME.terracotta}
                     strokeWidth="2"
                     strokeLinecap="round"
                     initial={{ pathLength: 0 }}
@@ -475,17 +483,17 @@ export default function Aboutme() {
             </div>
           </motion.div>
 
-          {/* Right Column - Content with staggered reveals */}
+          {/* Right Column - Content */}
           <motion.div
             style={{ y: contentY }}
             className="lg:pl-8"
           >
-            {/* Name and title with text reveal */}
+            {/* Name and title */}
             <div className="mb-8">
               <TextReveal delay={0.2}>
                 <span
                   className="text-sm font-mono uppercase tracking-widest mb-2 block"
-                  style={{ color: THEME.brownSugar }}
+                  style={{ color: THEME.olive }}
                 >
                   Harshit Singh
                 </span>
@@ -499,17 +507,17 @@ export default function Aboutme() {
                     fontFamily: "'Playfair Display', Georgia, serif"
                   }}
                 >
-                  Full Stack <em className="italic" style={{ color: THEME.bubblegum }}>Developer</em>
+                  Full Stack <em className="italic" style={{ color: THEME.terracotta }}>Developer</em>
                 </h3>
               </TextReveal>
             </div>
 
-            {/* Description with line-by-line reveal */}
+            {/* Description */}
             <div className="space-y-6 mb-12">
               <TextReveal delay={0.4}>
                 <p
                   className="text-lg leading-relaxed"
-                  style={{ color: THEME.textWarm }}
+                  style={{ color: THEME.textSecondary }}
                 >
                   With over 3 years of experience, I craft digital products that make a difference.
                   My approach combines technical expertise with a keen eye for design, ensuring every
@@ -520,7 +528,7 @@ export default function Aboutme() {
               <TextReveal delay={0.5}>
                 <p
                   className="text-lg leading-relaxed"
-                  style={{ color: THEME.textWarm }}
+                  style={{ color: THEME.textSecondary }}
                 >
                   I believe in the power of thoughtful design and clean code to solve real problems.
                   Whether it's a complex web application or a simple landing page, I bring the same
@@ -529,14 +537,14 @@ export default function Aboutme() {
               </TextReveal>
             </div>
 
-            {/* Skills Grid with staggered entrance */}
+            {/* Skills Grid */}
             <div className="grid sm:grid-cols-2 gap-4">
               {skills.map((skill, index) => (
                 <SkillCard key={skill.title} skill={skill} index={index} />
               ))}
             </div>
 
-            {/* CTA with magnetic hover effect */}
+            {/* CTA */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -552,12 +560,12 @@ export default function Aboutme() {
                 }}
                 className="inline-flex items-center gap-3 px-8 py-4 rounded-full font-medium relative overflow-hidden group"
                 style={{
-                  backgroundColor: THEME.malachite,
-                  color: 'white',
+                  backgroundColor: THEME.olive,
+                  color: '#F5F0E8',
                 }}
                 whileHover={{
                   scale: 1.03,
-                  boxShadow: `0 20px 60px ${THEME.malachite}40`,
+                  boxShadow: `0 20px 60px ${THEME.olive}40`,
                 }}
                 whileTap={{ scale: 0.98 }}
                 transition={{ duration: 0.3, ease: EASING.smooth }}
@@ -566,7 +574,7 @@ export default function Aboutme() {
                 <motion.div
                   className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                   style={{
-                    background: `linear-gradient(135deg, ${THEME.lagoon} 0%, ${THEME.malachite} 100%)`,
+                    background: `linear-gradient(135deg, ${THEME.olive} 0%, ${THEME.terracotta} 100%)`,
                   }}
                 />
 

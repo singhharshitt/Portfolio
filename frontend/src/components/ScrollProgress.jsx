@@ -31,7 +31,7 @@ export default function ScrollProgress() {
                 className="fixed top-0 left-0 right-0 h-0.5 origin-left z-100"
                 style={{
                     scaleX,
-                    background: 'linear-gradient(90deg, #30B8B2 0%, #15484C 100%)',
+                    background: 'linear-gradient(90deg, #C2743A 0%, #6E6B2F 100%)',
                 }}
                 aria-hidden="true"
             />
@@ -43,7 +43,7 @@ export default function ScrollProgress() {
                     scaleX,
                     background: useTransform(
                         gradientPosition,
-                        (pos) => `linear-gradient(90deg, transparent ${pos}, #F66483 calc(${pos} + 20%), transparent calc(${pos} + 40%))`
+                        (pos) => `linear-gradient(90deg, transparent ${pos}, #C9A66B calc(${pos} + 20%), transparent calc(${pos} + 40%))`
                     ),
                     filter: 'blur(2px)',
                 }}
@@ -54,7 +54,7 @@ export default function ScrollProgress() {
             <motion.div
                 className="fixed top-0 left-0 right-0 h-4 pointer-events-none z-99"
                 style={{
-                    background: 'linear-gradient(to bottom, rgba(21, 72, 76, 0.03), transparent)',
+                    background: 'linear-gradient(to bottom, rgba(110, 107, 47, 0.03), transparent)',
                     opacity: useTransform(scrollYProgress, [0, 0.05], [1, 0]),
                 }}
                 aria-hidden="true"

@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
+import { motion, useInView } from 'framer-motion';
 import {
   SiGithub,
   SiReact,
@@ -12,27 +12,28 @@ import {
   SiPython,
   SiDocker,
 } from 'react-icons/si';
-import { ExternalLink, ArrowUpRight, FolderOpen } from 'lucide-react';
+import { ExternalLink, ArrowUpRight, FolderOpen, ChevronLeft, ChevronRight } from 'lucide-react';
+import useReducedMotion from '../hooks/useReducedMotion';
+import useScrollReveal from '../hooks/useScrollReveal';
+import {
+  EASE_PREMIUM,
+  EASE_SMOOTH,
+  DURATION_REVEAL,
+  STAGGER_CHILDREN,
+  SPRING_BOUNCE,
+  BREAKPOINTS,
+} from '../utils/animationConstants';
 
-// Strict color palette
+// Warm Parchment palette
 const THEME = {
-  bubblegum: '#F66483',
-  marigold: '#C877BF',
-  lagoon: '#30B8B2',
-  brownSugar: '#A6480A',
-  malachite: '#15484C',
-  sand: {
-    100: '#F5E5CA',
-    200: '#F5EDE6',
-  },
-  charcoal: '#1A1A1A',
-  orange: '#F97316', // Keeping your orange accent
-};
-
-// Cinematic easing
-const EASE = {
-  smooth: [0.16, 1, 0.3, 1],
-  entrance: [0.25, 0.46, 0.45, 0.94],
+  terracotta: '#C2743A',
+  gold: '#C9A66B',
+  sage: '#B7B77A',
+  olive: '#6E6B2F',
+  parchment: '#E9E2D6',
+  cream: '#F5F0E8',
+  textDark: '#4A4A3A',
+  textMuted: '#8A8570',
 };
 
 const projects = [
@@ -49,7 +50,7 @@ const projects = [
     github: 'https://github.com/singhharshitt/grabdesk',
     liveDemo: null,
     category: 'Full Stack',
-    accentColor: THEME.lagoon,
+    accentColor: THEME.terracotta,
   },
   {
     id: 2,
@@ -63,7 +64,7 @@ const projects = [
     github: 'https://github.com/singhharshitt/sky-x',
     liveDemo: 'https://sky-x-demo.vercel.app',
     category: 'Frontend',
-    accentColor: THEME.bubblegum,
+    accentColor: THEME.gold,
   },
   {
     id: 3,
@@ -77,7 +78,7 @@ const projects = [
     github: 'https://github.com/singhharshitt/portfolio',
     liveDemo: 'https://harshitsingh.dev',
     category: 'Frontend',
-    accentColor: THEME.marigold,
+    accentColor: THEME.sage,
   },
   {
     id: 4,
@@ -91,7 +92,7 @@ const projects = [
     github: 'https://github.com/singhharshitt/task-manager',
     liveDemo: null,
     category: 'Full Stack',
-    accentColor: THEME.lagoon,
+    accentColor: THEME.olive,
   },
   {
     id: 5,
@@ -105,7 +106,7 @@ const projects = [
     github: 'https://github.com/singhharshitt/ai-chat',
     liveDemo: null,
     category: 'AI/ML',
-    accentColor: THEME.bubblegum,
+    accentColor: THEME.terracotta,
   },
   {
     id: 6,
@@ -119,31 +120,26 @@ const projects = [
     github: 'https://github.com/singhharshitt/devops-pipeline',
     liveDemo: null,
     category: 'DevOps',
-    accentColor: THEME.marigold,
+    accentColor: THEME.gold,
   },
 ];
 
-// Individual project card with MAI-style depth
-const ProjectCard = ({ project, index }) => {
+// ─── Enhanced Project Card ─────────────────────────────────
+const ProjectCard = ({ project, index, isCenter }) => {
   const cardRef = useRef(null);
-  const isInView = useInView(cardRef, { once: true, margin: '-80px' });
+  const reduced = useReducedMotion();
+  const [isHovered, setIsHovered] = useState(false);
 
   const cardVariants = {
-    hidden: {
-      opacity: 0,
-      y: 60,
-      rotateX: 8,
-      scale: 0.95,
-    },
+    hidden: reduced ? {} : { opacity: 0, y: 60, scale: 0.9 },
     visible: {
       opacity: 1,
       y: 0,
-      rotateX: 0,
       scale: 1,
       transition: {
-        duration: 0.9,
-        delay: index * 0.12,
-        ease: EASE.smooth,
+        duration: DURATION_REVEAL,
+        delay: index * 0.1,
+        ease: EASE_PREMIUM,
       },
     },
   };
@@ -153,98 +149,97 @@ const ProjectCard = ({ project, index }) => {
       ref={cardRef}
       variants={cardVariants}
       initial="hidden"
-      animate={isInView ? 'visible' : 'hidden'}
-      whileHover={{
-        y: -10,
-        scale: 1.02,
-        transition: { duration: 0.4, ease: EASE.smooth },
+      whileInView="visible"
+      viewport={{ once: true, margin: '-60px' }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="group relative flex flex-col snap-center shrink-0"
+      style={{
+        width: 'min(70vw, 900px)',
+        minHeight: '500px',
+        perspective: '1000px',
+        willChange: 'transform',
       }}
-      className="group relative flex flex-col h-full"
-      style={{ perspective: '1000px' }}
     >
-      {/* Glow backdrop on hover */}
+      {/* Glassmorphism card */}
       <motion.div
-        className="absolute -inset-2 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-xl"
-        style={{ backgroundColor: `${project.accentColor}30` }}
-      />
-
-      {/* Main card - preserving your retro design */}
-      <div
-        className="relative h-full bg-[#F5E5CA] shadow-md rounded-xl overflow-hidden border-b-4 border-r-4 transition-all duration-500 flex flex-col"
-        style={{ borderColor: THEME.orange }}
+        className="relative h-full rounded-2xl overflow-hidden flex flex-col"
+        style={{
+          background: `linear-gradient(145deg, rgba(245,240,232,0.95) 0%, rgba(233,226,214,0.9) 100%)`,
+          backdropFilter: 'blur(20px)',
+          border: `1px solid ${THEME.sage}40`,
+          boxShadow: isHovered
+            ? `0 25px 60px rgba(110,107,47,0.15), 0 0 0 1px ${project.accentColor}30`
+            : `0 8px 30px rgba(110,107,47,0.08)`,
+          transition: 'box-shadow 0.5s ease, transform 0.5s ease',
+          transform: isHovered ? 'translateY(-8px) translateZ(30px)' : 'translateY(0) translateZ(0)',
+        }}
       >
-        {/* Animated border frame on hover */}
-        <motion.div
-          className="absolute inset-0 border-2 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none z-20"
+        {/* Top gradient accent strip */}
+        <div
+          className="h-1.5 w-full"
           style={{
-            borderColor: project.accentColor,
-            margin: '12px',
+            background: `linear-gradient(90deg, ${project.accentColor}, ${project.accentColor}60, transparent)`,
           }}
         />
 
-        {/* Top accent line with color shift */}
-        <motion.div
-          className="absolute top-0 left-6 right-6 h-0.5 origin-left z-10"
-          style={{
-            background: `linear-gradient(90deg, transparent, ${project.accentColor}, transparent)`,
-            transform: 'scaleX(0)',
-          }}
-          whileHover={{ scaleX: 1 }}
-          transition={{ duration: 0.6, ease: EASE.smooth }}
-        />
+        {/* Card number watermark */}
+        <span
+          className="absolute top-6 right-6 font-serif text-7xl font-bold pointer-events-none select-none transition-colors duration-500"
+          style={{ color: isHovered ? `${project.accentColor}20` : `${THEME.textDark}08` }}
+        >
+          {String(index + 1).padStart(2, '0')}
+        </span>
 
-        <div className="relative z-10 p-6 flex flex-col h-full">
-          {/* Category badge with dynamic color */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
-            transition={{ delay: index * 0.12 + 0.2, duration: 0.5 }}
-            className="mb-3"
-          >
+        <div className="relative z-10 p-8 flex flex-col h-full">
+          {/* Category badge */}
+          <motion.div className="mb-4">
             <span
-              className="inline-block px-3 py-1 text-xs font-bold border rounded-full transition-colors duration-300"
+              className="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-bold uppercase tracking-wider border rounded-full transition-all duration-300"
               style={{
                 color: project.accentColor,
-                borderColor: `${project.accentColor}60`,
-                backgroundColor: `${project.accentColor}10`,
+                borderColor: `${project.accentColor}50`,
+                backgroundColor: isHovered ? `${project.accentColor}15` : `${project.accentColor}08`,
               }}
             >
+              <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: project.accentColor }} />
               {project.category}
             </span>
           </motion.div>
 
-          {/* Title with hover color shift */}
+          {/* Title */}
           <h3
-            className="text-xl font-bold mb-3 line-clamp-2 transition-colors duration-300 group-hover:text-(--title-color)"
-            style={{ color: THEME.charcoal, '--title-color': project.accentColor }}
+            className="text-2xl sm:text-3xl font-serif font-bold mb-4 transition-colors duration-300 leading-tight"
+            style={{
+              color: isHovered ? project.accentColor : THEME.textDark,
+              fontFamily: "'Playfair Display', Georgia, serif",
+            }}
           >
             {project.title}
           </h3>
 
           {/* Description */}
-          <p className="text-sm leading-relaxed mb-4 grow line-clamp-3" style={{ color: `${THEME.charcoal}B3` }}>
+          <p className="text-base leading-relaxed mb-6 grow" style={{ color: THEME.textMuted }}>
             {project.description}
           </p>
 
-          {/* Tech stack with icon colors */}
-          <div className="flex flex-wrap gap-2 mb-4">
+          {/* Tech stack with glow */}
+          <div className="flex flex-wrap gap-2.5 mb-6">
             {project.tech.map((tech, techIndex) => {
               const Icon = tech.icon;
               return (
                 <motion.div
                   key={techIndex}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
-                  transition={{ delay: index * 0.12 + techIndex * 0.05 + 0.3, duration: 0.4 }}
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  className="flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-lg transition-all duration-300 cursor-default"
+                  whileHover={{ scale: 1.08, y: -2 }}
+                  className="flex items-center gap-2 text-sm px-3 py-2 rounded-xl cursor-default transition-all duration-300"
                   style={{
-                    backgroundColor: `${tech.color}15`,
+                    backgroundColor: `${tech.color}12`,
                     color: tech.color,
+                    border: `1px solid ${tech.color}20`,
+                    boxShadow: isHovered ? `0 2px 12px ${tech.color}15` : 'none',
                   }}
-                  title={tech.name}
                 >
-                  <Icon className="w-3.5 h-3.5" />
+                  <Icon className="w-4 h-4" />
                   <span className="font-medium">{tech.name}</span>
                 </motion.div>
               );
@@ -252,20 +247,19 @@ const ProjectCard = ({ project, index }) => {
           </div>
 
           {/* Action buttons */}
-          <div className="flex gap-3 pt-3 border-t mt-auto" style={{ borderColor: `${THEME.charcoal}15` }}>
+          <div className="flex gap-3 pt-4 border-t mt-auto" style={{ borderColor: `${THEME.sage}30` }}>
             <motion.a
               href={project.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-bold rounded-lg transition-all duration-300 relative overflow-hidden group/btn"
+              className="flex-1 flex items-center justify-center gap-2 px-5 py-3 text-sm font-bold rounded-xl transition-all duration-300 relative overflow-hidden"
               style={{
-                color: THEME.orange,
-                border: `2px solid ${THEME.orange}`,
-                backgroundColor: 'transparent',
+                color: THEME.terracotta,
+                border: `2px solid ${THEME.terracotta}`,
               }}
               whileHover={{
-                backgroundColor: THEME.orange,
-                color: 'white',
+                backgroundColor: THEME.terracotta,
+                color: '#F5F0E8',
               }}
               whileTap={{ scale: 0.98 }}
             >
@@ -278,14 +272,14 @@ const ProjectCard = ({ project, index }) => {
                 href={project.liveDemo}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-bold rounded-lg transition-all duration-300 relative overflow-hidden"
+                className="flex-1 flex items-center justify-center gap-2 px-5 py-3 text-sm font-bold rounded-xl transition-all duration-300"
                 style={{
                   backgroundColor: project.accentColor,
-                  color: 'white',
+                  color: '#F5F0E8',
                 }}
                 whileHover={{
-                  scale: 1.02,
-                  boxShadow: `0 10px 30px ${project.accentColor}40`,
+                  scale: 1.03,
+                  boxShadow: `0 12px 35px ${project.accentColor}40`,
                 }}
                 whileTap={{ scale: 0.98 }}
               >
@@ -293,122 +287,269 @@ const ProjectCard = ({ project, index }) => {
                 Live Demo
               </motion.a>
             ) : (
-              <div className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-bold rounded-lg opacity-50 cursor-not-allowed" style={{ backgroundColor: `${THEME.charcoal}15`, color: THEME.charcoal }}>
+              <div
+                className="flex-1 flex items-center justify-center gap-2 px-5 py-3 text-sm font-bold rounded-xl opacity-50 cursor-not-allowed"
+                style={{ backgroundColor: `${THEME.sage}30`, color: THEME.textMuted }}
+              >
                 <FolderOpen className="w-4 h-4" />
                 Coming Soon
               </div>
             )}
           </div>
         </div>
-
-        {/* Bottom label - preserving your design */}
-        <span
-          className="absolute left-1/2 -translate-x-1/2 bottom-2 text-[9px] uppercase tracking-[0.5em] opacity-0 group-hover:opacity-100 transition-all duration-500 px-2 py-0.5 rounded-full z-20"
-          style={{
-            color: project.accentColor,
-            backgroundColor: '#F5E5CA',
-          }}
-        >
-          Project
-        </span>
-
-        {/* Decorative corner accent */}
-        <div
-          className="absolute -bottom-12 -right-12 w-24 h-24 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none blur-2xl"
-          style={{ backgroundColor: `${project.accentColor}30` }}
-        />
-      </div>
+      </motion.div>
     </motion.article>
   );
 };
 
-// Section header
+// ─── Progress Bar ──────────────────────────────────────────
+const ScrollProgressBar = ({ progress }) => (
+  <div className="flex justify-center mt-8 gap-2 items-center px-4">
+    <div className="w-full max-w-xs h-0.5 rounded-full overflow-hidden" style={{ backgroundColor: `${THEME.sage}30` }}>
+      <motion.div
+        className="h-full rounded-full"
+        style={{
+          width: `${progress}%`,
+          background: `linear-gradient(90deg, ${THEME.terracotta}, ${THEME.gold}, ${THEME.olive})`,
+          transition: 'width 0.3s ease',
+        }}
+      />
+    </div>
+    <span className="text-xs font-mono" style={{ color: THEME.textMuted }}>
+      {Math.round(progress)}%
+    </span>
+  </div>
+);
+
+// ─── Section Header ────────────────────────────────────────
 const SectionHeader = () => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
+  const { ref, controls } = useScrollReveal();
+
+  const headerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: STAGGER_CHILDREN, delayChildren: 0.1 },
+    },
+  };
+
+  const childVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: DURATION_REVEAL, ease: EASE_PREMIUM } },
+  };
 
   return (
-    <div ref={ref} className="text-center mb-16 px-4">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-        transition={{ duration: 0.6, ease: EASE.smooth }}
+    <motion.div
+      ref={ref}
+      variants={headerVariants}
+      initial="hidden"
+      animate={controls}
+      className="text-center mb-16 px-4"
+    >
+      <motion.span
+        variants={childVariants}
+        className="text-xs font-mono uppercase tracking-[0.3em] mb-4 block"
+        style={{ color: THEME.olive }}
       >
-        <span
-          className="text-xs font-mono uppercase tracking-[0.3em] mb-4 block"
-          style={{ color: THEME.brownSugar }}
-        >
-          Featured Work
-        </span>
-      </motion.div>
+        Featured Work
+      </motion.span>
 
       <div className="overflow-hidden">
         <motion.h2
-          initial={{ y: '100%' }}
-          animate={isInView ? { y: 0 } : { y: '100%' }}
-          transition={{ duration: 0.8, delay: 0.1, ease: EASE.smooth }}
+          variants={childVariants}
           className="text-5xl sm:text-6xl font-serif"
-          style={{ color: THEME.charcoal, fontFamily: "'Playfair Display', Georgia, serif" }}
+          style={{ color: THEME.textDark, fontFamily: "'Playfair Display', Georgia, serif" }}
         >
-          Selected <em className="italic" style={{ color: THEME.lagoon }}>Projects</em>
+          Selected <em className="italic" style={{ color: THEME.terracotta }}>Projects</em>
         </motion.h2>
       </div>
 
       <motion.p
-        initial={{ opacity: 0, y: 20 }}
-        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-        transition={{ duration: 0.6, delay: 0.3, ease: EASE.smooth }}
+        variants={childVariants}
         className="mt-4 text-lg max-w-2xl mx-auto"
-        style={{ color: `${THEME.charcoal}99` }}
+        style={{ color: THEME.textMuted }}
       >
         A collection of projects that showcase my skills in full-stack development, UI/UX design, and problem-solving.
       </motion.p>
-    </div>
+    </motion.div>
   );
 };
 
+// ─── Main Section ──────────────────────────────────────────
 const ProjectsSection = () => {
-  const containerRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start end', 'end start'],
-  });
+  const scrollRef = useRef(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  const bgY = useSpring(useTransform(scrollYProgress, [0, 1], [0, -50]), { stiffness: 100, damping: 30 });
+  // Responsive — detect mobile for vertical stack
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < BREAKPOINTS.mobile);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
+  // Track scroll position for progress bar + active card
+  const handleScroll = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const maxScroll = el.scrollWidth - el.clientWidth;
+    if (maxScroll <= 0) return;
+    const progress = (el.scrollLeft / maxScroll) * 100;
+    setScrollProgress(progress);
+
+    // Determine which card is centered
+    const cardWidth = el.children[0]?.offsetWidth || 0;
+    const gap = 32; // 2rem
+    const idx = Math.round(el.scrollLeft / (cardWidth + gap));
+    setActiveIndex(Math.min(idx, projects.length - 1));
+  }, []);
+
+  // ResizeObserver to recalculate on window resize
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el || isMobile) return;
+
+    const observer = new ResizeObserver(() => handleScroll());
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [handleScroll, isMobile]);
+
+  // Keyboard navigation
+  useEffect(() => {
+    if (isMobile) return;
+    const onKeyDown = (e) => {
+      const el = scrollRef.current;
+      if (!el) return;
+      const cardWidth = el.children[0]?.offsetWidth || 0;
+      const gap = 32;
+      if (e.key === 'ArrowRight') {
+        el.scrollBy({ left: cardWidth + gap, behavior: 'smooth' });
+      } else if (e.key === 'ArrowLeft') {
+        el.scrollBy({ left: -(cardWidth + gap), behavior: 'smooth' });
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [isMobile]);
+
+  const scrollTo = (dir) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const cardWidth = el.children[0]?.offsetWidth || 0;
+    el.scrollBy({ left: dir * (cardWidth + 32), behavior: 'smooth' });
+  };
 
   return (
     <section
-      ref={containerRef}
+      id="projects-showcase"
       className="relative py-24 lg:py-32 overflow-hidden"
-      style={{ backgroundColor: THEME.sand[200] }}
+      style={{ backgroundColor: THEME.parchment }}
     >
-      {/* Background elements */}
-      <motion.div
-
+      {/* Background orbs */}
+      <div
         className="absolute top-20 left-10 w-72 h-72 rounded-full opacity-20 blur-3xl pointer-events-none"
-        style={{ backgroundColor: `${THEME.lagoon}25`, y: bgY}}
+        style={{ backgroundColor: `${THEME.gold}25` }}
       />
-      <motion.div
-
+      <div
         className="absolute bottom-20 right-10 w-96 h-96 rounded-full opacity-15 blur-3xl pointer-events-none"
-        style={{ backgroundColor: `${THEME.bubblegum}25`, y: useTransform(scrollYProgress, [0, 1], [0, -80])  }}
+        style={{ backgroundColor: `${THEME.terracotta}15` }}
       />
 
-      <div className="relative z-10 max-w-7xl mx-auto">
+      <div className="relative z-10">
         <SectionHeader />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 sm:px-6 lg:px-8">
-          {projects.map((project, index) => (
-            <ProjectCard key={project.id} project={project} index={index} />
-          ))}
-        </div>
+        {isMobile ? (
+          /* ── Mobile: Vertical card stack ── */
+          <div className="grid grid-cols-1 gap-6 px-4">
+            {projects.map((project, index) => (
+              <ProjectCard key={project.id} project={project} index={index} isCenter={false} />
+            ))}
+          </div>
+        ) : (
+          /* ── Desktop/Tablet: Horizontal CSS scroll-snap gallery ── */
+          <div className="relative">
+            {/* Navigation arrows */}
+            <button
+              onClick={() => scrollTo(-1)}
+              className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full border backdrop-blur-md transition-all duration-300 hover:scale-110 hidden md:flex items-center justify-center"
+              style={{
+                backgroundColor: `${THEME.cream}90`,
+                borderColor: `${THEME.sage}40`,
+                color: THEME.textDark,
+              }}
+              aria-label="Previous project"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            <button
+              onClick={() => scrollTo(1)}
+              className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full border backdrop-blur-md transition-all duration-300 hover:scale-110 hidden md:flex items-center justify-center"
+              style={{
+                backgroundColor: `${THEME.cream}90`,
+                borderColor: `${THEME.sage}40`,
+                color: THEME.textDark,
+              }}
+              aria-label="Next project"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+
+            {/* Scroll container */}
+            <div
+              ref={scrollRef}
+              onScroll={handleScroll}
+              className="flex gap-8 overflow-x-auto px-[15vw] pb-4"
+              style={{
+                scrollSnapType: 'x mandatory',
+                scrollBehavior: 'smooth',
+                WebkitOverflowScrolling: 'touch',
+                msOverflowStyle: 'none',
+                scrollbarWidth: 'none',
+              }}
+            >
+              {projects.map((project, index) => (
+                <ProjectCard
+                  key={project.id}
+                  project={project}
+                  index={index}
+                  isCenter={index === activeIndex}
+                />
+              ))}
+            </div>
+
+            {/* Right fade hint */}
+            <div
+              className="absolute top-0 right-0 w-24 h-full pointer-events-none z-10"
+              style={{
+                background: `linear-gradient(to left, ${THEME.parchment}, transparent)`,
+              }}
+            />
+            {/* Left fade hint */}
+            <div
+              className="absolute top-0 left-0 w-24 h-full pointer-events-none z-10"
+              style={{
+                background: `linear-gradient(to right, ${THEME.parchment}, transparent)`,
+              }}
+            />
+
+            {/* Progress bar */}
+            <ScrollProgressBar progress={scrollProgress} />
+
+            {/* Hide scrollbar */}
+            <style>{`
+              div[style*="scroll-snap-type"]::-webkit-scrollbar { display: none; }
+            `}</style>
+          </div>
+        )}
 
         {/* View all CTA */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.4, ease: EASE.smooth }}
+          transition={{ duration: 0.6, delay: 0.4, ease: EASE_SMOOTH }}
           className="text-center mt-16"
         >
           <motion.a
@@ -417,12 +558,12 @@ const ProjectsSection = () => {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-3 px-8 py-3 rounded-full font-medium transition-all duration-300 border-2"
             style={{
-              borderColor: THEME.orange,
-              color: THEME.orange,
+              borderColor: THEME.terracotta,
+              color: THEME.terracotta,
             }}
             whileHover={{
-              backgroundColor: THEME.orange,
-              color: 'white',
+              backgroundColor: THEME.terracotta,
+              color: '#F5F0E8',
               scale: 1.03,
             }}
             whileTap={{ scale: 0.98 }}

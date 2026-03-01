@@ -1,18 +1,21 @@
 import { useState, useEffect, useCallback } from 'react';
+import { motion } from 'framer-motion';
 import MenuOverlay from './MenuOverlay';
 import { HamburgerButton } from './HamburgerButton';
+import useScrollDirection from '../hooks/useScrollDirection';
+import { EASE_PREMIUM, BREAKPOINTS } from '../utils/animationConstants';
+
 export default function Navbar({ onNavigate }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const { direction, isAtTop } = useScrollDirection({ threshold: 10, topThreshold: 50 });
 
-  // Handle scroll effect for navbar background
+  // Detect mobile — navbar never hides on mobile
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    const check = () => setIsMobile(window.innerWidth < BREAKPOINTS.mobile);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
   }, []);
 
   // Lock body scroll when menu is open
@@ -37,25 +40,37 @@ export default function Navbar({ onNavigate }) {
 
   const handleNavigate = useCallback((section) => {
     closeMenu();
-    // Small delay to let menu close animation start
     setTimeout(() => {
       onNavigate?.(section);
     }, 300);
   }, [closeMenu, onNavigate]);
 
-  const navbarStyle = isScrolled && !isMenuOpen
+  // Determine navbar visibility state
+  // Mobile: always visible. Menu open: always visible.
+  const shouldHide = !isMobile && !isMenuOpen && direction === 'down' && !isAtTop;
+  const isScrolled = !isAtTop && !isMenuOpen;
+
+  const navbarStyle = isScrolled
     ? { backgroundColor: 'var(--theme-navbar-bg)', boxShadow: 'var(--theme-shadow)' }
     : undefined;
 
   return (
     <>
-      {/* Main Navbar */}
-      <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-[background-color,box-shadow] duration-700 ease-[cubic-bezier(0.4,0,0.2,1)] ${isScrolled && !isMenuOpen
+      {/* Main Navbar — scroll-direction aware */}
+      <motion.header
+        className={`fixed top-0 left-0 right-0 z-50 ${isScrolled && !isMenuOpen
           ? 'backdrop-blur-md'
           : 'bg-transparent'
           }`}
         style={navbarStyle}
+        initial={{ y: 0 }}
+        animate={{
+          y: shouldHide ? '-100%' : '0%',
+        }}
+        transition={{
+          duration: 0.4,
+          ease: EASE_PREMIUM,
+        }}
       >
         <div className="w-full px-6 sm:px-8 lg:px-12">
           <nav className="flex items-center justify-between h-20 lg:h-24">
@@ -89,7 +104,7 @@ export default function Navbar({ onNavigate }) {
             />
           </nav>
         </div>
-      </header>
+      </motion.header>
 
       {/* Full-Screen Menu Overlay */}
       <MenuOverlay

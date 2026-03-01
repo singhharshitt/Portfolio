@@ -1,12 +1,12 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion';
 
-// Strict color palette
+// Warm Parchment palette
 const THEME = {
-  malachite: '#15484C',
+  olive: '#6E6B2F',
   cream: '#F5F0E8',
-  gold: '#F7B05B',
-  lagoon: '#30B8B2',
+  gold: '#C9A66B',
+  terracotta: '#C2743A',
 };
 
 // Cinematic easing
@@ -16,18 +16,18 @@ const EASE = [0.16, 1, 0.3, 1];
  * ThemeSection - lightweight wrapper with scroll-driven animations
  * Global theme switching is controlled from the Skills trigger.
  */
-export default function ThemeSection({ 
-  children, 
-  theme = 'light', 
-  className = '', 
+export default function ThemeSection({
+  children,
+  theme = 'light',
+  className = '',
   id,
   animateEntry = true,
   parallaxIntensity = 0.1,
-  ...props 
+  ...props
 }) {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
-  
+
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start end', 'end start']
@@ -62,8 +62,8 @@ export default function ThemeSection({
   };
 
   // Theme-based background decoration
-  const bgDecoration = theme === 'dark' 
-    ? `radial-gradient(circle at 80% 20%, ${THEME.lagoon}15 0%, transparent 50%)`
+  const bgDecoration = theme === 'dark'
+    ? `radial-gradient(circle at 80% 20%, ${THEME.gold}15 0%, transparent 50%)`
     : `radial-gradient(circle at 20% 80%, ${THEME.gold}10 0%, transparent 50%)`;
 
   return (
@@ -91,8 +91,8 @@ export default function ThemeSection({
       <motion.div
         className="absolute top-0 left-0 right-0 h-px origin-left"
         style={{
-          background: theme === 'dark' 
-            ? `linear-gradient(90deg, ${THEME.lagoon}, transparent)` 
+          background: theme === 'dark'
+            ? `linear-gradient(90deg, ${THEME.gold}, transparent)`
             : `linear-gradient(90deg, ${THEME.gold}, transparent)`,
           scaleX: isInView ? 1 : 0,
           transition: 'scaleX 1.2s cubic-bezier(0.16, 1, 0.3, 1)',
@@ -126,7 +126,7 @@ export default function ThemeSection({
       <div
         className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
         style={{
-          background: `linear-gradient(to top, ${theme === 'dark' ? THEME.malachite : THEME.cream}00, ${theme === 'dark' ? THEME.malachite : THEME.cream})`,
+          background: `linear-gradient(to top, ${theme === 'dark' ? THEME.olive : THEME.cream}00, ${theme === 'dark' ? THEME.olive : THEME.cream})`,
           opacity: 0.5,
         }}
       />

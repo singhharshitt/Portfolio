@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// Strict color palette
+// Warm Parchment palette
 const THEME = {
-  malachite: '#15484C',
+  olive: '#6E6B2F',
   cream: '#F5F0E8',
-  terracotta: '#B54A3F',
-  gold: '#F7B05B',
-  lagoon: '#30B8B2',
+  terracotta: '#C2743A',
+  gold: '#C9A66B',
+  sage: '#B7B77A',
 };
 
 // Cinematic easing
@@ -18,7 +18,7 @@ const EASE = {
 
 export default function ThemeWipe({ sectionIds = [], variant = 'center' }) {
   const [isWiping, setIsWiping] = useState(false);
-  const [wipeColor, setWipeColor] = useState(THEME.malachite);
+  const [wipeColor, setWipeColor] = useState(THEME.olive);
   const [wipeDirection, setWipeDirection] = useState('down');
   const prevSection = useRef(null);
   const wipeQueue = useRef([]);
@@ -27,10 +27,10 @@ export default function ThemeWipe({ sectionIds = [], variant = 'center' }) {
   // Process wipe queue to prevent overlapping animations
   const processQueue = useCallback(() => {
     if (isProcessing.current || wipeQueue.current.length === 0) return;
-    
+
     isProcessing.current = true;
     const { color, direction } = wipeQueue.current.shift();
-    
+
     setWipeColor(color);
     setWipeDirection(direction);
     setIsWiping(true);
@@ -64,13 +64,13 @@ export default function ThemeWipe({ sectionIds = [], variant = 'center' }) {
           if (entry.isIntersecting && prevSection.current !== sectionId.id) {
             const prevIndex = sectionIds.findIndex(s => s.id === prevSection.current);
             const direction = index > prevIndex ? 'down' : 'up';
-            
+
             // Only wipe when transitioning between different themed sections
             if (prevSection.current !== null) {
               const prevTheme = sectionIds.find(s => s.id === prevSection.current)?.theme;
               if (prevTheme !== sectionId.theme) {
-                const color = sectionId.theme === 'dark' 
-                  ? THEME.malachite 
+                const color = sectionId.theme === 'dark'
+                  ? THEME.olive
                   : THEME.cream;
                 queueWipe(color, direction);
               }
@@ -172,7 +172,7 @@ export default function ThemeWipe({ sectionIds = [], variant = 'center' }) {
                 key={`particle-${i}`}
                 className="absolute w-2 h-2 rounded-full"
                 style={{
-                  backgroundColor: THEME.lagoon,
+                  backgroundColor: THEME.sage,
                   left: '50%',
                   top: '50%',
                 }}

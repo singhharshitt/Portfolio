@@ -1,14 +1,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-// Strict color palette
+// Warm Parchment palette
 const THEME = {
-  bubblegum: '#F66483',
-  marigold: '#C877BF',
-  lagoon: '#30B8B2',
-  brownSugar: '#A6480A',
-  malachite: '#15484C',
-  charcoal: '#1A1A1A',
+  terracotta: '#C2743A',
+  gold: '#C9A66B',
+  olive: '#6E6B2F',
+  textDark: '#4A4A3A',
   cream: '#F5F0E8',
 };
 
@@ -19,7 +17,7 @@ export function HamburgerButton({ isOpen, onClick, isScrolled }) {
       rotate: 0,
       y: 0,
       x: 0,
-      backgroundColor: isScrolled ? THEME.charcoal : THEME.cream,
+      backgroundColor: isScrolled ? THEME.textDark : THEME.cream,
     },
     open: {
       rotate: 45,
@@ -33,7 +31,7 @@ export function HamburgerButton({ isOpen, onClick, isScrolled }) {
     closed: {
       opacity: 1,
       scaleX: 1,
-      backgroundColor: isScrolled ? THEME.charcoal : THEME.cream,
+      backgroundColor: isScrolled ? THEME.textDark : THEME.cream,
     },
     open: {
       opacity: 0,
@@ -47,7 +45,7 @@ export function HamburgerButton({ isOpen, onClick, isScrolled }) {
       rotate: 0,
       y: 0,
       x: 0,
-      backgroundColor: isScrolled ? THEME.charcoal : THEME.cream,
+      backgroundColor: isScrolled ? THEME.textDark : THEME.cream,
     },
     open: {
       rotate: -45,
@@ -69,21 +67,21 @@ export function HamburgerButton({ isOpen, onClick, isScrolled }) {
       onClick={onClick}
       className="relative z-50 w-12 h-12 flex items-center justify-center rounded-xl focus:outline-none focus-visible:ring-2"
       style={{
-        backgroundColor: isOpen 
-          ? 'transparent' 
-          : isScrolled 
-            ? 'rgba(245, 240, 232, 0.1)' 
+        backgroundColor: isOpen
+          ? 'transparent'
+          : isScrolled
+            ? 'rgba(245, 240, 232, 0.1)'
             : 'transparent',
-        border: isOpen 
-          ? 'none' 
-          : `1px solid ${isScrolled ? 'rgba(26, 26, 26, 0.1)' : 'rgba(245, 240, 232, 0.2)'}`,
+        border: isOpen
+          ? 'none'
+          : `1px solid ${isScrolled ? 'rgba(74, 74, 58, 0.1)' : 'rgba(245, 240, 232, 0.2)'}`,
       }}
-      whileHover={{ 
+      whileHover={{
         scale: 1.05,
-        backgroundColor: isOpen 
-          ? 'transparent' 
-          : isScrolled 
-            ? 'rgba(26, 26, 26, 0.05)' 
+        backgroundColor: isOpen
+          ? 'transparent'
+          : isScrolled
+            ? 'rgba(26, 26, 26, 0.05)'
             : 'rgba(245, 240, 232, 0.1)',
       }}
       whileTap={{ scale: 0.95 }}
@@ -91,7 +89,7 @@ export function HamburgerButton({ isOpen, onClick, isScrolled }) {
       aria-label={isOpen ? 'Close menu' : 'Open menu'}
       aria-expanded={isOpen}
     >
-      <div 
+      <div
         className="relative w-6 h-5 flex flex-col justify-between"
         style={{ transform: 'translateZ(0)' }}
       >
@@ -131,7 +129,7 @@ export function HamburgerButton({ isOpen, onClick, isScrolled }) {
         className="absolute inset-0 rounded-xl pointer-events-none"
         initial={{ scale: 0.8, opacity: 0 }}
         animate={isOpen ? { scale: 1.5, opacity: 0 } : { scale: 0.8, opacity: 0 }}
-        whileTap={{ scale: 1.2, opacity: 0.3, backgroundColor: THEME.lagoon }}
+        whileTap={{ scale: 1.2, opacity: 0.3, backgroundColor: THEME.gold }}
         transition={{ duration: 0.4 }}
       />
     </motion.button>

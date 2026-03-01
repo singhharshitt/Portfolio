@@ -49,13 +49,13 @@ const stagger = {
   slow: 0.15,
 };
 
-// Color palette
+// Color palette — Warm Parchment
 const colors = {
-  bubblegum: '#F66483',
-  marigold: '#C877BF',
-  brownSugar: '#A6480A',
-  malachite: '#15484C',
-  lagoon: '#30B8B2',
+  terracotta: '#C2743A',
+  gold: '#C9A66B',
+  sage: '#B7B77A',
+  olive: '#6E6B2F',
+  parchment: '#E9E2D6',
 };
 
 // Skills data for the accordion
@@ -127,8 +127,8 @@ const BASE_SECTION_CLASS = 'my-20 lg:my-28 mx-4 lg:mx-8';
 // Section wrapper with scroll-triggered animations
 function AnimatedSection({ children, className = "", delay = 0, id }) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { 
-    once: true, 
+  const isInView = useInView(ref, {
+    once: true,
     margin: "-100px",
     amount: 0.2
   });
@@ -138,8 +138,8 @@ function AnimatedSection({ children, className = "", delay = 0, id }) {
       ref={ref}
       id={id}
       initial={{ opacity: 0, y: 60 }}
-      animate={isInView ? { 
-        opacity: 1, 
+      animate={isInView ? {
+        opacity: 1,
         y: 0,
         transition: {
           duration: durations.slow,
@@ -161,7 +161,7 @@ function Home() {
     target: heroWrapperRef,
     offset: ['start start', 'end start'],
   });
-  
+
   // Smooth spring for cinematic feel
   const smoothProgress = useSpring(heroScrollProgress, {
     stiffness: 100,
@@ -192,12 +192,12 @@ function Home() {
   return (
     <>
       {/* Scroll Progress Bar with accent colors */}
-      <ScrollProgress color={colors.lagoon} glowColor={colors.bubblegum} />
+      <ScrollProgress color={colors.terracotta} glowColor={colors.gold} />
 
       {/* Background Effects Layer */}
       <BackgroundEffects />
 
-      <Navbar onNavigate={scrollToSection} accentColor={colors.lagoon} />
+      <Navbar onNavigate={scrollToSection} accentColor={colors.terracotta} />
 
       <div className="relative z-10">
 
@@ -224,7 +224,7 @@ function Home() {
 
           {/* Animated background pattern for all non-Hero sections */}
           <SectionBackground />
-          
+
           {/* ABOUT ME - Staggered reveal */}
           <AnimatedSection id="about" className="relative z-10" delay={0.1}>
             <Aboutme />
@@ -245,7 +245,7 @@ function Home() {
                 splitBy="word"
               />
             </motion.div>
-            <motion.div 
+            <motion.div
               className="px-4 sm:px-6 lg:px-12 mt-8"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -288,22 +288,22 @@ function Home() {
           </section>
 
           {/* PROJECTS — Dark theme section with depth */}
-          <section 
-            id="projects-showcase" 
+          <section
+            id="projects-showcase"
             className="py-20 lg:py-28 px-4 lg:px-8 relative overflow-hidden"
           >
             {/* Subtle gradient overlay for depth */}
-            <motion.div 
+            <motion.div
               className="absolute inset-0 pointer-events-none"
               style={{
-                background: `radial-gradient(ellipse at 50% 0%, ${colors.lagoon}08 0%, transparent 50%)`
+                background: `radial-gradient(ellipse at 50% 0%, ${colors.gold}08 0%, transparent 50%)`
               }}
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 1.5 }}
             />
-            
+
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -311,8 +311,8 @@ function Home() {
               transition={{ duration: 0.8, ease: easings.entrance }}
             >
               <SectionHeading text="PROJECTS" className="mb-2" />
-              <motion.p 
-                className="text-[#C8553D] text-lg ml-6 sm:ml-12 mb-12 plus-jakarta-sans-medium"
+              <motion.p
+                className="text-[#C2743A] text-lg ml-6 sm:ml-12 mb-12 plus-jakarta-sans-medium"
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
@@ -321,13 +321,13 @@ function Home() {
                 Scroll to explore my work
               </motion.p>
             </motion.div>
-            
+
             <HorizontalGallery items={galleryItems} />
           </section>
 
           {/* CERTIFICATES */}
-          <section 
-            id="certificates-section" 
+          <section
+            id="certificates-section"
             className="py-20 lg:py-28 px-4 lg:px-8"
           >
             <AnimatedSection>
@@ -358,8 +358,8 @@ function Home() {
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              transition={{ 
-                duration: 0.8, 
+              transition={{
+                duration: 0.8,
                 ease: easings.entrance,
                 delay: 0.2
               }}
@@ -372,16 +372,16 @@ function Home() {
                   Get in Touch
                 </span>
                 <motion.div
-                  className="absolute inset-0 bg-[#F66483]"
+                  className="absolute inset-0 bg-[#C2743A]"
                   initial={{ x: '-100%' }}
                   whileHover={{ x: 0 }}
                   transition={{ duration: 0.4, ease: easings.smooth }}
                 />
-                <svg 
-                  xmlns="http://www.w3.org/2000/svg" 
-                  className="h-5 w-5 relative z-10 group-hover:text-white transition-colors duration-500" 
-                  fill="none" 
-                  viewBox="0 0 24 24" 
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 relative z-10 group-hover:text-white transition-colors duration-500"
+                  fill="none"
+                  viewBox="0 0 24 24"
                   stroke="currentColor"
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />

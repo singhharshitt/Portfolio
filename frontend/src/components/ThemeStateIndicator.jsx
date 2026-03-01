@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// Strict color palette
+// Warm Parchment palette
 const THEME = {
-  malachite: '#15484C',
+  olive: '#6E6B2F',
   cream: '#F5F0E8',
-  gold: '#F7B05B',
-  lagoon: '#30B8B2',
+  gold: '#C9A66B',
+  terracotta: '#C2743A',
 };
 
 // Cinematic easing
@@ -26,8 +26,8 @@ export default function ThemeStateIndicator({ isDarkTheme = false }) {
     <motion.div
       className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-2 rounded-full backdrop-blur-md border"
       style={{
-        backgroundColor: isDarkTheme ? 'rgba(21, 72, 76, 0.8)' : 'rgba(245, 240, 232, 0.8)',
-        borderColor: isDarkTheme ? 'rgba(48, 184, 178, 0.3)' : 'rgba(166, 72, 10, 0.2)',
+        backgroundColor: isDarkTheme ? 'rgba(110, 107, 47, 0.8)' : 'rgba(245, 240, 232, 0.8)',
+        borderColor: isDarkTheme ? 'rgba(201, 166, 107, 0.3)' : 'rgba(194, 116, 58, 0.2)',
       }}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -39,17 +39,17 @@ export default function ThemeStateIndicator({ isDarkTheme = false }) {
       <motion.span
         className="relative w-3 h-3 rounded-full"
         style={{
-          backgroundColor: isDarkTheme ? THEME.lagoon : THEME.gold,
+          backgroundColor: isDarkTheme ? THEME.gold : THEME.gold,
         }}
         animate={{
           scale: isAnimating ? [1, 1.5, 1] : 1,
           boxShadow: isAnimating
             ? [
-                `0 0 0 0 ${isDarkTheme ? THEME.lagoon : THEME.gold}00`,
-                `0 0 0 8px ${isDarkTheme ? THEME.lagoon : THEME.gold}40`,
-                `0 0 0 0 ${isDarkTheme ? THEME.lagoon : THEME.gold}00`,
-              ]
-            : `0 0 0 0 ${isDarkTheme ? THEME.lagoon : THEME.gold}00`,
+              `0 0 0 0 ${THEME.gold}00`,
+              `0 0 0 8px ${THEME.gold}40`,
+              `0 0 0 0 ${THEME.gold}00`,
+            ]
+            : `0 0 0 0 ${THEME.gold}00`,
         }}
         transition={{ duration: 0.6, ease: EASE }}
       >
@@ -57,7 +57,7 @@ export default function ThemeStateIndicator({ isDarkTheme = false }) {
         <motion.span
           className="absolute inset-0 rounded-full"
           style={{
-            backgroundColor: isDarkTheme ? THEME.lagoon : THEME.gold,
+            backgroundColor: isDarkTheme ? THEME.gold : THEME.gold,
           }}
           animate={{
             scale: [1, 2],
@@ -78,7 +78,7 @@ export default function ThemeStateIndicator({ isDarkTheme = false }) {
             key={isDarkTheme ? 'dark' : 'light'}
             className="block text-xs font-mono font-bold tracking-widest"
             style={{
-              color: isDarkTheme ? THEME.cream : THEME.malachite,
+              color: isDarkTheme ? THEME.cream : THEME.olive,
             }}
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -94,12 +94,12 @@ export default function ThemeStateIndicator({ isDarkTheme = false }) {
       <motion.div
         className="absolute -left-12 top-1/2 h-px w-10 origin-right"
         style={{
-          backgroundColor: isDarkTheme ? THEME.lagoon : THEME.gold,
+          backgroundColor: isDarkTheme ? THEME.gold : THEME.gold,
         }}
         initial={{ scaleX: 0 }}
         animate={{ scaleX: 1 }}
         transition={{ duration: 0.8, delay: 1.2, ease: EASE }}
       />
-    </motion.div>
+    </motion.div >
   );
 }

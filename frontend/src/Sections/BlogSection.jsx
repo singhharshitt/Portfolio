@@ -1,19 +1,18 @@
 import React, { useRef } from 'react';
-import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, useInView, useMotionValue, useMotionTemplate } from 'framer-motion';
 import { ArrowUpRight, Clock, Calendar } from 'lucide-react';
 
-// Color theme from your spec
+// Warm Parchment palette
 const THEME = {
-  bubblegum: '#F66483',
-  marigold: '#C877BF',
-  lagoon: '#30B8B2',
-  brownSugar: '#A6480A',
-  malachite: '#15484C',
-  sand: {
-    100: '#FDF6F0',
-    200: '#F5EDE6',
-  },
-  charcoal: '#1A1A1A',
+  terracotta: '#C2743A',
+  gold: '#C9A66B',
+  sage: '#B7B77A',
+  olive: '#6E6B2F',
+  parchment: '#E9E2D6',
+  cream: '#F5F0E8',
+  textDark: '#4A4A3A',
+  textSecondary: '#6E6B2F',
+  textMuted: '#8A8570',
 };
 
 // Cinematic easing
@@ -21,6 +20,8 @@ const EASE = {
   smooth: [0.16, 1, 0.3, 1],
   entrance: [0.25, 0.46, 0.45, 0.94],
 };
+
+import useReducedMotion from '../hooks/useReducedMotion';
 
 const blogPosts = [
   {
@@ -31,7 +32,7 @@ const blogPosts = [
     readTime: "8 min read",
     tags: ["MERN", "Architecture", "Backend"],
     category: "Development",
-    color: THEME.lagoon,
+    color: THEME.terracotta,
   },
   {
     id: 2,
@@ -41,7 +42,7 @@ const blogPosts = [
     readTime: "6 min read",
     tags: ["React", "Performance", "Frontend"],
     category: "Development",
-    color: THEME.bubblegum,
+    color: THEME.gold,
   },
   {
     id: 3,
@@ -51,7 +52,7 @@ const blogPosts = [
     readTime: "10 min read",
     tags: ["CSS", "UI/UX", "Design"],
     category: "Design",
-    color: THEME.marigold,
+    color: THEME.sage,
   },
   {
     id: 4,
@@ -61,7 +62,7 @@ const blogPosts = [
     readTime: "7 min read",
     tags: ["API", "Backend", "Node.js"],
     category: "Development",
-    color: THEME.brownSugar,
+    color: THEME.olive,
   },
   {
     id: 5,
@@ -71,7 +72,7 @@ const blogPosts = [
     readTime: "9 min read",
     tags: ["Docker", "DevOps", "Deployment"],
     category: "DevOps",
-    color: THEME.malachite,
+    color: THEME.terracotta,
   },
   {
     id: 6,
@@ -81,21 +82,58 @@ const blogPosts = [
     readTime: "12 min read",
     tags: ["TypeScript", "JavaScript", "Frontend"],
     category: "Development",
-    color: THEME.lagoon,
+    color: THEME.gold,
   },
 ];
 
-// Individual blog card with MAI-style interactions
+// Individual blog card with magnetic effect
 const BlogCard = ({ post, index }) => {
   const cardRef = useRef(null);
   const isInView = useInView(cardRef, { once: true, margin: "-80px" });
+  const reduced = useReducedMotion();
 
-  // Staggered reveal with subtle rotation
+  // Magnetic and gradient tracking
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  // Spring physics for smooth magnetic pull
+  const springX = useSpring(mouseX, { stiffness: 150, damping: 15, mass: 0.1 });
+  const springY = useSpring(mouseY, { stiffness: 150, damping: 15, mass: 0.1 });
+
+  // Subtle magnetic movement limits (px)
+  const magneticX = useTransform(springX, [-0.5, 0.5], [-10, 10]);
+  const magneticY = useTransform(springY, [-0.5, 0.5], [-10, 10]);
+
+  // CSS readable mouse positions for the gradient border
+  const mouseXPos = useMotionValue(0);
+  const mouseYPos = useMotionValue(0);
+  const background = useMotionTemplate`radial-gradient(600px circle at ${mouseXPos}px ${mouseYPos}px, ${post.color}25, transparent 40%)`;
+
+  const handleMouseMove = (e) => {
+    if (reduced) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+
+    // Magnetic pull calculation (-0.5 to 0.5)
+    const xPct = (e.clientX - rect.left) / rect.width - 0.5;
+    const yPct = (e.clientY - rect.top) / rect.height - 0.5;
+    mouseX.set(xPct);
+    mouseY.set(yPct);
+
+    // Absolute pixel position for gradient
+    mouseXPos.set(e.clientX - rect.left);
+    mouseYPos.set(e.clientY - rect.top);
+  };
+
+  const handleMouseLeave = () => {
+    mouseX.set(0);
+    mouseY.set(0);
+  };
+
   const variants = {
     hidden: {
-      opacity: 0,
-      y: 60,
-      rotateX: 5,
+      opacity: reduced ? 0 : 0,
+      y: reduced ? 0 : 60,
+      rotateX: reduced ? 0 : 5,
     },
     visible: {
       opacity: 1,
@@ -115,38 +153,36 @@ const BlogCard = ({ post, index }) => {
       variants={variants}
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
-      whileHover={{
-        y: -8,
-        transition: { duration: 0.4, ease: EASE.smooth }
-      }}
-      className="group relative bg-[#FDF6F0] shadow-md rounded-xl overflow-hidden border-b-4 border-r-4 transition-all duration-500"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
       style={{
         borderColor: post.color,
         transformStyle: 'preserve-3d',
         perspective: '1000px',
+        boxShadow: '0 4px 20px rgba(110, 107, 47, 0.08)',
+        x: reduced ? 0 : magneticX,
+        y: reduced ? 0 : magneticY,
       }}
+      className="group relative bg-[#F5F0E8] shadow-md rounded-xl overflow-hidden border-b-4 border-r-4 transition-shadow hover:shadow-xl"
     >
-      {/* Animated gradient overlay on hover */}
+      {/* Mouse-following gradient highlight */}
+      {!reduced && (
+        <motion.div
+          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0"
+          style={{ background }}
+        />
+      )}
+
+      {/* Static hover overlay gradient for reduced motion or fallback */}
       <motion.div
-        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-0 lg:hidden"
         style={{
           background: `linear-gradient(135deg, ${post.color}08 0%, transparent 60%)`,
         }}
       />
 
-      {/* MAI-style floating border frame */}
-      <motion.div
-        className="absolute inset-0 border-2 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none"
-        style={{
-          borderColor: post.color,
-          margin: '12px',
-          borderRadius: '8px',
-        }}
-        initial={false}
-      />
-
       <div className="relative z-10 p-6 flex flex-col h-full">
-        {/* Category badge with color accent */}
+        {/* Category badge */}
         <motion.div
           className="mb-3"
           initial={{ opacity: 0, x: -20 }}
@@ -165,20 +201,20 @@ const BlogCard = ({ post, index }) => {
           </span>
         </motion.div>
 
-        {/* Title with hover color shift */}
+        {/* Title */}
         <h3
-          className="text-xl font-bold text-[#1A1A1A] mb-3 line-clamp-2 transition-colors duration-300 group-hover:text-(--title-color)"
-          style={{ '--title-color': post.color }}
+          className="text-xl font-bold mb-3 line-clamp-2 transition-colors duration-300 group-hover:text-(--title-color)"
+          style={{ color: THEME.textDark, '--title-color': post.color }}
         >
           {post.title}
         </h3>
 
         {/* Excerpt */}
-        <p className="text-[#1A1A1A]/70 text-sm mb-4 grow line-clamp-3 leading-relaxed">
+        <p className="text-sm mb-4 grow line-clamp-3 leading-relaxed" style={{ color: THEME.textMuted }}>
           {post.excerpt}
         </p>
 
-        {/* Tags with staggered hover effect */}
+        {/* Tags */}
         <div className="flex flex-wrap gap-2 mb-4">
           {post.tags.slice(0, 3).map((tag, tagIndex) => (
             <motion.span
@@ -199,7 +235,7 @@ const BlogCard = ({ post, index }) => {
         </div>
 
         {/* Footer with icons */}
-        <div className="flex items-center justify-between text-xs text-[#1A1A1A]/60 pt-3 border-t border-[#F5EDE6]">
+        <div className="flex items-center justify-between text-xs pt-3 border-t" style={{ color: THEME.textMuted, borderColor: `${THEME.sage}40` }}>
           <div className="flex items-center gap-1.5">
             <Calendar className="w-3.5 h-3.5" style={{ color: post.color }} />
             <time dateTime={post.date} className="font-medium">
@@ -216,7 +252,7 @@ const BlogCard = ({ post, index }) => {
           </div>
         </div>
 
-        {/* Read more link with arrow animation */}
+        {/* Read more link */}
         <motion.button
           className="mt-4 w-full py-2.5 text-sm font-bold rounded-lg transition-all duration-300 flex items-center justify-center gap-2 relative overflow-hidden group/btn"
           style={{
@@ -225,7 +261,7 @@ const BlogCard = ({ post, index }) => {
           }}
           whileHover={{
             backgroundColor: post.color,
-            color: 'white',
+            color: '#F5F0E8',
           }}
           whileTap={{ scale: 0.98 }}
         >
@@ -252,7 +288,7 @@ const BlogCard = ({ post, index }) => {
   );
 };
 
-// Section header with text reveal
+// Section header
 const SectionHeader = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
@@ -266,7 +302,7 @@ const SectionHeader = () => {
       >
         <span
           className="text-xs font-mono uppercase tracking-[0.3em] mb-4 block"
-          style={{ color: THEME.brownSugar }}
+          style={{ color: THEME.olive }}
         >
           Insights & Thoughts
         </span>
@@ -277,10 +313,10 @@ const SectionHeader = () => {
           initial={{ y: "100%" }}
           animate={isInView ? { y: 0 } : { y: "100%" }}
           transition={{ duration: 0.8, delay: 0.1, ease: EASE.smooth }}
-          className="text-5xl sm:text-6xl font-serif text-[#1A1A1A]"
-          style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
+          className="text-5xl sm:text-6xl font-serif"
+          style={{ color: THEME.textDark, fontFamily: "'Playfair Display', Georgia, serif" }}
         >
-          Latest <em className="italic" style={{ color: THEME.lagoon }}>Writings</em>
+          Latest <em className="italic" style={{ color: THEME.terracotta }}>Writings</em>
         </motion.h2>
       </div>
 
@@ -290,7 +326,7 @@ const SectionHeader = () => {
         transition={{ duration: 0.6, delay: 0.3, ease: EASE.smooth }}
         className="mt-4 max-w-2xl mx-auto"
       >
-        <p className="text-[#4A3728] text-lg">
+        <p style={{ color: THEME.textMuted }} className="text-lg">
           Exploring ideas in development, design, and technology.
         </p>
       </motion.div>
@@ -305,7 +341,6 @@ const BlogSection = () => {
     offset: ["start end", "end start"]
   });
 
-  // Subtle parallax for background elements
   const bgY = useSpring(
     useTransform(scrollYProgress, [0, 1], [0, -50]),
     { stiffness: 100, damping: 30 }
@@ -315,22 +350,20 @@ const BlogSection = () => {
     <section
       ref={containerRef}
       className="relative py-24 lg:py-32 overflow-hidden"
-      style={{ backgroundColor: THEME.sand[200] }}
+      style={{ backgroundColor: THEME.cream }}
     >
       {/* Background decorative elements */}
       <motion.div
-
         className="absolute top-20 left-10 w-64 h-64 rounded-full opacity-30 blur-3xl pointer-events-none"
         style={{
-          backgroundColor: `${THEME.lagoon}20`,
+          backgroundColor: `${THEME.gold}20`,
           y: bgY,
         }}
       />
       <motion.div
-
         className="absolute bottom-20 right-10 w-96 h-96 rounded-full opacity-20 blur-3xl pointer-events-none"
         style={{
-          backgroundColor: `${THEME.bubblegum}20`,
+          backgroundColor: `${THEME.terracotta}15`,
           y: bgY
         }}
       />
@@ -356,12 +389,12 @@ const BlogSection = () => {
             href="/blog"
             className="inline-flex items-center gap-2 px-8 py-3 rounded-full font-medium transition-all duration-300"
             style={{
-              backgroundColor: THEME.malachite,
-              color: 'white',
+              backgroundColor: THEME.olive,
+              color: '#F5F0E8',
             }}
             whileHover={{
               scale: 1.03,
-              boxShadow: `0 20px 50px ${THEME.malachite}40`,
+              boxShadow: `0 20px 50px ${THEME.olive}40`,
             }}
             whileTap={{ scale: 0.98 }}
           >

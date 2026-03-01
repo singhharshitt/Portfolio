@@ -1,23 +1,19 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence, useSpring, useTransform, useScroll } from 'framer-motion';
-import { ChevronLeft, ChevronRight, GraduationCap, Briefcase, Award, Code, Star } from 'lucide-react';
+import React, { useRef } from 'react';
+import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion';
+import { GraduationCap, Briefcase, Award, Code, Star } from 'lucide-react';
+import useReducedMotion from '../hooks/useReducedMotion';
+import useScrollReveal from '../hooks/useScrollReveal';
+import { EASE_PREMIUM, EASE_SMOOTH, DURATION_REVEAL, STAGGER_CHILDREN } from '../utils/animationConstants';
 
-// Strict color palette
+// Warm Parchment palette
 const THEME = {
-  malachite: '#15484C',
-  lagoon: '#30B8B2',
-  bubblegum: '#F66483',
-  brownSugar: '#A6480A',
-  gold: '#F7B05B',
+  olive: '#6E6B2F',
+  gold: '#C9A66B',
+  terracotta: '#C2743A',
+  sage: '#B7B77A',
   cream: '#F5F0E8',
-  charcoal: '#1A1A1A',
-  sand: '#ECE2D0',
-};
-
-// Cinematic easing
-const EASE = {
-  smooth: [0.16, 1, 0.3, 1],
-  entrance: [0.25, 0.46, 0.45, 0.94],
+  textDark: '#4A4A3A',
+  parchment: '#E9E2D6',
 };
 
 const TIMELINE_DATA = [
@@ -29,7 +25,7 @@ const TIMELINE_DATA = [
     description: "Pursuing B.Tech in CSE with a focus on Full Stack Development, DSA, and Cyber Security. Current CGPA: 7.45.",
     type: "Education",
     icon: GraduationCap,
-    color: THEME.lagoon,
+    color: THEME.gold,
   },
   {
     year: "2025",
@@ -39,7 +35,7 @@ const TIMELINE_DATA = [
     description: "Intensive training in React & Node.js. Built a digital reading platform, implemented CRUD APIs, and developed an admin dashboard.",
     type: "Training",
     icon: Briefcase,
-    color: THEME.bubblegum,
+    color: THEME.terracotta,
   },
   {
     year: "2025",
@@ -79,7 +75,7 @@ const TIMELINE_DATA = [
     description: "Completed Fundamentals of Network Communication, strengthening core CS networking concepts.",
     type: "Certification",
     icon: Award,
-    color: THEME.marigold,
+    color: THEME.sage,
   },
   {
     year: "2024",
@@ -89,417 +85,271 @@ const TIMELINE_DATA = [
     description: "Achieved 4-Star rating on HackerRank (Java, C, C++, Python) and LeetCode Contest Rank 3400.",
     type: "Achievement",
     icon: Star,
-    color: THEME.brownSugar,
+    color: THEME.olive,
   },
 ];
 
-// Navigation button with magnetic effect
-const NavButton = ({ onClick, disabled, direction, children }) => {
-  const [isHovered, setIsHovered] = useState(false);
-  const x = useSpring(0, { stiffness: 400, damping: 25 });
+// Timeline item component
+const TimelineItem = ({ data, index }) => {
+  const ref = useRef(null);
+  const reduced = useReducedMotion();
+  const Icon = data.icon;
+  const isEven = index % 2 === 0;
 
-  const handleMouseMove = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    x.set((e.clientX - centerX) * 0.2);
-  };
+  // Intersection observer to track active state
+  const isInView = useInView(ref, { margin: "-50% 0px -50% 0px" });
+  const isVisible = useInView(ref, { margin: "-20%" });
 
   return (
-    <motion.button
-      onClick={onClick}
-      disabled={disabled}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={() => { x.set(0); setIsHovered(false); }}
-      onMouseEnter={() => setIsHovered(true)}
-      style={{ x }}
-      className={`absolute ${direction}-4 md:${direction}-10 top-1/2 -translate-y-1/2 z-20 p-4 rounded-full border backdrop-blur-md transition-all duration-300 ${
-        disabled 
-          ? 'opacity-30 cursor-not-allowed border-white/5 bg-white/5' 
-          : 'border-white/10 bg-white/5 hover:bg-[#30B8B2] hover:border-[#30B8B2] hover:scale-110'
-      }`}
-      whileTap={{ scale: 0.95 }}
-    >
-      {children}
-    </motion.button>
+    <div ref={ref} className="relative z-10 w-full flex flex-col md:flex-row justify-center items-center md:items-start group mb-12 lg:mb-24 last:mb-0">
+
+      {/* Mobile-only spacer for the vertical line */}
+      <div className="md:hidden absolute left-8 top-0 bottom-0 w-px bg-white/10 -z-10" />
+
+      {/* Left side (Content or empty) */}
+      <div className={`w-full md:w-5/12 pl-16 md:pl-0 flex ${isEven ? 'md:justify-end md:pr-12' : 'md:justify-start lg:hidden hidden'}`}>
+        {isEven && (
+          <TimelineCard data={data} isActive={isInView} reduced={reduced} isVisible={isVisible} align="right" />
+        )}
+      </div>
+
+      {/* Center timeline node */}
+      <div className="absolute left-8 md:left-1/2 md:-translate-x-1/2 w-12 h-12 flex items-center justify-center top-0 md:top-6 z-20">
+        <motion.div
+          animate={reduced ? {} : {
+            scale: isInView ? 1.2 : 1,
+            backgroundColor: isInView ? data.color : 'transparent',
+            borderColor: isInView ? data.color : 'rgba(255, 255, 255, 0.3)',
+            boxShadow: isInView ? `0 0 20px ${data.color}60` : 'none',
+          }}
+          transition={{ duration: 0.3, ease: EASE_SMOOTH }}
+          className="w-4 h-4 rounded-full border-2 relative z-10 transition-colors duration-300"
+        >
+          {/* Pulse ring when active */}
+          {!reduced && isInView && (
+            <motion.div
+              className="absolute inset-0 rounded-full"
+              style={{ border: `2px solid ${data.color}`, transform: 'scale(2)' }}
+              initial={{ opacity: 0.8, scale: 1 }}
+              animate={{ opacity: 0, scale: 2.5 }}
+              transition={{ repeat: Infinity, duration: 1.5, ease: "easeOut" }}
+            />
+          )}
+        </motion.div>
+
+        {/* Connection line from dot to card */}
+        <div
+          className={`hidden md:block absolute h-px top-1/2 -translate-y-1/2 w-8 lg:w-16 
+            ${isEven ? '-left-8 lg:-left-16' : '-right-8 lg:-right-16'} transition-colors duration-500`}
+          style={{ backgroundColor: isInView ? data.color : 'rgba(255,255,255,0.1)' }}
+        />
+      </div>
+
+      {/* Right side (Content or empty) */}
+      <div className={`w-full md:w-5/12 pl-16 md:pl-12 flex ${!isEven ? 'md:justify-start' : 'lg:hidden hidden'}`}>
+        {!isEven && (
+          <TimelineCard data={data} isActive={isInView} reduced={reduced} isVisible={isVisible} align="left" />
+        )}
+      </div>
+
+      {/* Mobile rendering fallback for even indices (since left block handles desktop) */}
+      <div className="w-full pl-16 md:hidden flex mt-2">
+        {isEven && (
+          <TimelineCard data={data} isActive={isInView} reduced={reduced} isVisible={isVisible} align="left" />
+        )}
+      </div>
+    </div>
   );
 };
 
-// Timeline card with enhanced animations
-const TimelineCard = ({ data }) => {
+// Card contents extracted for reuse
+const TimelineCard = ({ data, isActive, reduced, isVisible, align }) => {
   const Icon = data.icon;
-  
+
   return (
     <motion.div
-      key={data.title}
-      initial={{ opacity: 0, y: 60, scale: 0.9, rotateX: 10 }}
-      animate={{ opacity: 1, y: 0, scale: 1, rotateX: 0 }}
-      exit={{ opacity: 0, y: -40, scale: 0.9, rotateX: -10 }}
-      transition={{ duration: 0.7, ease: EASE.smooth }}
-      className="w-[90%] max-w-md rounded-2xl overflow-hidden shadow-2xl relative"
+      initial={reduced ? {} : {
+        opacity: 0,
+        x: align === 'right' ? 40 : -40,
+        y: 20
+      }}
+      animate={reduced ? {} : {
+        opacity: isVisible ? (isActive ? 1 : 0.6) : 0,
+        x: isVisible ? 0 : (align === 'right' ? 40 : -40),
+        y: isVisible ? 0 : 20,
+        scale: isActive ? 1.02 : 1,
+      }}
+      transition={{ duration: 0.6, ease: EASE_PREMIUM }}
+      className={`w-full max-w-md rounded-2xl overflow-hidden shadow-2xl relative ${align === 'right' ? 'md:text-right text-left' : 'text-left'}`}
       style={{
-        backgroundColor: 'rgba(30, 41, 59, 0.8)',
+        backgroundColor: 'rgba(30, 41, 59, 0.7)',
         backdropFilter: 'blur(20px)',
-        border: '1px solid rgba(255, 255, 255, 0.1)',
-        transformStyle: 'preserve-3d',
+        border: `1px solid ${isActive ? data.color : 'rgba(255, 255, 255, 0.1)'}`,
+        transition: 'border-color 0.5s ease',
       }}
     >
-      {/* Gradient header */}
-      <div 
-        className="h-36 relative overflow-hidden flex items-center justify-center"
-        style={{
-          background: `linear-gradient(135deg, ${data.color}40 0%, ${data.color}20 100%)`,
-        }}
-      >
-        {/* Pattern overlay */}
-        <div 
-          className="absolute inset-0 opacity-30"
-          style={{
-            backgroundImage: `radial-gradient(circle at 2px 2px, rgba(255,255,255,0.15) 1px, transparent 0)`,
-            backgroundSize: '20px 20px',
-          }}
-        />
-        
-        {/* Animated icon */}
-        <motion.div
-          initial={{ scale: 0, rotate: -180 }}
-          animate={{ scale: 1, rotate: 0 }}
-          transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-          className="p-5 rounded-2xl relative z-10"
-          style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.1)',
-            backdropFilter: 'blur(10px)',
-            border: '1px solid rgba(255, 255, 255, 0.2)',
-            color: data.color,
-          }}
-        >
-          <Icon size={32} />
-        </motion.div>
-
-        {/* Decorative circles */}
-        <motion.div
-          animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-          transition={{ duration: 4, repeat: Infinity }}
-          className="absolute -top-20 -right-20 w-64 h-64 rounded-full"
-          style={{ backgroundColor: `${data.color}20` }}
-        />
-      </div>
-
-      {/* Card content */}
-      <div className="p-8 text-center relative">
-        {/* Type badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="inline-block px-4 py-1.5 rounded-full text-xs font-bold tracking-wider mb-4 border"
-          style={{
-            color: data.color,
-            borderColor: `${data.color}40`,
-            backgroundColor: `${data.color}10`,
-          }}
-        >
-          {data.type}
-        </motion.div>
-
-        {/* Title with text reveal */}
-        <div className="overflow-hidden mb-2">
-          <motion.h3
-            initial={{ y: '100%' }}
-            animate={{ y: 0 }}
-            transition={{ delay: 0.35, duration: 0.6, ease: EASE.smooth }}
-            className="text-2xl font-bold text-white"
-            style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
-          >
-            {data.title}
-          </motion.h3>
-        </div>
-
-        {/* Subtitle */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.45 }}
-          className="text-sm mb-4 font-medium"
-          style={{ color: 'rgba(255, 255, 255, 0.5)' }}
-        >
-          {data.subtitle}
-        </motion.p>
-
-        {/* Description */}
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="text-sm leading-relaxed"
-          style={{ color: 'rgba(255, 255, 255, 0.7)' }}
-        >
-          {data.description}
-        </motion.p>
-      </div>
-
-      {/* Connector line */}
-      <motion.div
-        initial={{ scaleY: 0 }}
-        animate={{ scaleY: 1 }}
-        transition={{ delay: 0.6, duration: 0.4 }}
-        className="absolute -bottom-12 left-1/2 w-px h-12 origin-top"
-        style={{
-          background: `linear-gradient(to bottom, ${data.color}, transparent)`,
-        }}
-      />
-    </motion.div>
-  );
-};
-
-// Timeline dot with pulse animation
-const TimelineDot = ({ isActive, color, onClick, index }) => {
-  return (
-    <motion.div
-      onClick={onClick}
-      className="relative cursor-pointer group"
-      whileHover={{ scale: 1.2 }}
-      whileTap={{ scale: 0.9 }}
-    >
-      {/* Pulse ring for active */}
-      {isActive && (
-        <motion.div
-          layoutId="pulseRing"
-          className="absolute inset-0 rounded-full"
-          style={{
-            border: `2px solid ${color}`,
-            transform: 'scale(1.5)',
-          }}
-          initial={{ opacity: 0.8 }}
-          animate={{ opacity: 0, scale: 2 }}
-          transition={{ repeat: Infinity, duration: 1.5, ease: "easeOut" }}
-        />
-      )}
-
-      {/* Main dot */}
-      <motion.div
-        animate={{
-          scale: isActive ? 1.4 : 1,
-          backgroundColor: isActive ? color : 'transparent',
-          borderColor: isActive ? color : 'rgba(255, 255, 255, 0.3)',
-        }}
-        transition={{ duration: 0.3, ease: EASE.smooth }}
-        className="w-4 h-4 rounded-full border-2 relative z-10"
-        style={{
-          boxShadow: isActive ? `0 0 20px ${color}60` : 'none',
-        }}
-      />
-
-      {/* Hover glow */}
+      {/* Card Header area */}
       <div
-        className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 blur-md"
-        style={{ backgroundColor: `${color}40` }}
-      />
-    </motion.div>
-  );
-};
-
-const InteractiveTimeline = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const containerRef = useRef(null);
-  const itemRefs = useRef([]);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"]
-  });
-
-  const bgY = useSpring(useTransform(scrollYProgress, [0, 1], [0, -50]), { stiffness: 100, damping: 30 });
-
-  // Scroll selected item into view
-  useEffect(() => {
-    if (itemRefs.current[activeIndex]) {
-      itemRefs.current[activeIndex].scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest',
-        inline: 'center'
-      });
-    }
-  }, [activeIndex]);
-
-  const handleNext = useCallback(() => {
-    setActiveIndex((prev) => Math.min(prev + 1, TIMELINE_DATA.length - 1));
-  }, []);
-
-  const handlePrev = useCallback(() => {
-    setActiveIndex((prev) => Math.max(prev - 1, 0));
-  }, []);
-
-  const handleDateClick = useCallback((index) => {
-    setActiveIndex(index);
-  }, []);
-
-  const activeData = TIMELINE_DATA[activeIndex];
-
-  return (
-    <section
-      className="min-h-200 w-full flex flex-col items-center justify-center overflow-hidden relative py-24"
-      style={{ backgroundColor: THEME.malachite }}
-    >
-      {/* Background elements */}
-      <motion.div
-        className="absolute top-20 left-10 w-96 h-96 rounded-full opacity-10 blur-3xl pointer-events-none"
-        style={{ backgroundColor: `${THEME.lagoon}30`,y: bgY }}
-      />
-      <motion.div
-        className="absolute bottom-20 right-10 w-72 h-72 rounded-full opacity-10 blur-3xl pointer-events-none"
-        style={{ backgroundColor: `${THEME.bubblegum}30` , y: useTransform(scrollYProgress, [0, 1], [0, -80]) }}
-      />
-
-      {/* Section header */}
-      <div className="text-center mb-12 px-4 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, ease: EASE.smooth }}
-        >
-          <span
-            className="text-xs font-mono uppercase tracking-[0.3em] mb-4 block"
-            style={{ color: THEME.lagoon }}
+        className="p-6 relative overflow-hidden"
+        style={{ background: `linear-gradient(to bottom, ${data.color}20, transparent)` }}
+      >
+        <div className={`flex items-center gap-4 ${align === 'right' ? 'md:flex-row-reverse flex-row' : ''}`}>
+          <div
+            className="p-3 rounded-xl backdrop-blur-md"
+            style={{ backgroundColor: `${data.color}20`, color: data.color }}
           >
-            My Journey
-          </span>
-        </motion.div>
-
-        <div className="overflow-hidden">
-          <motion.h2
-            initial={{ y: "100%" }}
-            whileInView={{ y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.1, ease: EASE.smooth }}
-            className="text-5xl sm:text-6xl font-serif text-white"
-            style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
-          >
-            Experi<em className="italic" style={{ color: THEME.gold }}>ence</em>
-          </motion.h2>
-        </div>
-      </div>
-
-      {/* Main container */}
-      <div className="relative w-full max-w-7xl h-150 flex flex-col justify-end pb-16">
-        
-        {/* Navigation buttons */}
-        <NavButton
-          onClick={handlePrev}
-          disabled={activeIndex === 0}
-          direction="left"
-        >
-          <ChevronLeft className="text-white w-6 h-6" />
-        </NavButton>
-
-        <NavButton
-          onClick={handleNext}
-          disabled={activeIndex === TIMELINE_DATA.length - 1}
-          direction="right"
-        >
-          <ChevronRight className="text-white w-6 h-6" />
-        </NavButton>
-
-        {/* Card display area */}
-        <div className="absolute top-0 left-0 w-full h-95 flex justify-center items-end pb-10 pointer-events-none">
-          <AnimatePresence mode="wait">
-            <TimelineCard data={activeData} />
-          </AnimatePresence>
-        </div>
-
-        {/* Timeline strip */}
-        <div className="w-full overflow-x-auto no-scrollbar" ref={containerRef}>
-          <div className="flex items-center min-w-max px-[50vw] py-12 relative">
-            {/* Base line */}
-            <div 
-              className="absolute left-0 right-0 h-px top-22 mx-10 md:mx-20"
-              style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)' }}
-            />
-
-            {/* Active line segment */}
-            <motion.div
-              className="absolute h-px top-22 mx-10 md:mx-20"
+            <Icon size={24} />
+          </div>
+          <div className={align === 'right' ? 'md:pr-1' : ''}>
+            <span
+              className="text-xs font-bold tracking-wider px-2.5 py-1 rounded-full border mb-2 inline-block transition-colors duration-300"
               style={{
-                backgroundColor: activeData.color,
-                left: `${(activeIndex / (TIMELINE_DATA.length - 1)) * 100}%`,
-                width: '100px',
+                color: isActive ? '#fff' : data.color,
+                borderColor: `${data.color}40`,
+                backgroundColor: isActive ? data.color : `${data.color}15`,
               }}
-              animate={{
-                left: `${(activeIndex / (TIMELINE_DATA.length - 1)) * 80 + 10}%`,
-              }}
-              transition={{ duration: 0.5, ease: EASE.smooth }}
-            />
-
-            {TIMELINE_DATA.map((item, index) => {
-              const isActive = index === activeIndex;
-              const distance = Math.abs(index - activeIndex);
-              const isVisible = distance <= 2;
-
-              return (
-                <motion.div
-                  key={index}
-                  ref={el => itemRefs.current[index] = el}
-                  onClick={() => handleDateClick(index)}
-                  className="relative flex flex-col items-center mx-6 md:mx-10"
-                  style={{ width: '80px' }}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ 
-                    opacity: isVisible ? 1 : 0.3, 
-                    y: 0,
-                    scale: isActive ? 1 : 0.9,
-                  }}
-                  transition={{ delay: index * 0.05, duration: 0.5 }}
-                >
-                  {/* Year label */}
-                  <motion.p
-                    animate={{
-                      y: isActive ? -8 : 0,
-                      color: isActive ? '#fff' : 'rgba(255, 255, 255, 0.4)',
-                    }}
-                    className="text-lg font-bold mb-6 transition-colors"
-                  >
-                    {item.year}
-                  </motion.p>
-
-                  {/* Dot */}
-                  <div className="pt-2">
-                    <TimelineDot
-                      isActive={isActive}
-                      color={item.color}
-                      onClick={() => handleDateClick(index)}
-                      index={index}
-                    />
-                  </div>
-
-                  {/* Date label */}
-                  <motion.p
-                    animate={{
-                      opacity: isActive ? 1 : 0,
-                      y: isActive ? 0 : 10,
-                    }}
-                    className="text-xs mt-4 whitespace-nowrap absolute top-20"
-                    style={{ color: item.color }}
-                  >
-                    {item.date}
-                  </motion.p>
-                </motion.div>
-              );
-            })}
+            >
+              {data.type}
+            </span>
+            <p className="text-sm font-medium" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
+              {data.date}
+            </p>
           </div>
         </div>
       </div>
 
-      {/* CSS for hiding scrollbar */}
-      <style>{`
-        .no-scrollbar::-webkit-scrollbar {
-          display: none;
-        }
-        .no-scrollbar {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-      `}</style>
-    </section>
+      <div className="px-6 pb-6 pt-2">
+        <h3 className="text-xl md:text-2xl font-bold text-white mb-2 font-serif leading-tight">
+          {data.title}
+        </h3>
+        <p className="text-sm font-medium mb-3" style={{ color: THEME.gold }}>
+          {data.subtitle}
+        </p>
+        <p className="text-sm leading-relaxed" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+          {data.description}
+        </p>
+      </div>
+
+      {/* Glow on active */}
+      <div
+        className="absolute inset-0 opacity-0 transition-opacity duration-700 pointer-events-none blur-3xl"
+        style={{
+          opacity: isActive ? 0.3 : 0,
+          background: `radial-gradient(circle at center, ${data.color}40 0%, transparent 70%)`
+        }}
+      />
+    </motion.div>
   );
 };
 
-export default InteractiveTimeline;
+const SectionHeader = () => {
+  const { ref, controls } = useScrollReveal();
+
+  return (
+    <motion.div
+      ref={ref}
+      initial="hidden"
+      animate={controls}
+      variants={{
+        hidden: { opacity: 0 },
+        visible: { opacity: 1, transition: { staggerChildren: STAGGER_CHILDREN, delayChildren: 0.1 } }
+      }}
+      className="text-center mb-24 px-4 relative z-10"
+    >
+      <motion.span
+        variants={{
+          hidden: { opacity: 0, y: 20 },
+          visible: { opacity: 1, y: 0, transition: { duration: DURATION_REVEAL, ease: EASE_PREMIUM } }
+        }}
+        className="text-xs font-mono uppercase tracking-[0.3em] mb-4 block"
+        style={{ color: THEME.gold }}
+      >
+        My Journey
+      </motion.span>
+      <div className="overflow-hidden">
+        <motion.h2
+          variants={{
+            hidden: { y: "100%" },
+            visible: { y: 0, transition: { duration: DURATION_REVEAL, ease: EASE_PREMIUM } }
+          }}
+          className="text-5xl sm:text-6xl font-serif text-white"
+          style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
+        >
+          Experi<em className="italic" style={{ color: THEME.gold }}>ence</em>
+        </motion.h2>
+      </div>
+    </motion.div>
+  );
+};
+
+export default function ScrollTimeline() {
+  const containerRef = useRef(null);
+
+  // Track scroll for vertical timeline progress
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start center", "end center"]
+  });
+
+  const progressHeight = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
+
+  // Subtle background movement
+  const { scrollYProgress: bgProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  });
+
+  const bgY1 = useTransform(bgProgress, [0, 1], [0, 150]);
+  const bgY2 = useTransform(bgProgress, [0, 1], [0, -150]);
+
+  return (
+    <section
+      ref={containerRef}
+      className="w-full flex justify-center overflow-hidden relative py-32"
+      style={{ backgroundColor: THEME.olive }}
+    >
+      {/* Background orbs */}
+      <motion.div
+        className="absolute top-0 left-10 w-[500px] h-[500px] rounded-full opacity-[0.07] blur-3xl pointer-events-none"
+        style={{ backgroundColor: THEME.gold, y: bgY1 }}
+      />
+      <motion.div
+        className="absolute bottom-20 right-10 w-[400px] h-[400px] rounded-full opacity-[0.07] blur-3xl pointer-events-none"
+        style={{ backgroundColor: THEME.terracotta, y: bgY2 }}
+      />
+
+      {/* Grid Pattern */}
+      <div
+        className="absolute inset-0 opacity-[0.03] pointer-events-none"
+        style={{
+          backgroundImage: `linear-gradient(to right, #fff 1px, transparent 1px), linear-gradient(to bottom, #fff 1px, transparent 1px)`,
+          backgroundSize: '80px 80px',
+        }}
+      />
+
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6">
+        <SectionHeader />
+
+        <div className="relative py-10">
+          {/* Main vertical line background */}
+          <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px bg-white/10 -translate-x-1/2" />
+
+          {/* Animated vertical progress line */}
+          <motion.div
+            className="hidden md:block absolute left-1/2 top-0 w-[3px] rounded-full -translate-x-1/2 origin-top shimmer-line z-10"
+            style={{
+              height: '100%',
+              scaleY: progressHeight,
+              background: `linear-gradient(to bottom, ${THEME.gold}, ${THEME.terracotta})`
+            }}
+          />
+
+          {/* Timeline Nodes */}
+          {TIMELINE_DATA.map((item, index) => (
+            <TimelineItem key={index} data={item} index={index} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}

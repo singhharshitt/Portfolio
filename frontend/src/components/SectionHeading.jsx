@@ -1,23 +1,18 @@
 import { useRef } from 'react';
-import { motion, useInView, useSpring, useTransform } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 
-// Strict color palette
+// Warm Parchment palette
 const THEME = {
-  malachite: '#15484C',
-  cream: '#F5F0E8',
-  gold: '#F7B05B',
-  lagoon: '#30B8B2',
-  bubblegum: '#F66483',
-  marigold: '#C877BF',
-  brownSugar: '#A6480A',
-  deepRed: '#3E000D',
+  terracotta: '#C2743A',
+  gold: '#C9A66B',
+  textDark: '#4A4A3A',
 };
 
 // Cinematic easing
 const EASE = [0.16, 1, 0.3, 1];
 
 /**
- * SectionHeading — Reusable animated section title with MAI-style polish
+ * SectionHeading — Reusable animated section title
  * Props:
  *   text — heading text
  *   className — extra classes
@@ -25,8 +20,8 @@ const EASE = [0.16, 1, 0.3, 1];
  *   showLine — show animated underline (default: true)
  *   stagger — delay between words (default: 0)
  */
-export default function SectionHeading({ 
-  text, 
+export default function SectionHeading({
+  text,
   className = '',
   accent = THEME.gold,
   showLine = true,
@@ -51,8 +46,8 @@ export default function SectionHeading({
   };
 
   const wordVariants = {
-    hidden: { 
-      opacity: 0, 
+    hidden: {
+      opacity: 0,
       y: 40,
       rotateX: -15,
     },
@@ -84,8 +79,8 @@ export default function SectionHeading({
     <div ref={ref} className={`relative ${className}`} style={{ perspective: '1000px' }}>
       <Tag
         className="text-3xl sm:text-4xl lg:text-6xl font-bold m-4 mt-10 ml-6 sm:ml-12 mb-8 overflow-hidden"
-        style={{ 
-          color: THEME.deepRed,
+        style={{
+          color: THEME.textDark,
           fontFamily: "'Playfair Display', Georgia, serif",
         }}
       >
@@ -105,14 +100,14 @@ export default function SectionHeading({
               <span className="inline-block">{word}</span>
             </motion.span>
           ))}
-          
+
           {/* Accent period */}
           <motion.span
             variants={wordVariants}
             className="inline-block"
             style={{ color: accent }}
-            whileHover={{ 
-              scale: 1.3, 
+            whileHover={{
+              scale: 1.3,
               rotate: 180,
               transition: { duration: 0.3 }
             }}
@@ -142,7 +137,7 @@ export default function SectionHeading({
         animate={isInView ? { opacity: 0.1, x: 0 } : { opacity: 0, x: -20 }}
         transition={{ delay: 0.5, duration: 0.6 }}
         className="absolute -top-4 -left-2 text-8xl font-bold pointer-events-none select-none hidden lg:block"
-        style={{ 
+        style={{
           color: accent,
           fontFamily: "'Playfair Display', Georgia, serif",
         }}

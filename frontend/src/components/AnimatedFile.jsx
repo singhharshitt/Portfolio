@@ -6,18 +6,15 @@ const EASE = {
   smooth: [0.16, 1, 0.3, 1],
 };
 
-// Color palette
+// Warm Parchment palette
 const THEME = {
-  lagoon: '#30B8B2',
-  bubblegum: '#F66483',
-  marigold: '#C877BF',
-  brownSugar: '#A6480A',
-  malachite: '#15484C',
-  sand: {
-    100: '#F5E5CA',
-    200: '#F0E7D5',
-  },
-  charcoal: '#1A1A1A',
+  terracotta: '#C2743A',
+  gold: '#C9A66B',
+  sage: '#B7B77A',
+  olive: '#6E6B2F',
+  parchment: '#E9E2D6',
+  cream: '#F5F0E8',
+  textDark: '#4A4A3A',
 };
 
 /**
@@ -33,12 +30,12 @@ export default function AnimatedFile({ title, type, cards = [] }) {
 
   // Pick accent from type
   const accentMap = {
-    frontend: THEME.lagoon,
-    backend: THEME.bubblegum,
-    devops: THEME.marigold,
-    core: THEME.brownSugar,
+    frontend: THEME.terracotta,
+    backend: THEME.gold,
+    devops: THEME.sage,
+    core: THEME.olive,
   };
-  const accent = accentMap[type] || THEME.lagoon;
+  const accent = accentMap[type] || THEME.terracotta;
 
   return (
     <motion.div
@@ -52,7 +49,7 @@ export default function AnimatedFile({ title, type, cards = [] }) {
       <div
         className="relative rounded-2xl overflow-hidden border p-5"
         style={{
-          backgroundColor: THEME.sand[100],
+          backgroundColor: THEME.cream,
           borderColor: `${accent}30`,
           boxShadow: `0 8px 32px ${accent}10`,
         }}
@@ -86,7 +83,7 @@ export default function AnimatedFile({ title, type, cards = [] }) {
           </span>
           <span
             className="text-xs font-mono"
-            style={{ color: `${THEME.charcoal}50` }}
+            style={{ color: `${THEME.textDark}50` }}
           >
             / {cards.length} technologies
           </span>
@@ -136,7 +133,7 @@ function TechCard({ card, index, isInView }) {
       {/* Name label */}
       <span
         className="text-[10px] font-medium text-center leading-tight"
-        style={{ color: hovered ? card.color : `${THEME.charcoal}80`, maxWidth: '56px' }}
+        style={{ color: hovered ? card.color : `${THEME.textDark}80`, maxWidth: '56px' }}
       >
         {card.name}
       </span>

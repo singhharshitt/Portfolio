@@ -1,16 +1,13 @@
 import React, { useMemo } from 'react';
 
-// Strict color palette
+// Warm Parchment palette
 const THEME = {
-  bubblegum: '#F66483',
-  marigold: '#C877BF',
-  lagoon: '#30B8B2',
-  brownSugar: '#A6480A',
-  malachite: '#15484C',
-  gold: '#F7B05B',
-  terracotta: '#CC5803',
-  rust: '#9B3D12',
+  terracotta: '#C2743A',
+  gold: '#C9A66B',
+  sage: '#B7B77A',
+  olive: '#6E6B2F',
   cream: '#F5F0E8',
+  textDark: '#4A4A3A',
 };
 
 const BackgroundEffects = React.memo(() => {
@@ -32,8 +29,8 @@ const BackgroundEffects = React.memo(() => {
   const orbs = useMemo(() => [
     { x: 20, y: 20, color: `${THEME.gold}20`, size: '50%', duration: '25s', delay: '0s' },
     { x: 80, y: 80, color: `${THEME.terracotta}15`, size: '40%', duration: '30s', delay: '-5s' },
-    { x: 50, y: 50, color: `${THEME.rust}10`, size: '60%', duration: '35s', delay: '-10s' },
-    { x: 30, y: 70, color: `${THEME.lagoon}12`, size: '35%', duration: '28s', delay: '-8s' },
+    { x: 50, y: 50, color: `${THEME.sage}10`, size: '60%', duration: '35s', delay: '-10s' },
+    { x: 30, y: 70, color: `${THEME.olive}12`, size: '35%', duration: '28s', delay: '-8s' },
   ], []);
 
   return (
@@ -74,8 +71,8 @@ const BackgroundEffects = React.memo(() => {
           background: `
             radial-gradient(circle at 20% 20%, ${THEME.gold}18 0%, transparent 50%),
             radial-gradient(circle at 80% 80%, ${THEME.terracotta}12 0%, transparent 50%),
-            radial-gradient(circle at 50% 50%, ${THEME.rust}08 0%, transparent 70%),
-            radial-gradient(circle at 30% 70%, ${THEME.lagoon}08 0%, transparent 40%)
+            radial-gradient(circle at 50% 50%, ${THEME.sage}08 0%, transparent 70%),
+            radial-gradient(circle at 30% 70%, ${THEME.olive}08 0%, transparent 40%)
           `,
           animation: 'bg-gradient-shift 20s ease-in-out infinite',
           willChange: 'transform',
@@ -124,8 +121,8 @@ const BackgroundEffects = React.memo(() => {
         className="absolute inset-0 opacity-[0.015]"
         style={{
           backgroundImage: `
-            linear-gradient(${THEME.malachite} 1px, transparent 1px),
-            linear-gradient(90deg, ${THEME.malachite} 1px, transparent 1px)
+            linear-gradient(${THEME.textDark} 1px, transparent 1px),
+            linear-gradient(90deg, ${THEME.textDark} 1px, transparent 1px)
           `,
           backgroundSize: '80px 80px',
           animation: 'subtle-drift 60s ease-in-out infinite',
@@ -133,7 +130,7 @@ const BackgroundEffects = React.memo(() => {
       />
 
       {/* Noise texture overlay */}
-      <svg 
+      <svg
         className="absolute inset-0 w-full h-full opacity-[0.025] mix-blend-overlay"
         preserveAspectRatio="none"
       >
@@ -149,11 +146,11 @@ const BackgroundEffects = React.memo(() => {
         <rect width="100%" height="100%" filter="url(#noise)" />
       </svg>
 
-      
+
       <div
         className="absolute inset-0"
         style={{
-          background: `radial-gradient(circle at 50% 50%, transparent 40%, ${THEME.malachite}15 100%)`,
+          background: `radial-gradient(circle at 50% 50%, transparent 40%, ${THEME.olive}15 100%)`,
           pointerEvents: 'none',
         }}
       />

@@ -1,16 +1,14 @@
 import React, { useRef, useState, useCallback } from 'react';
 import { motion, useSpring } from 'framer-motion';
 
-// Strict color palette
+// Warm Parchment palette
 const THEME = {
-  bubblegum: '#F66483',
-  marigold: '#C877BF',
-  lagoon: '#30B8B2',
-  brownSugar: '#A6480A',
-  malachite: '#15484C',
+  terracotta: '#C2743A',
+  gold: '#C9A66B',
+  sage: '#B7B77A',
+  olive: '#6E6B2F',
   cream: '#F5F0E8',
-  charcoal: '#1A1A1A',
-  gold: '#F7B05B',
+  textDark: '#4A4A3A',
 };
 
 // Cinematic easing
@@ -23,7 +21,7 @@ export default function MagneticButton({
   className = '',
   variant = 'primary',
   magneticStrength = 0.15,
-  glowColor = THEME.lagoon,
+  glowColor = THEME.gold,
 }) {
   const buttonRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -104,7 +102,7 @@ export default function MagneticButton({
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         style={buttonStyles}
-        className={`focus:outline-none focus-visible:ring-2 focus-visible:ring-[${THEME.lagoon}]/50 ${className}`}
+        className={`focus:outline-none focus-visible:ring-2 focus-visible:ring-[${THEME.gold}]/50 ${className}`}
         whileTap={{ scale: 0.98 }}
         {...linkProps}
       >
@@ -128,7 +126,7 @@ export default function MagneticButton({
           style={{
             position: 'absolute',
             inset: 0,
-            backgroundColor: 'var(--theme-accent-primary, #F7B05B)',
+            backgroundColor: 'var(--theme-accent-primary, #C2743A)',
             transformOrigin: 'left',
             transform: isHovered ? 'scaleX(1)' : 'scaleX(0)',
             transition: `transform 0.5s cubic-bezier(${EASE.join(',')})`,
