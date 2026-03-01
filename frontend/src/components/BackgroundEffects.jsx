@@ -1,72 +1,164 @@
 import React, { useMemo } from 'react';
 
+// Strict color palette
+const THEME = {
+  bubblegum: '#F66483',
+  marigold: '#C877BF',
+  lagoon: '#30B8B2',
+  brownSugar: '#A6480A',
+  malachite: '#15484C',
+  gold: '#F7B05B',
+  terracotta: '#CC5803',
+  rust: '#9B3D12',
+  cream: '#F5F0E8',
+};
 
 const BackgroundEffects = React.memo(() => {
-    // Generate random particle positions (pure CSS animated, no JS loops)
-    const particles = useMemo(() => {
-        const count = typeof window !== 'undefined' && window.innerWidth < 768 ? 6 : 12;
-        return Array.from({ length: count }, (_, i) => ({
-            id: i,
-            x: Math.random() * 100,
-            y: Math.random() * 100,
-            size: Math.random() * 3 + 2,
-            duration: Math.random() * 20 + 15,
-            delay: Math.random() * 5,
-            opacity: Math.random() * 0.12 + 0.04,
-        }));
-    }, []);
+  // Generate random particle positions (pure CSS animated, no JS loops)
+  const particles = useMemo(() => {
+    const count = typeof window !== 'undefined' && window.innerWidth < 768 ? 6 : 12;
+    return Array.from({ length: count }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: Math.random() * 3 + 2,
+      duration: Math.random() * 20 + 15,
+      delay: Math.random() * 5,
+      opacity: Math.random() * 0.12 + 0.04,
+    }));
+  }, []);
 
-    return (
-        <div
-            className="fixed inset-0 -z-10 overflow-hidden pointer-events-none"
-            style={{ contain: 'strict' }}
-        >
-            {/* Animated gradient background — CSS only */}
-            <div
-                className="absolute inset-0"
-                style={{
-                    background: `
-            radial-gradient(circle at 20% 20%, rgba(247, 176, 91, 0.12) 0%, transparent 50%),
-            radial-gradient(circle at 80% 80%, rgba(204, 88, 3, 0.08) 0%, transparent 50%),
-            radial-gradient(circle at 50% 50%, rgba(155, 61, 18, 0.05) 0%, transparent 70%)
+  // Gradient orbs configuration
+  const orbs = useMemo(() => [
+    { x: 20, y: 20, color: `${THEME.gold}20`, size: '50%', duration: '25s', delay: '0s' },
+    { x: 80, y: 80, color: `${THEME.terracotta}15`, size: '40%', duration: '30s', delay: '-5s' },
+    { x: 50, y: 50, color: `${THEME.rust}10`, size: '60%', duration: '35s', delay: '-10s' },
+    { x: 30, y: 70, color: `${THEME.lagoon}12`, size: '35%', duration: '28s', delay: '-8s' },
+  ], []);
+
+  return (
+    <div
+      className="fixed inset-0 -z-10 overflow-hidden pointer-events-none"
+      style={{ contain: 'strict' }}
+    >
+      {/* CSS Keyframes injection */}
+      <style>{`
+        @keyframes bg-gradient-shift {
+          0%, 100% { transform: translate(0, 0) scale(1); }
+          33% { transform: translate(2%, -2%) scale(1.05); }
+          66% { transform: translate(-1%, 1%) scale(0.98); }
+        }
+        
+        @keyframes floatParticle {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          25% { transform: translate(10px, -15px) rotate(90deg); }
+          50% { transform: translate(-5px, -25px) rotate(180deg); }
+          75% { transform: translate(-15px, -10px) rotate(270deg); }
+        }
+        
+        @keyframes orb-float {
+          0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+          50% { transform: translate(20px, -30px) scale(1.1); opacity: 0.8; }
+        }
+        
+        @keyframes subtle-drift {
+          0%, 100% { transform: translate(0, 0); }
+          50% { transform: translate(5px, 5px); }
+        }
+      `}</style>
+
+      {/* Animated gradient background layer */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: `
+            radial-gradient(circle at 20% 20%, ${THEME.gold}18 0%, transparent 50%),
+            radial-gradient(circle at 80% 80%, ${THEME.terracotta}12 0%, transparent 50%),
+            radial-gradient(circle at 50% 50%, ${THEME.rust}08 0%, transparent 70%),
+            radial-gradient(circle at 30% 70%, ${THEME.lagoon}08 0%, transparent 40%)
           `,
-                    animation: 'bg-gradient-shift 20s ease-in-out infinite',
-                }}
-            />
+          animation: 'bg-gradient-shift 20s ease-in-out infinite',
+          willChange: 'transform',
+        }}
+      />
 
-            {/* CSS-animated floating particles (no JS animation loop) */}
-            {particles.map((particle) => (
-                <div
-                    key={particle.id}
-                    className="absolute rounded-full"
-                    style={{
-                        left: `${particle.x}%`,
-                        top: `${particle.y}%`,
-                        width: `${particle.size}px`,
-                        height: `${particle.size}px`,
-                        backgroundColor: '#CC5803',
-                        opacity: particle.opacity,
-                        willChange: 'transform',
-                        animation: `floatParticle ${particle.duration}s ease-in-out ${particle.delay}s infinite`,
-                    }}
-                />
-            ))}
+      {/* Floating gradient orbs */}
+      {orbs.map((orb, index) => (
+        <div
+          key={`orb-${index}`}
+          className="absolute rounded-full blur-3xl"
+          style={{
+            left: `${orb.x}%`,
+            top: `${orb.y}%`,
+            width: orb.size,
+            height: orb.size,
+            background: `radial-gradient(circle, ${orb.color} 0%, transparent 70%)`,
+            transform: 'translate(-50%, -50%)',
+            animation: `orb-float ${orb.duration} ease-in-out ${orb.delay} infinite`,
+            willChange: 'transform, opacity',
+          }}
+        />
+      ))}
 
-            {/* Noise texture overlay */}
-            <svg className="absolute inset-0 w-full h-full opacity-[0.02]">
-                <filter id="noise">
-                    <feTurbulence
-                        type="fractalNoise"
-                        baseFrequency="0.80"
-                        numOctaves="4"
-                        stitchTiles="stitch"
-                    />
-                    <feColorMatrix type="saturate" values="0" />
-                </filter>
-                <rect width="100%" height="100%" filter="url(#noise)" />
-            </svg>
-        </div>
-    );
+      {/* CSS-animated floating particles */}
+      {particles.map((particle) => (
+        <div
+          key={particle.id}
+          className="absolute rounded-full"
+          style={{
+            left: `${particle.x}%`,
+            top: `${particle.y}%`,
+            width: `${particle.size}px`,
+            height: `${particle.size}px`,
+            backgroundColor: THEME.terracotta,
+            opacity: particle.opacity,
+            boxShadow: `0 0 ${particle.size * 2}px ${THEME.gold}40`,
+            animation: `floatParticle ${particle.duration}s ease-in-out ${particle.delay}s infinite`,
+            willChange: 'transform',
+          }}
+        />
+      ))}
+
+      {/* Subtle grid pattern */}
+      <div
+        className="absolute inset-0 opacity-[0.015]"
+        style={{
+          backgroundImage: `
+            linear-gradient(${THEME.malachite} 1px, transparent 1px),
+            linear-gradient(90deg, ${THEME.malachite} 1px, transparent 1px)
+          `,
+          backgroundSize: '80px 80px',
+          animation: 'subtle-drift 60s ease-in-out infinite',
+        }}
+      />
+
+      {/* Noise texture overlay */}
+      <svg 
+        className="absolute inset-0 w-full h-full opacity-[0.025] mix-blend-overlay"
+        preserveAspectRatio="none"
+      >
+        <filter id="noise">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.80"
+            numOctaves="4"
+            stitchTiles="stitch"
+          />
+          <feColorMatrix type="saturate" values="0" />
+        </filter>
+        <rect width="100%" height="100%" filter="url(#noise)" />
+      </svg>
+
+      
+      <div
+        className="absolute inset-0"
+        style={{
+          background: `radial-gradient(circle at 50% 50%, transparent 40%, ${THEME.malachite}15 100%)`,
+          pointerEvents: 'none',
+        }}
+      />
+    </div>
+  );
 });
 
 BackgroundEffects.displayName = 'BackgroundEffects';

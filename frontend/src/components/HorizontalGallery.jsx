@@ -75,7 +75,7 @@ function GalleryCard({ item, index }) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: index * 0.05 }}
-            className="group flex-shrink-0 w-[320px] md:w-[380px] aspect-[4/5] rounded-2xl bg-sand-200 overflow-hidden relative cursor-pointer transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] hover:scale-105 hover:shadow-xl"
+            className="group shrink-0 w-[320px] md:w-95 aspect-4/5 rounded-2xl bg-sand-200 overflow-hidden relative cursor-pointer transition-all duration-500 ease-in-out hover:scale-105 hover:shadow-xl"
         >
             {/* Image or gradient placeholder */}
             {item.image ? (
@@ -86,11 +86,11 @@ function GalleryCard({ item, index }) {
                     loading="lazy"
                 />
             ) : (
-                <div className="w-full h-full bg-gradient-to-br from-sand-300 to-sand-200" />
+                <div className="w-full h-full bg-linear-to-br from-sand-300 to-sand-200" />
             )}
 
             {/* Overlay content */}
-            <div className="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-transparent to-transparent flex flex-col justify-end p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+            <div className="absolute inset-0 bg-linear-to-t from-charcoal/80 via-transparent to-transparent flex flex-col justify-end p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                 {item.category && (
                     <span className="text-xs font-bold uppercase tracking-wider text-orange-400 mb-2">
                         {item.category}

@@ -1,8 +1,9 @@
 import { useEffect, useRef } from 'react';
-import { ArrowRight, Mail, Github, Linkedin, Twitter } from 'lucide-react';
+import { ArrowRight, Mail } from 'lucide-react';
+import { SiGithub, SiLinkedin, SiX } from 'react-icons/si';
 
 const mainNavItems = [
-    { label: 'Work', section: 'projects', description: 'Selected projects' },
+    { label: 'Work', section: 'projects-showcase', description: 'Selected projects' },
     { label: 'About', section: 'about', description: 'My story' },
     { label: 'Tech Stack', section: 'techstack', description: 'What I use' },
     { label: 'Journey', section: 'journey', description: 'My path' },
@@ -164,12 +165,12 @@ export default function MenuOverlay({ isOpen, onClose, onNavigate }) {
                                             style={{
                                                 transitionDelay: isOpen ? `${450 + index * 100}ms` : '0ms',
                                             }}
-                                            onClick={() => handleNavClick('projects')}
+                                            onClick={() => handleNavClick('projects-showcase')}
                                             tabIndex={0}
                                             role="button"
                                             onKeyDown={(e) => {
                                                 if (e.key === 'Enter' || e.key === ' ') {
-                                                    handleNavClick('projects');
+                                                    handleNavClick('projects-showcase');
                                                 }
                                             }}
                                         >
@@ -232,9 +233,9 @@ export default function MenuOverlay({ isOpen, onClose, onNavigate }) {
                                 {/* Social Links */}
                                 <div className="flex items-center gap-6">
                                     {[
-                                        { icon: Twitter, label: 'Twitter', href: 'https://twitter.com/singhharshitt' },
-                                        { icon: Linkedin, label: 'LinkedIn', href: 'https://linkedin.com/in/singh-harshit-' },
-                                        { icon: Github, label: 'GitHub', href: 'https://github.com/singhharshitt' },
+                                        { icon: SiX, label: 'Twitter', href: 'https://twitter.com/singhharshitt' },
+                                        { icon: SiLinkedin, label: 'LinkedIn', href: 'https://linkedin.com/in/singh-harshit-' },
+                                        { icon: SiGithub, label: 'GitHub', href: 'https://github.com/singhharshitt' },
                                     ].map(({ icon: Icon, label, href }) => (
                                         <a
                                             key={label}

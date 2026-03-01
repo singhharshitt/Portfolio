@@ -1,160 +1,590 @@
-import { useEffect, useRef, useState } from 'react';
-import { Code2, Palette, Lightbulb, Rocket } from 'lucide-react';
+import { useRef } from 'react';
+import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion';
+import { Code2, Palette, Lightbulb, Rocket, ArrowUpRight } from 'lucide-react';
 import me from '../assets/me.jpg';
 
+// Retro color palette
+const THEME = {
+  bubblegum: '#F66483',
+  marigold: '#C877BF',
+  lagoon: '#30B8B2',
+  brownSugar: '#A6480A',
+  malachite: '#15484C',
+  bgCream: '#FDF6F0',
+  bgSoftPink: '#FEF2F4',
+  bgSoftTeal: '#E8F6F5',
+  bgWarm: '#F5EDE6',
+  textDark: '#1A1A1A',
+  textWarm: '#4A3728',
+  textMuted: '#8B7355',
+};
+
+// Cinematic easing curves from reference
+const EASING = {
+  smooth: [0.16, 1, 0.3, 1],      // Primary smooth ease
+  entrance: [0.25, 0.46, 0.45, 0.94], // Soft entrance
+  exit: [0.55, 0.085, 0.68, 0.53],    // Gentle exit
+  elastic: [0.68, -0.55, 0.265, 1.55], // Subtle bounce
+};
+
 const skills = [
-    {
-        icon: Code2,
-        title: 'Development',
-        description: 'Building robust, scalable applications with modern technologies.',
-    },
-    {
-        icon: Palette,
-        title: 'Design',
-        description: 'Creating beautiful, intuitive interfaces that users love.',
-    },
-    {
-        icon: Lightbulb,
-        title: 'Strategy',
-        description: 'Solving complex problems with creative, effective solutions.',
-    },
-    {
-        icon: Rocket,
-        title: 'Performance',
-        description: 'Optimizing for speed, accessibility, and user experience.',
-    },
+  {
+    icon: Code2,
+    title: 'Development',
+    description: 'Building robust, scalable applications with modern technologies.',
+    color: THEME.lagoon,
+  },
+  {
+    icon: Palette,
+    title: 'Design',
+    description: 'Creating beautiful, intuitive interfaces that users love.',
+    color: THEME.bubblegum,
+  },
+  {
+    icon: Lightbulb,
+    title: 'Strategy',
+    description: 'Solving complex problems with creative, effective solutions.',
+    color: THEME.marigold,
+  },
+  {
+    icon: Rocket,
+    title: 'Performance',
+    description: 'Optimizing for speed, accessibility, and user experience.',
+    color: THEME.brownSugar,
+  },
 ];
 
+// Enhanced Skill Card with MAI-style interactions
+const SkillCard = ({ skill, index }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 40 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+      transition={{
+        delay: index * 0.12,
+        duration: 0.7,
+        ease: EASING.smooth,
+      }}
+      whileHover={{
+        y: -8,
+        transition: { duration: 0.3, ease: EASING.smooth }
+      }}
+      className="group relative p-6 rounded-2xl cursor-pointer overflow-hidden"
+      style={{
+        backgroundColor: 'white',
+        boxShadow: '0 4px 20px rgba(0,0,0,0.04)',
+      }}
+    >
+      {/* Animated border gradient on hover */}
+      <motion.div
+        className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+        style={{
+          background: `linear-gradient(135deg, ${skill.color}20 0%, transparent 50%)`,
+        }}
+      />
+
+      {/* Top accent line with scale animation */}
+      <div className="absolute top-0 left-6 right-6 h-0.5 overflow-hidden rounded-full">
+        <motion.div
+          className="h-full w-full origin-left"
+          style={{ backgroundColor: skill.color }}
+          initial={{ scaleX: 0 }}
+          whileHover={{ scaleX: 1 }}
+          transition={{ duration: 0.5, ease: EASING.smooth }}
+        />
+      </div>
+
+      {/* Icon container with subtle rotation on hover */}
+      <motion.div
+        className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 relative"
+        style={{ backgroundColor: `${skill.color}12` }}
+        whileHover={{
+          rotate: [0, -5, 5, 0],
+          transition: { duration: 0.5 }
+        }}
+      >
+        <skill.icon
+          className="w-6 h-6 transition-all duration-300 group-hover:scale-110"
+          style={{ color: skill.color }}
+        />
+      </motion.div>
+
+      <h3
+        className="text-lg font-medium mb-2 transition-colors duration-300 group-hover:text-(--hover-color)"
+        style={{
+          color: THEME.textDark,
+          '--hover-color': skill.color
+        }}
+      >
+        {skill.title}
+      </h3>
+
+      <p
+        className="text-sm leading-relaxed transition-colors duration-300"
+        style={{ color: THEME.textMuted }}
+      >
+        {skill.description}
+      </p>
+
+      {/* Arrow reveal with stagger */}
+      <motion.div
+        initial={{ opacity: 0, x: -10, scale: 0.8 }}
+        whileHover={{ opacity: 1, x: 0, scale: 1 }}
+        transition={{ duration: 0.3, ease: EASING.smooth }}
+        className="absolute bottom-6 right-6"
+      >
+        <ArrowUpRight
+          className="w-5 h-5"
+          style={{ color: skill.color }}
+        />
+      </motion.div>
+
+      {/* Subtle glow on hover */}
+      <motion.div
+        className="absolute -bottom-20 -right-20 w-40 h-40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-3xl"
+        style={{ backgroundColor: `${skill.color}20` }}
+      />
+    </motion.div>
+  );
+};
+
+// Floating decorative element with parallax
+const FloatingElement = ({ children, className, delay = 0, direction = 'left', scrollYProgress }) => {
+  const y = useTransform(
+    scrollYProgress,
+    [0, 1],
+    direction === 'left' ? [0, -80] : [0, -40]
+  );
+
+  const rotate = useTransform(
+    scrollYProgress,
+    [0, 1],
+    direction === 'left' ? [-3, 3] : [3, -3]
+  );
+
+  const springY = useSpring(y, { stiffness: 100, damping: 30 });
+  const springRotate = useSpring(rotate, { stiffness: 100, damping: 30 });
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
+      transition={{ delay, duration: 0.9, ease: EASING.smooth }}
+      style={{ y: springY, rotate: springRotate }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+};
+
+// Text reveal component for staggered typography
+const TextReveal = ({ children, delay = 0, className = "" }) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  return (
+    <div ref={ref} className={`overflow-hidden ${className}`}>
+      <motion.div
+        initial={{ y: "100%" }}
+        animate={isInView ? { y: 0 } : { y: "100%" }}
+        transition={{
+          duration: 0.8,
+          delay,
+          ease: EASING.smooth,
+        }}
+      >
+        {children}
+      </motion.div>
+    </div>
+  );
+};
+
 export default function Aboutme() {
-    const sectionRef = useRef(null);
-    const [isVisible, setIsVisible] = useState(false);
-    const revealTransitionClass = 'transition-[opacity,transform] duration-700 ease-out';
-    const descriptionTextClass = 'text-base sm:text-lg leading-relaxed';
-    const skillCardClass = 'group p-5 rounded-xl border border-sand-200/70 bg-sand-200/35 hover:bg-white/90 hover:border-orange-400/30 hover:shadow-md hover:-translate-y-1 transition-all duration-300';
+  const sectionRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"]
+  });
 
-    useEffect(() => {
-        const observer = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting) {
-                    setIsVisible(true);
-                    observer.unobserve(entry.target);
-                }
-            },
-            { threshold: 0.2 }
-        );
+  // Smooth spring physics for parallax
+  const imageY = useSpring(
+    useTransform(scrollYProgress, [0, 1], [120, -120]),
+    { stiffness: 100, damping: 30 }
+  );
 
-        if (sectionRef.current) {
-            observer.observe(sectionRef.current);
-        }
+  const contentY = useSpring(
+    useTransform(scrollYProgress, [0, 1], [60, -60]),
+    { stiffness: 100, damping: 30 }
+  );
 
-        return () => observer.disconnect();
-    }, []);
+  const imageRotate = useSpring(
+    useTransform(scrollYProgress, [0, 0.5, 1], [-2, 0, 2]),
+    { stiffness: 100, damping: 30 }
+  );
 
-    return (
-        <section
-            id="about"
-            ref={sectionRef}
-            className="relative py-24 lg:py-32 bg-[#F5E5CA] overflow-x-hidden"
+  const scale = useSpring(
+    useTransform(scrollYProgress, [0, 0.5, 1], [0.95, 1, 0.98]),
+    { stiffness: 100, damping: 30 }
+  );
+
+  return (
+    <section
+      id="about"
+      ref={sectionRef}
+      className="relative py-32 lg:py-48 overflow-hidden"
+      style={{ backgroundColor: THEME.bgSoftTeal }}
+    >
+      {/* MAI-style floating decorative elements with enhanced parallax */}
+      <FloatingElement
+        className="absolute top-24 left-8 lg:left-20 w-36 lg:w-52 h-44 lg:h-64 rounded-2xl overflow-hidden shadow-2xl hidden lg:block z-0"
+        delay={0.3}
+        direction="left"
+        scrollYProgress={scrollYProgress}
+      >
+        <div
+          className="w-full h-full relative"
+          style={{ backgroundColor: `${THEME.bubblegum}25` }}
         >
-            {/* Background decoration */}
-            <div className="absolute inset-0 pointer-events-none">
-                <div className="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-sand-200/30 to-transparent" />
-                <div className="absolute -top-16 -left-24 w-72 h-72 rounded-full bg-orange-400/10 blur-3xl" />
-                <div className="absolute -bottom-16 right-0 w-80 h-80 rounded-full bg-[var(--app-accent-secondary)]/10 blur-3xl" />
-            </div>
+          {/* Subtle texture overlay */}
+          <div
+            className="absolute inset-0 opacity-30"
+            style={{
+              backgroundImage: `radial-gradient(circle at 2px 2px, ${THEME.bubblegum}40 1px, transparent 0)`,
+              backgroundSize: '20px 20px',
+            }}
+          />
+        </div>
+      </FloatingElement>
 
-            <div className="relative z-10 px-5 sm:px-8 lg:px-12 max-w-7xl mx-auto">
-                <div className="grid lg:grid-cols-2 gap-14 lg:gap-20 items-center">
-                    {/* Left Column - Image */}
-                    <div
-                        className={`relative min-w-0 ${revealTransitionClass} ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+      <FloatingElement
+        className="absolute bottom-40 right-8 lg:right-28 w-44 lg:w-60 h-36 lg:h-48 rounded-2xl overflow-hidden shadow-2xl hidden lg:block z-0"
+        delay={0.5}
+        direction="right"
+        scrollYProgress={scrollYProgress}
+      >
+        <div
+          className="w-full h-full relative"
+          style={{ backgroundColor: `${THEME.lagoon}25` }}
+        >
+          <div
+            className="absolute inset-0 opacity-30"
+            style={{
+              backgroundImage: `radial-gradient(circle at 2px 2px, ${THEME.lagoon}40 1px, transparent 0)`,
+              backgroundSize: '20px 20px',
+            }}
+          />
+        </div>
+      </FloatingElement>
+
+      {/* Additional floating accent */}
+      <FloatingElement
+        className="absolute top-1/2 right-16 w-24 h-24 rounded-full hidden xl:block z-0"
+        delay={0.7}
+        direction="right"
+        scrollYProgress={scrollYProgress}
+      >
+        <div
+          className="w-full h-full rounded-full"
+          style={{
+            background: `radial-gradient(circle, ${THEME.marigold}30 0%, transparent 70%)`,
+          }}
+        />
+      </FloatingElement>
+
+      {/* Subtle background pattern with fade */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 1.5 }}
+        className="absolute inset-0 opacity-[0.03]"
+      >
+        <div
+          className="w-full h-full"
+          style={{
+            backgroundImage: `radial-gradient(circle at 1px 1px, ${THEME.malachite} 1px, transparent 0)`,
+            backgroundSize: '48px 48px',
+          }}
+        />
+      </motion.div>
+
+      <div className="relative z-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        {/* Section Header - MAI Style with Text Reveal */}
+        <div className="text-center mb-20 lg:mb-32">
+          <TextReveal delay={0}>
+            <span
+              className="text-xs font-mono uppercase tracking-[0.3em] mb-4 block"
+              style={{ color: THEME.brownSugar }}
+            >
+              Get to know me
+            </span>
+          </TextReveal>
+
+          <TextReveal delay={0.1}>
+            <h2
+              className="text-5xl sm:text-6xl lg:text-7xl font-serif"
+              style={{
+                color: THEME.textDark,
+                fontFamily: "'Playfair Display', Georgia, serif"
+              }}
+            >
+              About <em className="italic" style={{ color: THEME.lagoon }}>Me</em>
+            </h2>
+          </TextReveal>
+        </div>
+
+        {/* Main Content Grid */}
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+          {/* Left Column - Image with enhanced parallax */}
+          <motion.div
+            style={{ y: imageY, rotate: imageRotate, scale }}
+            className="relative"
+          >
+            <div className="relative max-w-md mx-auto lg:mx-0">
+              {/* Main image container with reveal animation */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9, y: 40 }}
+                whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1, ease: EASING.smooth }}
+                className="relative aspect-4/5 rounded-3xl overflow-hidden shadow-2xl group"
+                style={{
+                  border: `2px solid ${THEME.lagoon}25`,
+                }}
+              >
+                <motion.img
+                  src={me}
+                  alt="Harshit Singh"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  whileHover={{ scale: 1.03 }}
+                  transition={{ duration: 0.6 }}
+                />
+
+                {/* Gradient overlay that shifts on hover */}
+                <motion.div
+                  className="absolute inset-0"
+                  style={{
+                    background: `linear-gradient(180deg, transparent 50%, ${THEME.malachite}40 100%)`,
+                  }}
+                  initial={{ opacity: 0.3 }}
+                  whileHover={{ opacity: 0.5 }}
+                  transition={{ duration: 0.4 }}
+                />
+
+                {/* Animated border glow */}
+                <motion.div
+                  className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  style={{
+                    boxShadow: `inset 0 0 0 2px ${THEME.lagoon}50`,
+                  }}
+                />
+              </motion.div>
+
+              {/* Floating stats card with spring animation */}
+              <motion.div
+                initial={{ opacity: 0, x: 40, y: 20 }}
+                whileInView={{ opacity: 1, x: 0, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.5, duration: 0.8, ease: EASING.smooth }}
+                whileHover={{
+                  y: -5,
+                  boxShadow: `0 25px 50px ${THEME.bubblegum}20`,
+                }}
+                className="absolute -bottom-8 -right-8 bg-white rounded-2xl p-6 shadow-xl"
+                style={{
+                  border: `1px solid ${THEME.bubblegum}20`,
+                }}
+              >
+                <div className="flex items-center gap-4">
+                  <motion.div
+                    className="w-14 h-14 rounded-xl flex items-center justify-center"
+                    style={{ backgroundColor: `${THEME.bubblegum}12` }}
+                    whileHover={{ rotate: 360 }}
+                    transition={{ duration: 0.6 }}
+                  >
+                    <Rocket
+                      className="w-7 h-7"
+                      style={{ color: THEME.bubblegum }}
+                    />
+                  </motion.div>
+                  <div>
+                    <motion.div
+                      className="text-3xl font-serif font-bold"
+                      style={{ color: THEME.textDark }}
+                      initial={{ opacity: 0, y: 10 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.7, duration: 0.5 }}
                     >
-                        <div className="relative">
-                            {/* Main image */}
-                            <div
-                                className="relative aspect-square w-full max-w-[420px] mx-auto lg:mx-0 rounded-2xl overflow-hidden group/img border border-[var(--app-accent-secondary)]/25 bg-sand-200/45 shadow-[0_20px_45px_rgba(47,16,0,0.22)] transition-transform duration-500 hover:scale-[1.02]"
-                            >
-                                <img
-                                    src={me}
-                                    alt="Portrait"
-                                    className="w-full h-full object-contain object-center transition-transform duration-500"
-                                    loading="lazy"
-                                />
-                                {/* Overlay gradient */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-charcoal/30 to-transparent" />
-                                <div className="absolute inset-0 pointer-events-none rounded-2xl ring-1 ring-[var(--app-accent-primary)]/12" />
-                            </div>
-
-                            {/* Floating card */}
-                            <div
-                                className={`absolute z-20 bottom-3 right-3 sm:-bottom-5 sm:right-0 lg:-right-8 bg-sand-100/95 backdrop-blur-sm border border-sand-200 rounded-xl p-4 sm:p-6 shadow-xl max-w-[180px] sm:max-w-none transition-[opacity,transform] duration-700 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
-                            >
-                                <div className="flex items-center gap-4">
-                                    <div className="w-12 h-12 bg-orange-400/10 rounded-full flex items-center justify-center">
-                                        <Rocket className="w-6 h-6 text-orange-400" />
-                                    </div>
-                                    <div>
-                                        <div className="text-2xl font-serif font-bold text-charcoal">5+</div>
-                                        <div className="text-sm text-charcoal/60">Years Experience</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Decorative elements */}
-                            <div className="absolute -top-4 -left-4 w-24 h-24 border-2 border-orange-400/20 rounded-xl -z-10" />
-                            <div className="absolute -bottom-4 left-1/4 w-16 h-16 bg-sand-300/30 rounded-full blur-xl" />
-                        </div>
-                    </div>
-
-                    {/* Right Column - Content */}
+                      5+
+                    </motion.div>
                     <div
-                        className={`min-w-0 ${revealTransitionClass} delay-200 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-12'}`}
+                      className="text-sm"
+                      style={{ color: THEME.textMuted }}
                     >
-                        <div>
-                            <span className="inline-flex items-center px-4 py-1.5 rounded-full text-xs sm:text-sm tracking-[0.18em] plus-jakarta-sans-semibold text-charcoal/70 bg-sand-200/60 border border-sand-300/70">
-                                ABOUT ME
-                            </span>
-                            <h3 className="font-serif text-2xl sm:text-3xl text-charcoal mt-6 mb-2">
-                                Hey, I am <span className="text-orange-400">Harshit</span>
-                            </h3>
-                            <h2 className="lexend-exa-bold text-3xl sm:text-4xl lg:text-5xl text-charcoal leading-tight mb-6">
-                                FULL STACK DEVELOPER
-                            </h2>
-                        </div>
-
-                        {/* Description */}
-                        <div className="space-y-4 text-charcoal/70 mb-10 max-w-xl">
-                            <p className={descriptionTextClass}>
-                                With over 3 years of experience, I craft digital products that make a difference. My approach combines
-                                technical expertise with a keen eye for design, ensuring every project
-                                is both functional and beautiful.
-                            </p>
-                            <p className={descriptionTextClass}>
-                                I believe in the power of thoughtful design and clean code to solve
-                                real problems. Whether it's a complex web application or a simple
-                                landing page, I bring the same level of dedication and attention to detail.
-                            </p>
-                        </div>
-
-                        {/* Skills Grid */}
-                        <div className="grid sm:grid-cols-2 gap-6">
-                            {skills.map((skill, index) => (
-                                <div
-                                    key={skill.title}
-                                    className={`${skillCardClass} ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
-                                    style={{ transitionDelay: `${400 + index * 100}ms` }}
-                                >
-                                    <div className="w-10 h-10 bg-orange-400/10 rounded-lg flex items-center justify-center mb-3 group-hover:bg-orange-400 group-hover:scale-110 transition-all duration-300">
-                                        <skill.icon className="w-5 h-5 text-orange-400 group-hover:text-white transition-colors duration-300" />
-                                    </div>
-                                    <h3 className="font-medium text-charcoal mb-1">{skill.title}</h3>
-                                    <p className="text-sm text-charcoal/60">{skill.description}</p>
-                                </div>
-                            ))}
-                        </div>
+                      Years Experience
                     </div>
+                  </div>
                 </div>
+              </motion.div>
+
+              {/* Decorative corner elements with draw animation */}
+              <motion.div
+                className="absolute -top-4 -left-4 w-24 h-24 hidden lg:block"
+                initial={{ pathLength: 0, opacity: 0 }}
+                whileInView={{ pathLength: 1, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.8, duration: 1 }}
+              >
+                <svg width="96" height="96" viewBox="0 0 96 96" fill="none">
+                  <motion.path
+                    d="M0 96V0H96"
+                    stroke={THEME.lagoon}
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    initial={{ pathLength: 0 }}
+                    whileInView={{ pathLength: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.8, duration: 0.8, ease: EASING.smooth }}
+                  />
+                </svg>
+              </motion.div>
+
+              <motion.div
+                className="absolute -bottom-4 -right-4 w-24 h-24 hidden lg:block"
+              >
+                <svg width="96" height="96" viewBox="0 0 96 96" fill="none">
+                  <motion.path
+                    d="M96 0V96H0"
+                    stroke={THEME.bubblegum}
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    initial={{ pathLength: 0 }}
+                    whileInView={{ pathLength: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 1, duration: 0.8, ease: EASING.smooth }}
+                  />
+                </svg>
+              </motion.div>
             </div>
-        </section>
-    );
+          </motion.div>
+
+          {/* Right Column - Content with staggered reveals */}
+          <motion.div
+            style={{ y: contentY }}
+            className="lg:pl-8"
+          >
+            {/* Name and title with text reveal */}
+            <div className="mb-8">
+              <TextReveal delay={0.2}>
+                <span
+                  className="text-sm font-mono uppercase tracking-widest mb-2 block"
+                  style={{ color: THEME.brownSugar }}
+                >
+                  Harshit Singh
+                </span>
+              </TextReveal>
+
+              <TextReveal delay={0.3}>
+                <h3
+                  className="text-4xl sm:text-5xl lg:text-6xl font-serif mb-4"
+                  style={{
+                    color: THEME.textDark,
+                    fontFamily: "'Playfair Display', Georgia, serif"
+                  }}
+                >
+                  Full Stack <em className="italic" style={{ color: THEME.bubblegum }}>Developer</em>
+                </h3>
+              </TextReveal>
+            </div>
+
+            {/* Description with line-by-line reveal */}
+            <div className="space-y-6 mb-12">
+              <TextReveal delay={0.4}>
+                <p
+                  className="text-lg leading-relaxed"
+                  style={{ color: THEME.textWarm }}
+                >
+                  With over 3 years of experience, I craft digital products that make a difference.
+                  My approach combines technical expertise with a keen eye for design, ensuring every
+                  project is both functional and beautiful.
+                </p>
+              </TextReveal>
+
+              <TextReveal delay={0.5}>
+                <p
+                  className="text-lg leading-relaxed"
+                  style={{ color: THEME.textWarm }}
+                >
+                  I believe in the power of thoughtful design and clean code to solve real problems.
+                  Whether it's a complex web application or a simple landing page, I bring the same
+                  level of dedication and attention to detail.
+                </p>
+              </TextReveal>
+            </div>
+
+            {/* Skills Grid with staggered entrance */}
+            <div className="grid sm:grid-cols-2 gap-4">
+              {skills.map((skill, index) => (
+                <SkillCard key={skill.title} skill={skill} index={index} />
+              ))}
+            </div>
+
+            {/* CTA with magnetic hover effect */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.8, duration: 0.7, ease: EASING.smooth }}
+              className="mt-12"
+            >
+              <motion.a
+                href="#connect"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById('connect')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="inline-flex items-center gap-3 px-8 py-4 rounded-full font-medium relative overflow-hidden group"
+                style={{
+                  backgroundColor: THEME.malachite,
+                  color: 'white',
+                }}
+                whileHover={{
+                  scale: 1.03,
+                  boxShadow: `0 20px 60px ${THEME.malachite}40`,
+                }}
+                whileTap={{ scale: 0.98 }}
+                transition={{ duration: 0.3, ease: EASING.smooth }}
+              >
+                {/* Animated background gradient on hover */}
+                <motion.div
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  style={{
+                    background: `linear-gradient(135deg, ${THEME.lagoon} 0%, ${THEME.malachite} 100%)`,
+                  }}
+                />
+
+                <span className="relative z-10">Let's work together</span>
+
+                <motion.span
+                  className="relative z-10"
+                  initial={{ x: 0, y: 0 }}
+                  whileHover={{ x: 3, y: -3 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <ArrowUpRight className="w-5 h-5" />
+                </motion.span>
+              </motion.a>
+            </motion.div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
 }

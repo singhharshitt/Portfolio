@@ -1,34 +1,139 @@
+import React from 'react';
+import { motion } from 'framer-motion';
+
+// Strict color palette
+const THEME = {
+  bubblegum: '#F66483',
+  marigold: '#C877BF',
+  lagoon: '#30B8B2',
+  brownSugar: '#A6480A',
+  malachite: '#15484C',
+  charcoal: '#1A1A1A',
+  cream: '#F5F0E8',
+};
+
 export function HamburgerButton({ isOpen, onClick, isScrolled }) {
-    return (
-        <button
-            onClick={onClick}
-            className="relative z-50 w-10 h-10 flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-400/50 rounded-lg transition-colors"
-            aria-label={isOpen ? 'Close menu' : 'Open menu'}
-            aria-expanded={isOpen}
-        >
-            <div className="relative w-8 h-6 flex flex-col justify-between">
-                {/* Top line */}
-                <span
-                    className={`block h-[3px] w-full rounded-full transition-all duration-300 ease-out origin-left ${isOpen
-                        ? 'bg-[var(--app-text-light)] rotate-45 translate-x-px -translate-y-px'
-                        : 'bg-charcoal'
-                        }`}
-                />
-                {/* Middle line */}
-                <span
-                    className={`block h-[3px] rounded-full transition-all duration-300 ease-out ${isOpen
-                        ? 'bg-[var(--app-text-light)] w-0 opacity-0'
-                        : 'bg-charcoal w-full'
-                        }`}
-                />
-                {/* Bottom line */}
-                <span
-                    className={`block h-[3px] w-full rounded-full transition-all duration-300 ease-out origin-left ${isOpen
-                        ? 'bg-[var(--app-text-light)] -rotate-45 translate-x-px translate-y-px'
-                        : 'bg-charcoal'
-                        }`}
-                />
-            </div>
-        </button>
-    );
+  // Line animation variants
+  const topLineVariants = {
+    closed: {
+      rotate: 0,
+      y: 0,
+      x: 0,
+      backgroundColor: isScrolled ? THEME.charcoal : THEME.cream,
+    },
+    open: {
+      rotate: 45,
+      y: -2,
+      x: 2,
+      backgroundColor: THEME.cream,
+    },
+  };
+
+  const middleLineVariants = {
+    closed: {
+      opacity: 1,
+      scaleX: 1,
+      backgroundColor: isScrolled ? THEME.charcoal : THEME.cream,
+    },
+    open: {
+      opacity: 0,
+      scaleX: 0,
+      backgroundColor: THEME.cream,
+    },
+  };
+
+  const bottomLineVariants = {
+    closed: {
+      rotate: 0,
+      y: 0,
+      x: 0,
+      backgroundColor: isScrolled ? THEME.charcoal : THEME.cream,
+    },
+    open: {
+      rotate: -45,
+      y: 2,
+      x: 2,
+      backgroundColor: THEME.cream,
+    },
+  };
+
+  // Spring physics for organic feel
+  const lineTransition = {
+    type: 'spring',
+    stiffness: 400,
+    damping: 30,
+  };
+
+  return (
+    <motion.button
+      onClick={onClick}
+      className="relative z-50 w-12 h-12 flex items-center justify-center rounded-xl focus:outline-none focus-visible:ring-2"
+      style={{
+        backgroundColor: isOpen 
+          ? 'transparent' 
+          : isScrolled 
+            ? 'rgba(245, 240, 232, 0.1)' 
+            : 'transparent',
+        border: isOpen 
+          ? 'none' 
+          : `1px solid ${isScrolled ? 'rgba(26, 26, 26, 0.1)' : 'rgba(245, 240, 232, 0.2)'}`,
+      }}
+      whileHover={{ 
+        scale: 1.05,
+        backgroundColor: isOpen 
+          ? 'transparent' 
+          : isScrolled 
+            ? 'rgba(26, 26, 26, 0.05)' 
+            : 'rgba(245, 240, 232, 0.1)',
+      }}
+      whileTap={{ scale: 0.95 }}
+      transition={{ duration: 0.2 }}
+      aria-label={isOpen ? 'Close menu' : 'Open menu'}
+      aria-expanded={isOpen}
+    >
+      <div 
+        className="relative w-6 h-5 flex flex-col justify-between"
+        style={{ transform: 'translateZ(0)' }}
+      >
+        {/* Top line */}
+        <motion.span
+          className="block h-0.5 w-full rounded-full origin-left"
+          variants={topLineVariants}
+          initial="closed"
+          animate={isOpen ? 'open' : 'closed'}
+          transition={lineTransition}
+          style={{ willChange: 'transform' }}
+        />
+
+        {/* Middle line */}
+        <motion.span
+          className="block h-0.5 rounded-full origin-center"
+          variants={middleLineVariants}
+          initial="closed"
+          animate={isOpen ? 'open' : 'closed'}
+          transition={lineTransition}
+          style={{ willChange: 'transform, opacity' }}
+        />
+
+        {/* Bottom line */}
+        <motion.span
+          className="block h-0.5 w-full rounded-full origin-left"
+          variants={bottomLineVariants}
+          initial="closed"
+          animate={isOpen ? 'open' : 'closed'}
+          transition={lineTransition}
+          style={{ willChange: 'transform' }}
+        />
+      </div>
+
+      {/* Subtle ripple effect on click */}
+      <motion.div
+        className="absolute inset-0 rounded-xl pointer-events-none"
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={isOpen ? { scale: 1.5, opacity: 0 } : { scale: 0.8, opacity: 0 }}
+        whileTap={{ scale: 1.2, opacity: 0.3, backgroundColor: THEME.lagoon }}
+        transition={{ duration: 0.4 }}
+      />
+    </motion.button>
+  );
 }

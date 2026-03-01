@@ -1,13 +1,20 @@
 import { useCallback, useEffect, useMemo, useRef, useState, memo } from 'react';
+import { motion, useInView } from 'framer-motion';
 
+// Animation configuration
 const ANIMATION_CONFIG = {
   SMOOTH_TAU: 0.25,
   MIN_COPIES: 2,
-  COPY_HEADROOM: 2
+  COPY_HEADROOM: 2,
+  ENTRANCE_DURATION: 0.8,
+  STAGGER_DELAY: 0.05,
+};
+
+const EASE = {
+  smooth: [0.16, 1, 0.3, 1],
 };
 
 const toCssLength = value => (typeof value === 'number' ? `${value}px` : (value ?? undefined));
-
 const cx = (...parts) => parts.filter(Boolean).join(' ');
 
 const useResizeObserver = (callback, elements, dependencies) => {
@@ -136,6 +143,93 @@ const useAnimationLoop = (trackRef, targetVelocity, seqWidth, isHovered, pauseOn
   }, [targetVelocity, seqWidth, isHovered, pauseOnHover, trackRef]);
 };
 
+// Enhanced logo item with entrance animation
+const LogoItem = memo(({ item, index, scaleOnHover }) => {
+  const isNodeItem = 'node' in item;
+  const itemRef = useRef(null);
+  const isInView = useInView(itemRef, { once: true, margin: '-50px' });
+
+  const content = isNodeItem ? (
+    <span
+      className={cx(
+        'inline-flex items-center',
+        'motion-reduce:transition-none',
+        scaleOnHover &&
+          'transition-transform duration-300 ease-in-out group-hover/item:scale-110'
+      )}
+      aria-hidden={!!item.href && !item.ariaLabel}
+    >
+      {item.node}
+    </span>
+  ) : (
+    <img
+      className={cx(
+        'h-(--logoloop-logoHeight) w-auto block object-contain',
+        '[-webkit-user-drag:none] pointer-events-none',
+        '[image-rendering:-webkit-optimize-contrast]',
+        'motion-reduce:transition-none',
+        scaleOnHover &&
+          'transition-transform duration-300 ease-in-out group-hover/item:scale-110'
+      )}
+      src={item.src}
+      srcSet={item.srcSet}
+      sizes={item.sizes}
+      width={item.width}
+      height={item.height}
+      alt={item.alt ?? ''}
+      title={item.title}
+      loading="lazy"
+      decoding="async"
+      draggable={false}
+    />
+  );
+
+  const itemAriaLabel = isNodeItem ? (item.ariaLabel ?? item.title) : (item.alt ?? item.title);
+
+  const inner = item.href ? (
+    <motion.a
+      className={cx(
+        'inline-flex items-center no-underline rounded',
+        'transition-opacity duration-200 ease-linear',
+        'hover:opacity-80',
+        'focus-visible:outline focus-visible:outline-current focus-visible:outline-offset-2'
+      )}
+      href={item.href}
+      aria-label={itemAriaLabel || 'logo link'}
+      target="_blank"
+      rel="noreferrer noopener"
+      whileHover={{ y: -2 }}
+      transition={{ duration: 0.2 }}
+    >
+      {content}
+    </motion.a>
+  ) : (
+    content
+  );
+
+  return (
+    <motion.li
+      ref={itemRef}
+      className={cx(
+        'flex-none mr-(--logoloop-gap) text-(length:--logoloop-logoHeight) leading-none',
+        scaleOnHover && 'overflow-visible group/item'
+      )}
+      initial={{ opacity: 0, y: 20 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+      transition={{
+        duration: ANIMATION_CONFIG.ENTRANCE_DURATION,
+        delay: index * ANIMATION_CONFIG.STAGGER_DELAY,
+        ease: EASE.smooth,
+      }}
+      role="listitem"
+    >
+      {inner}
+    </motion.li>
+  );
+});
+
+LogoItem.displayName = 'LogoItem';
+
 export const LogoLoop = memo(
   ({
     logos,
@@ -155,6 +249,8 @@ export const LogoLoop = memo(
     const containerRef = useRef(null);
     const trackRef = useRef(null);
     const seqRef = useRef(null);
+    const containerInViewRef = useRef(null);
+    const isContainerInView = useInView(containerInViewRef, { once: true, margin: '-100px' });
 
     const [seqWidth, setSeqWidth] = useState(0);
     const [copyCount, setCopyCount] = useState(ANIMATION_CONFIG.MIN_COPIES);
@@ -216,78 +312,14 @@ export const LogoLoop = memo(
     }, [pauseOnHover]);
 
     const renderLogoItem = useCallback(
-      (item, key) => {
-        const isNodeItem = 'node' in item;
-
-        const content = isNodeItem ? (
-          <span
-            className={cx(
-              'inline-flex items-center',
-              'motion-reduce:transition-none',
-              scaleOnHover &&
-                'transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover/item:scale-120'
-            )}
-            aria-hidden={!!item.href && !item.ariaLabel}
-          >
-            {item.node}
-          </span>
-        ) : (
-          <img
-            className={cx(
-              'h-[var(--logoloop-logoHeight)] w-auto block object-contain',
-              '[-webkit-user-drag:none] pointer-events-none',
-              '[image-rendering:-webkit-optimize-contrast]',
-              'motion-reduce:transition-none',
-              scaleOnHover &&
-                'transition-transform duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] group-hover/item:scale-120'
-            )}
-            src={item.src}
-            srcSet={item.srcSet}
-            sizes={item.sizes}
-            width={item.width}
-            height={item.height}
-            alt={item.alt ?? ''}
-            title={item.title}
-            loading="lazy"
-            decoding="async"
-            draggable={false}
-          />
-        );
-
-        const itemAriaLabel = isNodeItem ? (item.ariaLabel ?? item.title) : (item.alt ?? item.title);
-
-        const inner = item.href ? (
-          <a
-            className={cx(
-              'inline-flex items-center no-underline rounded',
-              'transition-opacity duration-200 ease-linear',
-              'hover:opacity-80',
-              'focus-visible:outline focus-visible:outline-current focus-visible:outline-offset-2'
-            )}
-            href={item.href}
-            aria-label={itemAriaLabel || 'logo link'}
-            target="_blank"
-            rel="noreferrer noopener"
-          >
-            {content}
-          </a>
-        ) : (
-          content
-        );
-
-        return (
-          <li
-            className={cx(
-              'flex-none mr-[var(--logoloop-gap)] text-[length:var(--logoloop-logoHeight)] leading-[1]',
-              scaleOnHover && 'overflow-visible group/item'
-            )}
-            key={key}
-            role="listitem"
-          >
-            {inner}
-          </li>
-        );
-      },
+      (item, index) => (
+        <LogoItem
+          key={index}
+          item={item}
+          index={index}
+          scaleOnHover={scaleOnHover}
+        />
+      ),
       [scaleOnHover]
     );
 
@@ -318,41 +350,60 @@ export const LogoLoop = memo(
 
     return (
       <div
-        ref={containerRef}
-        className={rootClasses}
-        style={containerStyle}
-        role="region"
-        aria-label={ariaLabel}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
+        ref={containerInViewRef}
+        className="w-full"
       >
-        {fadeOut && (
-          <>
-            <div
-              aria-hidden
-              className={cx(
-                'pointer-events-none absolute inset-y-0 left-0 z-[1]',
-                'w-[clamp(24px,8%,120px)]',
-                'bg-[linear-gradient(to_right,var(--logoloop-fadeColor,var(--logoloop-fadeColorAuto))_0%,rgba(0,0,0,0)_100%)]'
-              )}
-            />
-            <div
-              aria-hidden
-              className={cx(
-                'pointer-events-none absolute inset-y-0 right-0 z-[1]',
-                'w-[clamp(24px,8%,120px)]',
-                'bg-[linear-gradient(to_left,var(--logoloop-fadeColor,var(--logoloop-fadeColorAuto))_0%,rgba(0,0,0,0)_100%)]'
-              )}
-            />
-          </>
-        )}
-
-        <div
-          className={cx('flex w-max will-change-transform select-none', 'motion-reduce:transform-none')}
-          ref={trackRef}
+        <motion.div
+          ref={containerRef}
+          className={rootClasses}
+          style={containerStyle}
+          role="region"
+          aria-label={ariaLabel}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          initial={{ opacity: 0 }}
+          animate={isContainerInView ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: 0.6, ease: EASE.smooth }}
         >
-          {logoLists}
-        </div>
+          {/* Top accent line */}
+          <motion.div
+            className="absolute top-0 left-0 right-0 h-0.5 origin-left z-10"
+            style={{
+              background: `linear-gradient(90deg, ${fadeOutColor || 'var(--logoloop-fadeColorAuto)'}, transparent)`,
+            }}
+            initial={{ scaleX: 0 }}
+            animate={isContainerInView ? { scaleX: 1 } : { scaleX: 0 }}
+            transition={{ duration: 1.2, ease: EASE.smooth, delay: 0.3 }}
+          />
+
+          {fadeOut && (
+            <>
+              <div
+                aria-hidden
+                className={cx(
+                  'pointer-events-none absolute inset-y-0 left-0 z-1',
+                  'w-[clamp(24px,8%,120px)]',
+                  'bg-[linear-gradient(to_right,var(--logoloop-fadeColor,var(--logoloop-fadeColorAuto))_0%,rgba(0,0,0,0)_100%)]'
+                )}
+              />
+              <div
+                aria-hidden
+                className={cx(
+                  'pointer-events-none absolute inset-y-0 right-0 z-1',
+                  'w-[clamp(24px,8%,120px)]',
+                  'bg-[linear-gradient(to_left,var(--logoloop-fadeColor,var(--logoloop-fadeColorAuto))_0%,rgba(0,0,0,0)_100%)]'
+                )}
+              />
+            </>
+          )}
+
+          <div
+            className={cx('flex w-max will-change-transform select-none', 'motion-reduce:transform-none')}
+            ref={trackRef}
+          >
+            {logoLists}
+          </div>
+        </motion.div>
       </div>
     );
   }

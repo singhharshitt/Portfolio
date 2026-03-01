@@ -38,7 +38,7 @@ const Footer = () => {
         { name: 'About', action: () => scrollToSection('about') },
         { name: 'Tech Stack', action: () => scrollToSection('techstack') },
         { name: 'Journey', action: () => scrollToSection('journey') },
-        { name: 'Projects', action: () => scrollToSection('projects') },
+        { name: 'Projects', action: () => scrollToSection('projects-showcase') },
         { name: 'Blog', action: () => scrollToSection('blog') },
         { name: 'Connect', action: () => scrollToSection('connect') }
     ];

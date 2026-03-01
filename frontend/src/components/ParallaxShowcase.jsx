@@ -38,7 +38,7 @@ export default function ParallaxShowcase({ layers = [] }) {
     return (
         <div
             ref={containerRef}
-            className="relative h-[500px] md:h-[600px] flex items-center justify-center overflow-hidden theme-transition-scope"
+            className="relative h-125 md:h-150 flex items-center justify-center overflow-hidden theme-transition-scope"
         >
             {defaultLayers.map((layer, index) => {
                 const multiplier = multipliers[index % multipliers.length];
@@ -89,20 +89,20 @@ function ParallaxLayer({ layer, index, total, scrollYProgress, multiplier, isBac
     return (
         <motion.div
             style={{ y, left: `${20 + offset}px`, zIndex, boxShadow: 'var(--theme-shadow)' }}
-            className={`absolute w-[280px] md:w-[400px] rounded-2xl overflow-hidden gpu-accelerated border border-[var(--theme-border-current)]/10 transition-colors duration-700 ${isBackground ? 'blur-[1px]' : ''
+            className={`absolute w-70 md:w-100 rounded-2xl overflow-hidden gpu-accelerated border border-(--theme-border-current)/10 transition-colors duration-700 ${isBackground ? 'blur-[1px]' : ''
                 }`}
         >
             {/* Window chrome */}
-            <div className="bg-[var(--theme-surface-elevated)] px-4 py-3 flex items-center gap-2 transition-colors duration-700">
-                <span className="w-3 h-3 rounded-full bg-[var(--theme-accent-main)]" />
-                <span className="w-3 h-3 rounded-full bg-[var(--theme-accent-secondary)]" />
-                <span className="w-3 h-3 rounded-full bg-[var(--theme-border-current)]" />
-                <span className="ml-auto text-xs text-[var(--theme-text-current)] opacity-60 font-mono transition-colors duration-700">{layer.label}</span>
+            <div className="bg-(--theme-surface-elevated) px-4 py-3 flex items-center gap-2 transition-colors duration-700">
+                <span className="w-3 h-3 rounded-full bg-(--theme-accent-main)" />
+                <span className="w-3 h-3 rounded-full bg-(--theme-accent-secondary)" />
+                <span className="w-3 h-3 rounded-full bg-(--theme-border-current)" />
+                <span className="ml-auto text-xs text-(--theme-text-current) opacity-60 font-mono transition-colors duration-700">{layer.label}</span>
             </div>
 
             {/* Code content */}
-            <div className="bg-[var(--theme-surface-current)] p-5 transition-colors duration-700">
-                <pre className="font-mono text-[13px] leading-relaxed text-[var(--theme-text-current)] overflow-x-auto transition-colors duration-700">
+            <div className="bg-(--theme-surface-current) p-5 transition-colors duration-700">
+                <pre className="font-mono text-[13px] leading-relaxed text-(--theme-text-current) overflow-x-auto transition-colors duration-700">
                     <code dangerouslySetInnerHTML={{ __html: highlightCode(layer.code || '') }} />
                 </pre>
             </div>
