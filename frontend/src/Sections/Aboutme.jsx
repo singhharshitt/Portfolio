@@ -80,7 +80,7 @@ export default function Aboutme() {
           
           {/* Left: Horizontal Parallax Image Gallery */}
           <motion.div 
-            className="relative h-[500px] lg:h-[600px] flex items-center justify-center"
+            className="relative h-125 lg:h-150 flex items-center justify-center"
             style={{ scale, opacity }}
           >
             {/* Decorative frame */}
@@ -132,7 +132,7 @@ export default function Aboutme() {
                       />
                       
                       {/* Overlay gradient on hover */}
-                      <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-[#5D0D18]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      <div className="absolute inset-0 rounded-2xl bg-linear-to-t from-[#5D0D18]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </motion.div>
                     
                     {/* Decorative border */}
@@ -150,7 +150,7 @@ export default function Aboutme() {
               {/* Connecting line between images */}
               {images.length > 1 && (
                 <motion.div
-                  className="absolute top-1/2 left-1/4 right-1/4 h-px bg-gradient-to-r from-transparent via-[#9FB2AC]/30 to-transparent"
+                  className="absolute top-1/2 left-1/4 right-1/4 h-px bg-linear-to-r from-transparent via-[#9FB2AC]/30 to-transparent"
                   initial={{ scaleX: 0 }}
                   whileInView={{ scaleX: 1 }}
                   transition={{ duration: 1, delay: 0.5 }}

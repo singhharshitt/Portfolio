@@ -336,7 +336,7 @@ export default function TechStack() {
         <TabSlider activeTab={activeTab} onTabChange={setActiveTab} />
 
         {/* Tech Orbs Grid */}
-        <div className="relative min-h-[400px]">
+        <div className="relative min-h-100">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}

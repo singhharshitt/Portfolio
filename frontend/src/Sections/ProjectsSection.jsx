@@ -95,12 +95,17 @@ const ProjectCard = ({ project, index }) => {
   const y = useTransform(scrollYProgress, [0, 1], [50, -50]);
   const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.9, 1, 0.9]);
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0.8]);
+  const imageY = useTransform(scrollYProgress, [0, 1], [-20, 20]);
+
+  const smoothY = useSpring(y, { stiffness: 120, damping: 28, mass: 0.35 });
+  const smoothScale = useSpring(scale, { stiffness: 140, damping: 30, mass: 0.35 });
+  const smoothOpacity = useSpring(opacity, { stiffness: 120, damping: 26, mass: 0.35 });
 
   return (
     <motion.article
       ref={cardRef}
       className={`relative group ${project.featured ? 'lg:col-span-2' : ''}`}
-      style={{ y, scale, opacity }}
+      style={{ y: smoothY, scale: smoothScale, opacity: smoothOpacity }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       initial={{ opacity: 0, y: 50 }}
@@ -108,20 +113,36 @@ const ProjectCard = ({ project, index }) => {
       transition={{ duration: 0.6, delay: index * 0.1 }}
       viewport={{ once: true, margin: "-100px" }}
     >
-      <div className="relative overflow-hidden rounded-2xl bg-white border border-[#5D0D18]/10 shadow-lg hover:shadow-2xl hover:shadow-[#5D0D18]/10 transition-all duration-500">
+      <motion.div
+        className="relative overflow-hidden rounded-2xl bg-white border border-[#5D0D18]/10 shadow-lg hover:shadow-2xl hover:shadow-[#5D0D18]/10 transition-all duration-500"
+        whileHover={{ y: -6 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+      >
         {/* Image Container */}
-        <div className="relative aspect-[16/10] overflow-hidden">
+        <div className="relative aspect-16/10 overflow-hidden">
           <motion.img
             src={project.image}
             alt={project.title}
             className="w-full h-full object-cover"
+            style={{ y: imageY }}
             animate={{ scale: isHovered ? 1.1 : 1 }}
             transition={{ duration: 0.6 }}
+          />
+
+          {/* Subtle shine on hover */}
+          <motion.div
+            className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/2 bg-gradient-to-r from-transparent via-white/35 to-transparent"
+            initial={{ x: '-120%', opacity: 0 }}
+            animate={{
+              x: isHovered ? '240%' : '-120%',
+              opacity: isHovered ? 1 : 0,
+            }}
+            transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
           />
           
           {/* Gradient Overlay */}
           <motion.div 
-            className="absolute inset-0 bg-gradient-to-t from-[#1a1a1a] via-[#1a1a1a]/20 to-transparent"
+            className="absolute inset-0 bg-linear-to-t from-[#1a1a1a] via-[#1a1a1a]/20 to-transparent"
             initial={{ opacity: 0.4 }}
             animate={{ opacity: isHovered ? 0.8 : 0.4 }}
           />
@@ -140,7 +161,7 @@ const ProjectCard = ({ project, index }) => {
           
           {/* Action Buttons Overlay */}
           <motion.div
-            className="absolute inset-0 flex items-center justify-center gap-4"
+            className="absolute inset-0 flex items-center justify-center gap-4 backdrop-blur-[1.5px]"
             initial={{ opacity: 0 }}
             animate={{ opacity: isHovered ? 1 : 0 }}
             transition={{ duration: 0.3 }}
@@ -187,7 +208,7 @@ const ProjectCard = ({ project, index }) => {
               href={project.liveUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-shrink-0 w-12 h-12 rounded-full bg-[#5D0D18]/10 flex items-center justify-center text-[#5D0D18] hover:bg-[#5D0D18] hover:text-[#FFFBEB] transition-all duration-300"
+              className="shrink-0 w-12 h-12 rounded-full bg-[#5D0D18]/10 flex items-center justify-center text-[#5D0D18] hover:bg-[#5D0D18] hover:text-[#FFFBEB] transition-all duration-300"
               whileHover={{ scale: 1.1, rotate: 45 }}
               whileTap={{ scale: 0.9 }}
             >
@@ -209,6 +230,7 @@ const ProjectCard = ({ project, index }) => {
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.1 * tagIndex }}
+                  whileHover={{ y: -2, scale: 1.04 }}
                 >
                   {tag}
                 </motion.span>
@@ -217,7 +239,7 @@ const ProjectCard = ({ project, index }) => {
             <span className="text-sm text-[#9FB2AC] font-medium">{project.date}</span>
           </div>
         </div>
-      </div>
+      </motion.div>
     </motion.article>
   );
 };
@@ -287,7 +309,7 @@ const HorizontalScrollGallery = () => {
         {PROJECTS.map((project, index) => (
           <div 
             key={project.title} 
-            className={`flex-shrink-0 w-[85vw] sm:w-[60vw] lg:w-auto snap-center ${project.featured ? 'lg:col-span-2' : ''}`}
+            className={`shrink-0 w-[85vw] sm:w-[60vw] lg:w-auto snap-center ${project.featured ? 'lg:col-span-2' : ''}`}
           >
             <ProjectCard project={project} index={index} />
           </div>
@@ -332,8 +354,21 @@ export default function ProjectsSection() {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <span className="w-8 h-px bg-[#9FB2AC]" />
+            <motion.span
+              className="h-px bg-[#9FB2AC]"
+              initial={{ width: 0 }}
+              whileInView={{ width: 32 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              viewport={{ once: true }}
+            />
             Selected Work
+            <motion.span
+              className="h-px bg-[#9FB2AC]"
+              initial={{ width: 0 }}
+              whileInView={{ width: 32 }}
+              transition={{ duration: 0.5, delay: 0.16 }}
+              viewport={{ once: true }}
+            />
           </motion.span>
           
           <motion.h2 

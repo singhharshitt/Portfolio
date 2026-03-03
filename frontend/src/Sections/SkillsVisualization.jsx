@@ -177,7 +177,7 @@ const SkillConstellation = ({ skill, index, isHovered, onHover }) => {
 
       {/* Connection lines to neighbors */}
       <motion.div
-        className="absolute top-1/2 -right-8 w-8 h-px bg-gradient-to-r from-[#5D0D18]/20 to-transparent"
+        className="absolute top-1/2 -right-8 w-8 h-px bg-linear-to-r from-[#5D0D18]/20 to-transparent"
         initial={{ scaleX: 0 }}
         whileInView={{ scaleX: 1 }}
         transition={{ duration: 0.5, delay: index * 0.1 + 0.3 }}
@@ -238,7 +238,7 @@ const SoftSkillPillar = ({ skill, index }) => {
       <div className="relative w-20 h-48 bg-[#5D0D18]/5 rounded-2xl overflow-hidden">
         {/* Liquid fill effect */}
         <motion.div
-          className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#5D0D18] to-[#9FB2AC] rounded-2xl"
+          className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-[#5D0D18] to-[#9FB2AC] rounded-2xl"
           initial={{ height: 0 }}
           whileInView={{ height }}
           transition={{ duration: 1, delay: index * 0.2, ease: "easeOut" }}
