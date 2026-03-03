@@ -166,7 +166,7 @@ export default function JourneyTimeline() {
             
             {/* Animated progress line */}
             <motion.div 
-              className="absolute top-0 left-0 right-0 bg-gradient-to-b from-[#5D0D18] via-[#9FB2AC] to-[#5D0D18]"
+              className="absolute top-0 left-0 right-0 bg-linear-to-b from-[#5D0D18] via-[#9FB2AC] to-[#5D0D18]"
               style={{ height: lineHeight }}
             />
             
@@ -286,7 +286,7 @@ export default function JourneyTimeline() {
 
                       {/* Hover gradient */}
                       <motion.div
-                        className="absolute inset-0 rounded-2xl bg-gradient-to-br from-[#9FB2AC]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"
+                        className="absolute inset-0 rounded-2xl bg-linear-to-br from-[#9FB2AC]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"
                       />
                     </motion.article>
                   </motion.div>

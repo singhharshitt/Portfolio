@@ -3,10 +3,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, Mail, Github, Linkedin, Twitter } from 'lucide-react';
 
 const mainNavItems = [
-    { label: 'Work', section: 'projects', description: 'Selected projects' },
+    { label: 'Work', section: 'projects-showcase', description: 'Selected projects' },
     { label: 'About', section: 'about', description: 'My story' },
     { label: 'Tech Stack', section: 'techstack', description: 'What I use' },
-    { label: 'Journey', section: 'journey', description: 'My path' },
+    { label: 'Journey', section: 'timeline', description: 'My path' },
     { label: 'Connect', section: 'connect', description: 'Get in touch' },
 ];
 
@@ -116,7 +116,7 @@ export default function MenuOverlay({ isOpen, onClose, onNavigate }) {
                     initial="hidden"
                     animate="visible"
                     exit="exit"
-                    className="fixed inset-0 h-[100dvh] z-40"
+                    className="fixed inset-0 h-dvh z-40"
                     aria-hidden={!isOpen}
                 >
                     {/* Background Layers - Bloodstone (#5D0D18) with depth */}
@@ -277,26 +277,26 @@ export default function MenuOverlay({ isOpen, onClose, onNavigate }) {
                                                     key={project.title}
                                                     variants={itemVariants}
                                                     className="group relative flex items-center gap-5 p-4 rounded-2xl transition-all duration-500 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#9FB2AC]/50 overflow-hidden"
-                                                    onClick={() => handleNavClick('projects')}
+                                                    onClick={() => handleNavClick('projects-showcase')}
                                                     whileHover={{ x: 8 }}
                                                     tabIndex={0}
                                                     role="button"
                                                     onKeyDown={(e) => {
                                                         if (e.key === 'Enter' || e.key === ' ') {
-                                                            handleNavClick('projects');
+                                                            handleNavClick('projects-showcase');
                                                         }
                                                     }}
                                                 >
                                                     {/* Hover background */}
                                                     <motion.div
-                                                        className="absolute inset-0 bg-gradient-to-r from-[#9FB2AC]/10 to-transparent"
+                                                        className="absolute inset-0 bg-linear-to-r from-[#9FB2AC]/10 to-transparent"
                                                         initial={{ x: '-100%', opacity: 0 }}
                                                         whileHover={{ x: 0, opacity: 1 }}
                                                         transition={{ duration: 0.4 }}
                                                     />
                                                     
                                                     {/* Project Image with frame */}
-                                                    <div className="relative w-24 h-24 lg:w-28 lg:h-28 rounded-xl overflow-hidden flex-shrink-0 ring-2 ring-[#FFFBEB]/10 group-hover:ring-[#9FB2AC]/30 transition-all duration-500">
+                                                    <div className="relative w-24 h-24 lg:w-28 lg:h-28 rounded-xl overflow-hidden shrink-0 ring-2 ring-[#FFFBEB]/10 group-hover:ring-[#9FB2AC]/30 transition-all duration-500">
                                                         <motion.img
                                                             src={project.image}
                                                             alt={project.title}
@@ -305,7 +305,7 @@ export default function MenuOverlay({ isOpen, onClose, onNavigate }) {
                                                             transition={{ duration: 0.6 }}
                                                         />
                                                         {/* Overlay gradient */}
-                                                        <div className="absolute inset-0 bg-gradient-to-t from-[#5D0D18]/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                                                        <div className="absolute inset-0 bg-linear-to-t from-[#5D0D18]/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                                                         
                                                         {/* View indicator */}
                                                         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -327,7 +327,7 @@ export default function MenuOverlay({ isOpen, onClose, onNavigate }) {
                                                     </div>
 
                                                     {/* Arrow with circle */}
-                                                    <div className="relative w-10 h-10 rounded-full border border-[#FFFBEB]/20 flex items-center justify-center group-hover:border-[#9FB2AC] group-hover:bg-[#9FB2AC] transition-all duration-300 flex-shrink-0">
+                                                    <div className="relative w-10 h-10 rounded-full border border-[#FFFBEB]/20 flex items-center justify-center group-hover:border-[#9FB2AC] group-hover:bg-[#9FB2AC] transition-all duration-300 shrink-0">
                                                         <ArrowRight
                                                             className="w-4 h-4 text-[#FFFBEB]/50 group-hover:text-[#5D0D18] transition-all duration-300 group-hover:translate-x-0.5"
                                                             strokeWidth={2}
@@ -340,7 +340,7 @@ export default function MenuOverlay({ isOpen, onClose, onNavigate }) {
                                         {/* View all link */}
                                         <motion.button
                                             variants={itemVariants}
-                                            onClick={() => handleNavClick('projects')}
+                                            onClick={() => handleNavClick('projects-showcase')}
                                             className="group flex items-center gap-2 text-[#9FB2AC] hover:text-[#FFFBEB] transition-colors duration-300 mt-6 text-sm font-medium"
                                         >
                                             <span>View all projects</span>
