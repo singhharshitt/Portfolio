@@ -7,6 +7,7 @@ import JourneyTimeline from '../components/TimeLine.jsx';
 import TechStack from '../Sections/TechStack.jsx';
 import ProjectsSection from '../Sections/ProjectsSection.jsx';
 import SkillsVisualization from '../Sections/SkillsVisualization.jsx';
+import CodingActivity from '../Sections/CodingActivity.jsx';
 import Certificates from '../Sections/Certificates.jsx';
 import BlogSection from '../Sections/BlogSection.jsx';
 import ConnectSection from '../Sections/ConnectSection.jsx';
@@ -66,10 +67,11 @@ function Home() {
       <main className="site-main">
         <Hero />
         <Aboutme />
-        <JourneyTimeline />
-        <SkillsVisualization />
         <TechStack />
+        <SkillsVisualization />
         <ProjectsSection />
+        <JourneyTimeline />
+        <CodingActivity />
         <Dashboard {...DASHBOARD_PROPS} />
         <Certificates />
         <BlogSection />
