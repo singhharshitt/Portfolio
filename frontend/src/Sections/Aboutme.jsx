@@ -1,595 +1,294 @@
-import { useRef } from 'react';
-import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion';
-import { Code2, Palette, Lightbulb, Rocket, ArrowUpRight } from 'lucide-react';
-import me from '../assets/me.jpg';
+import { useRef, useEffect, useState } from 'react';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
+import profileMain from '../assets/me.jpg';
 
-// Warm Parchment color palette
-const THEME = {
-  terracotta: '#C2743A',
-  gold: '#C9A66B',
-  sage: '#B7B77A',
-  olive: '#6E6B2F',
-  parchment: '#E9E2D6',
-  cream: '#F5F0E8',
-  bgSection: '#E9E2D6',
-  textDark: '#4A4A3A',
-  textSecondary: '#6E6B2F',
-  textMuted: '#8A8570',
-};
+function goToProjects(event) {
+  event.preventDefault();
+  document.getElementById('projects-showcase')?.scrollIntoView({ behavior: 'smooth' });
+}
 
-// Cinematic easing curves
-const EASING = {
-  smooth: [0.16, 1, 0.3, 1],
-  entrance: [0.25, 0.46, 0.45, 0.94],
-  exit: [0.55, 0.085, 0.68, 0.53],
-  elastic: [0.68, -0.55, 0.265, 1.55],
-};
+export default function Aboutme() {
+  const containerRef = useRef(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  });
+  
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
+  
+  // Horizontal parallax for images - moves left as you scroll down
+  const x1 = useTransform(smoothProgress, [0, 1], [100, -100]);
+  
+  // Vertical parallax with different speeds
+  const y1 = useTransform(smoothProgress, [0, 1], [-30, 30]);
+  
+  // Rotation based on scroll
+  const rotate1 = useTransform(smoothProgress, [0, 1], [-5, 5]);
+  
+  // Scale on scroll
+  const scale = useTransform(smoothProgress, [0, 0.5, 1], [0.8, 1, 0.9]);
+  const opacity = useTransform(smoothProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0.8]);
 
-const skills = [
-  {
-    icon: Code2,
-    title: 'Development',
-    description: 'Building robust, scalable applications with modern technologies.',
-    color: THEME.terracotta,
-  },
-  {
-    icon: Palette,
-    title: 'Design',
-    description: 'Creating beautiful, intuitive interfaces that users love.',
-    color: THEME.gold,
-  },
-  {
-    icon: Lightbulb,
-    title: 'Strategy',
-    description: 'Solving complex problems with creative, effective solutions.',
-    color: THEME.sage,
-  },
-  {
-    icon: Rocket,
-    title: 'Performance',
-    description: 'Optimizing for speed, accessibility, and user experience.',
-    color: THEME.olive,
-  },
-];
+  // Mouse tracking for image tilt
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      const { clientX, clientY } = e;
+      const { innerWidth, innerHeight } = window;
+      setMousePosition({
+        x: (clientX - innerWidth / 2) / innerWidth,
+        y: (clientY - innerHeight / 2) / innerHeight,
+      });
+    };
+    
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
 
-// Enhanced Skill Card
-const SkillCard = ({ skill, index }) => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
+  const images = [
+    {
+      src: profileMain,
+      alt: "Harshit Singh - Profile",
+      style: { x: x1, y: y1, rotate: rotate1 },
+      className: "w-64 h-80 object-cover rounded-2xl shadow-2xl z-10",
+      delay: 0,
+    },
+  ];
 
   return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 40 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-      transition={{
-        delay: index * 0.12,
-        duration: 0.7,
-        ease: EASING.smooth,
-      }}
-      whileHover={{
-        y: -8,
-        transition: { duration: 0.3, ease: EASING.smooth }
-      }}
-      className="group relative p-6 rounded-2xl cursor-pointer overflow-hidden"
-      style={{
-        backgroundColor: THEME.cream,
-        boxShadow: '0 4px 20px rgba(110, 107, 47, 0.06)',
-      }}
+    <section 
+      id="about" 
+      ref={containerRef}
+      className="relative min-h-screen w-full bg-[#FFFBEB] overflow-hidden py-20 lg:py-32"
     >
-      {/* Animated border gradient on hover */}
-      <motion.div
-        className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-        style={{
-          background: `linear-gradient(135deg, ${skill.color}20 0%, transparent 50%)`,
-        }}
-      />
-
-      {/* Top accent line */}
-      <div className="absolute top-0 left-6 right-6 h-0.5 overflow-hidden rounded-full">
-        <motion.div
-          className="h-full w-full origin-left"
-          style={{ backgroundColor: skill.color }}
-          initial={{ scaleX: 0 }}
-          whileHover={{ scaleX: 1 }}
-          transition={{ duration: 0.5, ease: EASING.smooth }}
+      {/* Background Elements */}
+      <div className="absolute inset-0 pointer-events-none">
+        <motion.div 
+          className="absolute top-20 right-20 w-96 h-96 rounded-full bg-[#9FB2AC]/10 blur-3xl"
+          style={{ opacity: useTransform(smoothProgress, [0, 0.5], [0, 1]) }}
+        />
+        <motion.div 
+          className="absolute bottom-20 left-20 w-72 h-72 rounded-full bg-[#5D0D18]/5 blur-3xl"
+          style={{ opacity: useTransform(smoothProgress, [0, 0.5], [0, 1]) }}
         />
       </div>
 
-      {/* Icon container */}
-      <motion.div
-        className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 relative"
-        style={{ backgroundColor: `${skill.color}12` }}
-        whileHover={{
-          rotate: [0, -5, 5, 0],
-          transition: { duration: 0.5 }
-        }}
-      >
-        <skill.icon
-          className="w-6 h-6 transition-all duration-300 group-hover:scale-110"
-          style={{ color: skill.color }}
-        />
-      </motion.div>
-
-      <h3
-        className="text-lg font-medium mb-2 transition-colors duration-300 group-hover:text-(--hover-color)"
-        style={{
-          color: THEME.textDark,
-          '--hover-color': skill.color
-        }}
-      >
-        {skill.title}
-      </h3>
-
-      <p
-        className="text-sm leading-relaxed transition-colors duration-300"
-        style={{ color: THEME.textMuted }}
-      >
-        {skill.description}
-      </p>
-
-      {/* Arrow reveal */}
-      <motion.div
-        initial={{ opacity: 0, x: -10, scale: 0.8 }}
-        whileHover={{ opacity: 1, x: 0, scale: 1 }}
-        transition={{ duration: 0.3, ease: EASING.smooth }}
-        className="absolute bottom-6 right-6"
-      >
-        <ArrowUpRight
-          className="w-5 h-5"
-          style={{ color: skill.color }}
-        />
-      </motion.div>
-
-      {/* Subtle glow on hover */}
-      <motion.div
-        className="absolute -bottom-20 -right-20 w-40 h-40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-3xl"
-        style={{ backgroundColor: `${skill.color}20` }}
-      />
-    </motion.div>
-  );
-};
-
-// Floating decorative element with parallax
-const FloatingElement = ({ children, className, delay = 0, direction = 'left', speed = 1, scrollYProgress }) => {
-  const baseTravel = direction === 'left' ? -80 : -40;
-  const y = useTransform(
-    scrollYProgress,
-    [0, 1],
-    [0, baseTravel * speed]
-  );
-
-  const rotate = useTransform(
-    scrollYProgress,
-    [0, 1],
-    direction === 'left' ? [-2, 2] : [3, -3]
-  );
-
-  const scaleVal = useTransform(
-    scrollYProgress,
-    [0, 0.3, 0.7, 1],
-    [0.95, 1.05, 1.05, 0.98]
-  );
-
-  const springY = useSpring(y, { stiffness: 100, damping: 30 });
-  const springRotate = useSpring(rotate, { stiffness: 100, damping: 30 });
-  const springScale = useSpring(scaleVal, { stiffness: 100, damping: 30 });
-
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true }}
-      transition={{ delay, duration: 0.9, ease: EASING.smooth }}
-      style={{ y: springY, rotate: springRotate, scale: springScale, willChange: 'transform' }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
-};
-
-// Text reveal component
-const TextReveal = ({ children, delay = 0, className = "" }) => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-
-  return (
-    <div ref={ref} className={`overflow-hidden ${className}`}>
-      <motion.div
-        initial={{ y: "100%" }}
-        animate={isInView ? { y: 0 } : { y: "100%" }}
-        transition={{
-          duration: 0.8,
-          delay,
-          ease: EASING.smooth,
-        }}
-      >
-        {children}
-      </motion.div>
-    </div>
-  );
-};
-
-export default function Aboutme() {
-  const sectionRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"]
-  });
-
-  // Smooth spring physics for parallax
-  const imageY = useSpring(
-    useTransform(scrollYProgress, [0, 1], [120, -120]),
-    { stiffness: 100, damping: 30 }
-  );
-
-  const contentY = useSpring(
-    useTransform(scrollYProgress, [0, 1], [60, -60]),
-    { stiffness: 100, damping: 30 }
-  );
-
-  const imageRotate = useSpring(
-    useTransform(scrollYProgress, [0, 0.5, 1], [-2, 0, 2]),
-    { stiffness: 100, damping: 30 }
-  );
-
-  const scale = useSpring(
-    useTransform(scrollYProgress, [0, 0.5, 1], [0.95, 1, 0.98]),
-    { stiffness: 100, damping: 30 }
-  );
-
-  return (
-    <section
-      id="about"
-      ref={sectionRef}
-      className="relative py-32 lg:py-48 overflow-hidden"
-      style={{ backgroundColor: THEME.bgSection }}
-    >
-      {/* Floating decorative elements */}
-      <FloatingElement
-        className="absolute top-24 left-8 lg:left-20 w-36 lg:w-52 h-44 lg:h-64 rounded-2xl overflow-hidden shadow-2xl hidden lg:block z-0"
-        delay={0.3}
-        direction="left"
-        speed={0.7}
-        scrollYProgress={scrollYProgress}
-      >
-        <div
-          className="w-full h-full relative"
-          style={{ backgroundColor: `${THEME.terracotta}15` }}
-        >
-          <div
-            className="absolute inset-0 opacity-30"
-            style={{
-              backgroundImage: `radial-gradient(circle at 2px 2px, ${THEME.terracotta}30 1px, transparent 0)`,
-              backgroundSize: '20px 20px',
-            }}
-          />
-        </div>
-      </FloatingElement>
-
-      <FloatingElement
-        className="absolute bottom-40 right-8 lg:right-28 w-44 lg:w-60 h-36 lg:h-48 rounded-2xl overflow-hidden shadow-2xl hidden lg:block z-0"
-        delay={0.5}
-        direction="right"
-        speed={1.1}
-        scrollYProgress={scrollYProgress}
-      >
-        <div
-          className="w-full h-full relative"
-          style={{ backgroundColor: `${THEME.gold}15` }}
-        >
-          <div
-            className="absolute inset-0 opacity-30"
-            style={{
-              backgroundImage: `radial-gradient(circle at 2px 2px, ${THEME.gold}30 1px, transparent 0)`,
-              backgroundSize: '20px 20px',
-            }}
-          />
-        </div>
-      </FloatingElement>
-
-      {/* Additional floating accent */}
-      <FloatingElement
-        className="absolute top-1/2 right-16 w-24 h-24 rounded-full hidden xl:block z-0"
-        delay={0.7}
-        direction="right"
-        scrollYProgress={scrollYProgress}
-      >
-        <div
-          className="w-full h-full rounded-full"
-          style={{
-            background: `radial-gradient(circle, ${THEME.sage}30 0%, transparent 70%)`,
-          }}
-        />
-      </FloatingElement>
-
-      {/* Subtle background pattern */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 1.5 }}
-        className="absolute inset-0 opacity-[0.03]"
-      >
-        <div
-          className="w-full h-full"
-          style={{
-            backgroundImage: `radial-gradient(circle at 1px 1px, ${THEME.textDark} 1px, transparent 0)`,
-            backgroundSize: '48px 48px',
-          }}
-        />
-      </motion.div>
-
-      <div className="relative z-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        {/* Section Header */}
-        <div className="text-center mb-20 lg:mb-32">
-          <TextReveal delay={0}>
-            <span
-              className="text-xs font-mono uppercase tracking-[0.3em] mb-4 block"
-              style={{ color: THEME.olive }}
-            >
-              Get to know me
-            </span>
-          </TextReveal>
-
-          <TextReveal delay={0.1}>
-            <h2
-              className="text-5xl sm:text-6xl lg:text-7xl font-serif"
-              style={{
-                color: THEME.textDark,
-                fontFamily: "'Playfair Display', Georgia, serif"
-              }}
-            >
-              About <em className="italic" style={{ color: THEME.terracotta }}>Me</em>
-            </h2>
-          </TextReveal>
-        </div>
-
-        {/* Main Content Grid */}
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-          {/* Left Column - Image */}
-          <motion.div
-            style={{ y: imageY, rotate: imageRotate, scale }}
-            className="relative"
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center min-h-[80vh]">
+          
+          {/* Left: Horizontal Parallax Image Gallery */}
+          <motion.div 
+            className="relative h-[500px] lg:h-[600px] flex items-center justify-center"
+            style={{ scale, opacity }}
           >
-            <div className="relative max-w-md mx-auto lg:mx-0">
-              {/* Main image container */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9, y: 40 }}
-                whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1, ease: EASING.smooth }}
-                className="relative aspect-4/5 rounded-3xl overflow-hidden shadow-2xl group"
-                style={{
-                  border: `2px solid ${THEME.gold}25`,
-                }}
-              >
-                <motion.img
-                  src={me}
-                  alt="Harshit Singh"
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  whileHover={{ scale: 1.03 }}
-                  transition={{ duration: 0.6 }}
-                />
-
-                {/* Gradient overlay */}
+            {/* Decorative frame */}
+            <motion.div
+              className="absolute inset-0 border border-[#5D0D18]/10 rounded-3xl"
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            />
+            
+            {/* Images with parallax */}
+            <div className="relative w-full h-full flex items-center justify-center">
+              {images.map((img, index) => (
                 <motion.div
-                  className="absolute inset-0"
-                  style={{
-                    background: `linear-gradient(180deg, transparent 50%, ${THEME.olive}30 100%)`,
+                  key={index}
+                  className={`absolute ${
+                    images.length === 1
+                      ? 'left-1/2 -translate-x-1/2'
+                      : index === 0
+                        ? 'left-10 lg:left-20'
+                        : 'right-10 lg:right-20'
+                  }`}
+                  style={img.style}
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: img.delay }}
+                  viewport={{ once: true }}
+                  whileHover={{ 
+                    scale: 1.05, 
+                    zIndex: 30,
+                    transition: { duration: 0.3 }
                   }}
-                  initial={{ opacity: 0.3 }}
-                  whileHover={{ opacity: 0.5 }}
-                  transition={{ duration: 0.4 }}
-                />
-
-                {/* Animated border glow */}
-                <motion.div
-                  className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                  style={{
-                    boxShadow: `inset 0 0 0 2px ${THEME.gold}50`,
-                  }}
-                />
-              </motion.div>
-
-              {/* Floating stats card */}
-              <motion.div
-                initial={{ opacity: 0, x: 40, y: 20 }}
-                whileInView={{ opacity: 1, x: 0, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.5, duration: 0.8, ease: EASING.smooth }}
-                whileHover={{
-                  y: -5,
-                  boxShadow: `0 25px 50px ${THEME.terracotta}20`,
-                }}
-                className="absolute -bottom-8 -right-8 rounded-2xl p-6 shadow-xl"
-                style={{
-                  backgroundColor: THEME.cream,
-                  border: `1px solid ${THEME.terracotta}20`,
-                }}
-              >
-                <div className="flex items-center gap-4">
-                  <motion.div
-                    className="w-14 h-14 rounded-xl flex items-center justify-center"
-                    style={{ backgroundColor: `${THEME.terracotta}12` }}
-                    whileHover={{ rotate: 360 }}
-                    transition={{ duration: 0.6 }}
-                  >
-                    <Rocket
-                      className="w-7 h-7"
-                      style={{ color: THEME.terracotta }}
-                    />
-                  </motion.div>
-                  <div>
+                >
+                  <div className="relative group">
+                    {/* Image container with 3D tilt effect */}
                     <motion.div
-                      className="text-3xl font-serif font-bold"
-                      style={{ color: THEME.textDark }}
-                      initial={{ opacity: 0, y: 10 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: 0.7, duration: 0.5 }}
+                      style={{
+                        rotateY: mousePosition.x * 10,
+                        rotateX: -mousePosition.y * 10,
+                        transformStyle: "preserve-3d",
+                      }}
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
                     >
-                      5+
+                      <img 
+                        src={img.src} 
+                        alt={img.alt}
+                        className={`${img.className} transition-all duration-500 group-hover:shadow-2xl`}
+                      />
+                      
+                      {/* Overlay gradient on hover */}
+                      <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-[#5D0D18]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </motion.div>
-                    <div
-                      className="text-sm"
-                      style={{ color: THEME.textMuted }}
-                    >
-                      Years Experience
-                    </div>
+                    
+                    {/* Decorative border */}
+                    <motion.div
+                      className="absolute -inset-3 border-2 border-[#9FB2AC]/30 rounded-3xl -z-10"
+                      initial={{ opacity: 0, scale: 1.1 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.6, delay: img.delay + 0.2 }}
+                      viewport={{ once: true }}
+                    />
                   </div>
-                </div>
-              </motion.div>
-
-              {/* Decorative corner elements */}
-              <motion.div
-                className="absolute -top-4 -left-4 w-24 h-24 hidden lg:block"
-                initial={{ pathLength: 0, opacity: 0 }}
-                whileInView={{ pathLength: 1, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.8, duration: 1 }}
-              >
-                <svg width="96" height="96" viewBox="0 0 96 96" fill="none">
-                  <motion.path
-                    d="M0 96V0H96"
-                    stroke={THEME.gold}
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    initial={{ pathLength: 0 }}
-                    whileInView={{ pathLength: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.8, duration: 0.8, ease: EASING.smooth }}
-                  />
-                </svg>
-              </motion.div>
-
-              <motion.div
-                className="absolute -bottom-4 -right-4 w-24 h-24 hidden lg:block"
-              >
-                <svg width="96" height="96" viewBox="0 0 96 96" fill="none">
-                  <motion.path
-                    d="M96 0V96H0"
-                    stroke={THEME.terracotta}
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    initial={{ pathLength: 0 }}
-                    whileInView={{ pathLength: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 1, duration: 0.8, ease: EASING.smooth }}
-                  />
-                </svg>
-              </motion.div>
+                </motion.div>
+              ))}
+              
+              {/* Connecting line between images */}
+              {images.length > 1 && (
+                <motion.div
+                  className="absolute top-1/2 left-1/4 right-1/4 h-px bg-gradient-to-r from-transparent via-[#9FB2AC]/30 to-transparent"
+                  initial={{ scaleX: 0 }}
+                  whileInView={{ scaleX: 1 }}
+                  transition={{ duration: 1, delay: 0.5 }}
+                  viewport={{ once: true }}
+                />
+              )}
             </div>
+            
+            {/* Floating badges */}
+            <motion.div
+              className="absolute top-10 right-10 px-4 py-2 bg-[#5D0D18] text-[#FFFBEB] text-sm font-medium rounded-full"
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              viewport={{ once: true }}
+              style={{ y: useTransform(smoothProgress, [0, 1], [0, -40]) }}
+            >
+              3+ Years
+            </motion.div>
+            
+            <motion.div
+              className="absolute bottom-20 left-10 px-4 py-2 bg-[#9FB2AC] text-[#5D0D18] text-sm font-medium rounded-full"
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+              viewport={{ once: true }}
+              style={{ y: useTransform(smoothProgress, [0, 1], [0, 40]) }}
+            >
+              50+ Projects
+            </motion.div>
           </motion.div>
 
-          {/* Right Column - Content */}
-          <motion.div
-            style={{ y: contentY }}
-            className="lg:pl-8"
+          {/* Right: Content */}
+          <motion.div 
+            className="space-y-8 lg:pl-8"
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
           >
-            {/* Name and title */}
-            <div className="mb-8">
-              <TextReveal delay={0.2}>
-                <span
-                  className="text-sm font-mono uppercase tracking-widest mb-2 block"
-                  style={{ color: THEME.olive }}
-                >
-                  Harshit Singh
-                </span>
-              </TextReveal>
-
-              <TextReveal delay={0.3}>
-                <h3
-                  className="text-4xl sm:text-5xl lg:text-6xl font-serif mb-4"
-                  style={{
-                    color: THEME.textDark,
-                    fontFamily: "'Playfair Display', Georgia, serif"
-                  }}
-                >
-                  Full Stack <em className="italic" style={{ color: THEME.terracotta }}>Developer</em>
-                </h3>
-              </TextReveal>
-            </div>
-
-            {/* Description */}
-            <div className="space-y-6 mb-12">
-              <TextReveal delay={0.4}>
-                <p
-                  className="text-lg leading-relaxed"
-                  style={{ color: THEME.textSecondary }}
-                >
-                  With over 3 years of experience, I craft digital products that make a difference.
-                  My approach combines technical expertise with a keen eye for design, ensuring every
-                  project is both functional and beautiful.
-                </p>
-              </TextReveal>
-
-              <TextReveal delay={0.5}>
-                <p
-                  className="text-lg leading-relaxed"
-                  style={{ color: THEME.textSecondary }}
-                >
-                  I believe in the power of thoughtful design and clean code to solve real problems.
-                  Whether it's a complex web application or a simple landing page, I bring the same
-                  level of dedication and attention to detail.
-                </p>
-              </TextReveal>
-            </div>
-
-            {/* Skills Grid */}
-            <div className="grid sm:grid-cols-2 gap-4">
-              {skills.map((skill, index) => (
-                <SkillCard key={skill.title} skill={skill} index={index} />
-              ))}
-            </div>
-
-            {/* CTA */}
+            {/* Label */}
             <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+            >
+              <span className="inline-flex items-center gap-2 text-[#9FB2AC] text-sm font-medium tracking-widest uppercase">
+                <span className="w-8 h-px bg-[#9FB2AC]" />
+                About Me
+              </span>
+            </motion.div>
+
+            {/* Main Text */}
+            <motion.h2 
+              className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#1a1a1a] leading-tight font-fliege"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.1 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.8, duration: 0.7, ease: EASING.smooth }}
-              className="mt-12"
             >
-              <motion.a
-                href="#connect"
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById('connect')?.scrollIntoView({ behavior: 'smooth' });
-                }}
-                className="inline-flex items-center gap-3 px-8 py-4 rounded-full font-medium relative overflow-hidden group"
-                style={{
-                  backgroundColor: THEME.olive,
-                  color: '#F5F0E8',
-                }}
-                whileHover={{
-                  scale: 1.03,
-                  boxShadow: `0 20px 60px ${THEME.olive}40`,
-                }}
-                whileTap={{ scale: 0.98 }}
-                transition={{ duration: 0.3, ease: EASING.smooth }}
+              I build{' '}
+              <motion.span 
+                className="text-[#5D0D18] italic"
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: "spring", stiffness: 300 }}
               >
-                {/* Animated background gradient on hover */}
-                <motion.div
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                  style={{
-                    background: `linear-gradient(135deg, ${THEME.olive} 0%, ${THEME.terracotta} 100%)`,
-                  }}
-                />
+                human-centered
+              </motion.span>{' '}
+              digital products
+            </motion.h2>
 
-                <span className="relative z-10">Let's work together</span>
+            {/* Description */}
+            <motion.p 
+              className="text-lg text-[#1a1a1a]/70 leading-relaxed max-w-lg"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              viewport={{ once: true }}
+            >
+              By combining clean engineering, visual depth, and practical product thinking, 
+              I create experiences that resonate with users and drive business results.
+            </motion.p>
 
+            {/* Skills tags */}
+            <motion.div 
+              className="flex flex-wrap gap-3"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              viewport={{ once: true }}
+            >
+              {['React', 'Node.js', 'UI/UX', 'Motion Design'].map((skill, index) => (
                 <motion.span
-                  className="relative z-10"
-                  initial={{ x: 0, y: 0 }}
-                  whileHover={{ x: 3, y: -3 }}
-                  transition={{ duration: 0.3 }}
+                  key={skill}
+                  className="px-4 py-2 bg-[#5D0D18]/5 text-[#5D0D18] text-sm font-medium rounded-full border border-[#5D0D18]/10"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
+                  viewport={{ once: true }}
+                  whileHover={{ 
+                    backgroundColor: "#5D0D18",
+                    color: "#FFFBEB",
+                    scale: 1.05
+                  }}
                 >
-                  <ArrowUpRight className="w-5 h-5" />
+                  {skill}
                 </motion.span>
-              </motion.a>
+              ))}
             </motion.div>
+
+            {/* CTA */}
+            <motion.a 
+              href="#projects-showcase" 
+              className="group inline-flex items-center gap-3 text-[#5D0D18] font-medium mt-4"
+              onClick={goToProjects}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              viewport={{ once: true }}
+              whileHover={{ x: 5 }}
+            >
+              <span className="relative">
+                Explore selected work
+                <motion.span
+                  className="absolute -bottom-1 left-0 h-px bg-[#5D0D18]"
+                  initial={{ width: 0 }}
+                  whileHover={{ width: "100%" }}
+                  transition={{ duration: 0.3 }}
+                />
+              </span>
+              <motion.span
+                animate={{ x: [0, 5, 0] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+              >
+                <ArrowRight size={18} />
+              </motion.span>
+            </motion.a>
           </motion.div>
         </div>
       </div>

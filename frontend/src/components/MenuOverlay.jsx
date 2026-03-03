@@ -1,9 +1,9 @@
 import { useEffect, useRef } from 'react';
-import { ArrowRight, Mail } from 'lucide-react';
-import { SiGithub, SiLinkedin, SiX } from 'react-icons/si';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowRight, Mail, Github, Linkedin, Twitter } from 'lucide-react';
 
 const mainNavItems = [
-    { label: 'Work', section: 'projects-showcase', description: 'Selected projects' },
+    { label: 'Work', section: 'projects', description: 'Selected projects' },
     { label: 'About', section: 'about', description: 'My story' },
     { label: 'Tech Stack', section: 'techstack', description: 'What I use' },
     { label: 'Journey', section: 'journey', description: 'My path' },
@@ -32,6 +32,63 @@ const featuredProjects = [
     },
 ];
 
+// Animation variants
+const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.08,
+            delayChildren: 0.2,
+        },
+    },
+    exit: {
+        opacity: 0,
+        transition: {
+            staggerChildren: 0.05,
+            staggerDirection: -1,
+        },
+    },
+};
+
+const itemVariants = {
+    hidden: { y: 60, opacity: 0 },
+    visible: {
+        y: 0,
+        opacity: 1,
+        transition: {
+            duration: 0.6,
+            ease: [0.16, 1, 0.3, 1],
+        },
+    },
+    exit: {
+        y: 40,
+        opacity: 0,
+        transition: {
+            duration: 0.3,
+            ease: [0.16, 1, 0.3, 1],
+        },
+    },
+};
+
+const slideUpVariants = {
+    hidden: { y: '100%' },
+    visible: {
+        y: 0,
+        transition: {
+            duration: 0.8,
+            ease: [0.16, 1, 0.3, 1],
+        },
+    },
+    exit: {
+        y: '-100%',
+        transition: {
+            duration: 0.6,
+            ease: [0.16, 1, 0.3, 1],
+        },
+    },
+};
+
 export default function MenuOverlay({ isOpen, onClose, onNavigate }) {
     const overlayRef = useRef(null);
 
@@ -52,208 +109,324 @@ export default function MenuOverlay({ isOpen, onClose, onNavigate }) {
     };
 
     return (
-        <div
-            ref={overlayRef}
-            className={`fixed inset-0 h-[100dvh] z-40 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen
-                ? 'opacity-100 pointer-events-auto'
-                : 'opacity-0 pointer-events-none'
-                }`}
-            aria-hidden={!isOpen}
-        >
-            {/* Background with slide animation */}
-            <div
-                className={`absolute inset-0 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? 'translate-y-0' : '-translate-y-full'
-                    }`}
-                style={{ backgroundColor: '#6E6B2F' }}
-            />
+        <AnimatePresence>
+            {isOpen && (
+                <motion.div
+                    ref={overlayRef}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    className="fixed inset-0 h-[100dvh] z-40"
+                    aria-hidden={!isOpen}
+                >
+                    {/* Background Layers - Bloodstone (#5D0D18) with depth */}
+                    <div className="absolute inset-0 overflow-hidden">
+                        {/* Primary background slide */}
+                        <motion.div
+                            variants={slideUpVariants}
+                            className="absolute inset-0 bg-[#5D0D18]"
+                        />
+                        
+                        {/* Secondary decorative layer */}
+                        <motion.div
+                            initial={{ y: '100%' }}
+                            animate={{ y: 0 }}
+                            exit={{ y: '-100%' }}
+                            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
+                            className="absolute inset-0 bg-[#3d0910]"
+                            style={{ clipPath: 'polygon(0 60%, 100% 40%, 100% 100%, 0 100%)' }}
+                        />
+                        
+                        {/* Misty Sage accent line */}
+                        <motion.div
+                            initial={{ scaleX: 0 }}
+                            animate={{ scaleX: 1 }}
+                            exit={{ scaleX: 0 }}
+                            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
+                            className="absolute top-1/3 left-0 right-0 h-px bg-[#9FB2AC]/30 origin-left"
+                        />
+                    </div>
 
-            {/* Content */}
-            <div className="relative h-full overflow-y-auto overscroll-contain">
-                <div className="min-h-full px-6 sm:px-8 lg:px-12 py-24 lg:py-32 flex flex-col">
-                    <div className="max-w-7xl mx-auto">
-                        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20">
-                            {/* Left Column - Navigation */}
-                            <div className="space-y-12">
-                                {/* Main Navigation */}
-                                <nav className="space-y-2" aria-label="Main navigation">
-                                    {mainNavItems.map((item, index) => (
-                                        <div
-                                            key={item.section}
-                                            className={`transition-all duration-500 ease-out ${isOpen
-                                                ? 'opacity-100 translate-y-0'
-                                                : 'opacity-0 translate-y-8'
-                                                }`}
-                                            style={{
-                                                transitionDelay: isOpen ? `${150 + index * 80}ms` : '0ms',
-                                            }}
-                                        >
-                                            <button
-                                                onClick={() => handleNavClick(item.section)}
-                                                className="group w-full text-left py-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C2743A]/50 rounded-lg"
-                                            >
-                                                <div className="flex items-center justify-between">
-                                                    <span className="text-4xl sm:text-5xl lg:text-6xl font-serif text-[#F5F0E8] transition-all duration-300 group-hover:text-[#C2743A] group-hover:translate-x-2">
-                                                        {item.label}
-                                                    </span>
-                                                    <ArrowRight
-                                                        className="w-6 h-6 lg:w-8 lg:h-8 text-[#F5F0E8]/50 transition-all duration-300 group-hover:text-[#C2743A] group-hover:translate-x-1 opacity-0 group-hover:opacity-100"
-                                                        strokeWidth={1.5}
-                                                    />
-                                                </div>
-                                            </button>
-                                        </div>
-                                    ))}
-                                </nav>
-
-                                {/* Secondary Navigation */}
-                                <div
-                                    className={`flex flex-wrap gap-4 pt-8 border-t border-[#F5F0E8]/10 transition-all duration-500 ease-out ${isOpen
-                                        ? 'opacity-100 translate-y-0'
-                                        : 'opacity-0 translate-y-8'
-                                        }`}
-                                    style={{
-                                        transitionDelay: isOpen ? `${150 + mainNavItems.length * 80}ms` : '0ms',
-                                    }}
-                                >
-                                    {/* CTA Button */}
-                                    <button
-                                        onClick={() => handleNavClick('connect')}
-                                        className="group relative px-6 py-3 bg-[#F5F0E8] text-[#6E6B2F] rounded-full font-medium text-sm transition-all duration-300 hover:bg-[#C2743A] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C2743A]/50 overflow-hidden"
+                    {/* Content */}
+                    <div className="relative h-full overflow-y-auto overscroll-contain">
+                        <div className="min-h-full px-6 sm:px-8 lg:px-12 xl:px-16 py-24 lg:py-32 flex flex-col">
+                            <div className="max-w-7xl mx-auto w-full">
+                                <div className="grid lg:grid-cols-2 gap-12 lg:gap-20">
+                                    {/* Left Column - Navigation */}
+                                    <motion.div 
+                                        className="space-y-12"
+                                        variants={containerVariants}
+                                        initial="hidden"
+                                        animate="visible"
+                                        exit="exit"
                                     >
-                                        <span className="relative z-10 flex items-center gap-2">
-                                            <Mail className="w-4 h-4" />
-                                            <span className="group-hover:hidden">Get in Touch</span>
-                                            <span className="hidden group-hover:inline">hello@portfolio.com</span>
-                                        </span>
-                                    </button>
+                                        {/* Main Navigation */}
+                                        <nav className="space-y-1" aria-label="Main navigation">
+                                            {mainNavItems.map((item, index) => (
+                                                <motion.div
+                                                    key={item.section}
+                                                    variants={itemVariants}
+                                                    className="overflow-hidden"
+                                                >
+                                                    <button
+                                                        onClick={() => handleNavClick(item.section)}
+                                                        className="group w-full text-left py-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#9FB2AC]/50 rounded-lg relative"
+                                                    >
+                                                        {/* Hover background */}
+                                                        <motion.div
+                                                            className="absolute inset-0 bg-[#9FB2AC]/10 rounded-lg"
+                                                            initial={{ scaleX: 0, opacity: 0 }}
+                                                            whileHover={{ scaleX: 1, opacity: 1 }}
+                                                            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                                                            style={{ originX: 0 }}
+                                                        />
+                                                        
+                                                        <div className="relative flex items-center justify-between px-4">
+                                                            <div className="flex flex-col">
+                                                                <span className="text-4xl sm:text-5xl lg:text-6xl font-serif text-[#FFFBEB] transition-all duration-500 group-hover:text-[#9FB2AC] group-hover:translate-x-3 font-fliege">
+                                                                    {item.label}
+                                                                </span>
+                                                                <span className="text-sm text-[#FFFBEB]/40 mt-1 font-light tracking-wide opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-y-2 group-hover:translate-y-0">
+                                                                    {item.description}
+                                                                </span>
+                                                            </div>
+                                                            
+                                                            {/* Animated arrow */}
+                                                            <motion.div
+                                                                initial={{ x: -20, opacity: 0 }}
+                                                                whileHover={{ x: 0, opacity: 1 }}
+                                                                className="text-[#9FB2AC]"
+                                                            >
+                                                                <ArrowRight
+                                                                    className="w-8 h-8 transition-transform duration-300 group-hover:translate-x-2"
+                                                                    strokeWidth={1}
+                                                                />
+                                                            </motion.div>
+                                                        </div>
+                                                        
+                                                        {/* Number indicator */}
+                                                        <span className="absolute left-0 top-1/2 -translate-y-1/2 text-[#FFFBEB]/20 text-sm font-mono opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                                            0{index + 1}
+                                                        </span>
+                                                    </button>
+                                                </motion.div>
+                                            ))}
+                                        </nav>
 
-                                    {secondaryNavItems.map((item, index) => (
-                                        <button
-                                            key={item.section}
-                                            onClick={() => handleNavClick(item.section)}
-                                            className="px-4 py-3 text-[#F5F0E8]/70 hover:text-[#F5F0E8] transition-colors duration-300 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C2743A]/50 rounded-lg"
-                                            style={{
-                                                transitionDelay: isOpen ? `${200 + mainNavItems.length * 80 + index * 50}ms` : '0ms',
-                                            }}
+                                        {/* Secondary Navigation */}
+                                        <motion.div
+                                            variants={itemVariants}
+                                            className="flex flex-wrap items-center gap-4 pt-8 border-t border-[#FFFBEB]/10"
                                         >
-                                            {item.label}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-
-                            {/* Right Column - Featured Projects */}
-                            <div
-                                className={`space-y-6 transition-all duration-500 ease-out ${isOpen
-                                    ? 'opacity-100 translate-y-0'
-                                    : 'opacity-0 translate-y-8'
-                                    }`}
-                                style={{
-                                    transitionDelay: isOpen ? '400ms' : '0ms',
-                                }}
-                            >
-                                <h3 className="text-sm font-medium text-[#F5F0E8]/50 uppercase tracking-wider mb-6">
-                                    Featured Work
-                                </h3>
-                                <div className="space-y-4">
-                                    {featuredProjects.map((project, index) => (
-                                        <div
-                                            key={project.title}
-                                            className={`group flex items-center gap-4 p-3 rounded-xl transition-all duration-300 hover:bg-white/5 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C2743A]/50 ${isOpen
-                                                ? 'opacity-100 translate-y-0'
-                                                : 'opacity-0 translate-y-8'
-                                                }`}
-                                            style={{
-                                                transitionDelay: isOpen ? `${450 + index * 100}ms` : '0ms',
-                                            }}
-                                            onClick={() => handleNavClick('projects-showcase')}
-                                            tabIndex={0}
-                                            role="button"
-                                            onKeyDown={(e) => {
-                                                if (e.key === 'Enter' || e.key === ' ') {
-                                                    handleNavClick('projects-showcase');
-                                                }
-                                            }}
-                                        >
-                                            {/* Project Image */}
-                                            <div className="relative w-20 h-20 lg:w-24 lg:h-24 rounded-lg overflow-hidden flex-shrink-0">
-                                                <img
-                                                    src={project.image}
-                                                    alt={project.title}
-                                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                                    loading="lazy"
-                                                />
-                                            </div>
-
-                                            {/* Project Info */}
-                                            <div className="flex-1 min-w-0">
-                                                <span className="text-xs text-[#F5F0E8]/50 uppercase tracking-wider">
-                                                    {project.category}
+                                            {/* CTA Button - Bloodstone to Misty Sage */}
+                                            <motion.button
+                                                onClick={() => handleNavClick('connect')}
+                                                className="group relative px-8 py-4 rounded-full font-medium text-sm overflow-hidden"
+                                                whileHover={{ scale: 1.02 }}
+                                                whileTap={{ scale: 0.98 }}
+                                            >
+                                                {/* Background layers */}
+                                                <div className="absolute inset-0 bg-[#FFFBEB] transition-transform duration-500 group-hover:scale-x-0" style={{ transformOrigin: 'right' }} />
+                                                <div className="absolute inset-0 bg-[#9FB2AC] scale-x-0 group-hover:scale-x-100 transition-transform duration-500" style={{ transformOrigin: 'left' }} />
+                                                
+                                                <span className="relative z-10 flex items-center gap-3 text-[#5D0D18] group-hover:text-[#5D0D18] transition-colors duration-300">
+                                                    <Mail className="w-4 h-4" />
+                                                    <span className="group-hover:hidden">Get in Touch</span>
+                                                    <span className="hidden group-hover:inline font-medium">hello@harshit.dev</span>
                                                 </span>
-                                                <h4 className="text-lg lg:text-xl text-[#F5F0E8] font-medium truncate group-hover:text-[#C2743A] transition-colors duration-300">
-                                                    {project.title}
-                                                </h4>
-                                            </div>
+                                            </motion.button>
 
-                                            {/* Arrow */}
-                                            <ArrowRight
-                                                className="w-5 h-5 text-[#F5F0E8]/30 transition-all duration-300 group-hover:text-[#C2743A] group-hover:translate-x-1 flex-shrink-0"
-                                                strokeWidth={1.5}
-                                            />
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
+                                            {secondaryNavItems.map((item) => (
+                                                <motion.button
+                                                    key={item.section}
+                                                    onClick={() => handleNavClick(item.section)}
+                                                    className="px-6 py-3 text-[#FFFBEB]/60 hover:text-[#FFFBEB] transition-colors duration-300 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-[#9FB2AC]/50 rounded-lg relative group overflow-hidden"
+                                                    whileHover={{ y: -2 }}
+                                                >
+                                                    <span className="relative z-10">{item.label}</span>
+                                                    <motion.div
+                                                        className="absolute bottom-0 left-0 right-0 h-px bg-[#9FB2AC]"
+                                                        initial={{ scaleX: 0 }}
+                                                        whileHover={{ scaleX: 1 }}
+                                                        transition={{ duration: 0.3 }}
+                                                    />
+                                                </motion.button>
+                                            ))}
+                                        </motion.div>
+                                    </motion.div>
 
-                        {/* Footer */}
-                        <div
-                            className={`mt-16 lg:mt-24 pt-8 border-t border-[#F5F0E8]/10 transition-all duration-500 ease-out ${isOpen
-                                ? 'opacity-100 translate-y-0'
-                                : 'opacity-0 translate-y-8'
-                                }`}
-                            style={{
-                                transitionDelay: isOpen ? '700ms' : '0ms',
-                            }}
-                        >
-                            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-                                {/* Newsletter */}
-                                <div className="flex items-center gap-4">
-                                    <span className="text-sm text-[#F5F0E8]/70">Stay updated</span>
-                                    <div className="flex items-center gap-2 px-4 py-2 rounded-full border border-[#F5F0E8]/20 bg-transparent">
-                                        <Mail className="w-4 h-4 text-[#F5F0E8]/50" />
-                                        <input
-                                            type="email"
-                                            placeholder="Your email"
-                                            className="bg-transparent text-sm text-[#F5F0E8] placeholder:text-[#F5F0E8]/40 focus:outline-none w-32 sm:w-40"
-                                            aria-label="Email for updates"
-                                        />
-                                    </div>
-                                </div>
-
-                                {/* Social Links */}
-                                <div className="flex items-center gap-6">
-                                    {[
-                                        { icon: SiX, label: 'Twitter', href: 'https://twitter.com/singhharshitt' },
-                                        { icon: SiLinkedin, label: 'LinkedIn', href: 'https://linkedin.com/in/singh-harshit-' },
-                                        { icon: SiGithub, label: 'GitHub', href: 'https://github.com/singhharshitt' },
-                                    ].map(({ icon: Icon, label, href }) => (
-                                        <a
-                                            key={label}
-                                            href={href}
-                                            className="group flex items-center gap-2 text-[#F5F0E8]/50 hover:text-[#F5F0E8] transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C2743A]/50 rounded-lg px-2 py-1"
-                                            aria-label={label}
+                                    {/* Right Column - Featured Projects */}
+                                    <motion.div
+                                        variants={containerVariants}
+                                        initial="hidden"
+                                        animate="visible"
+                                        exit="exit"
+                                        className="space-y-6"
+                                    >
+                                        <motion.h3 
+                                            variants={itemVariants}
+                                            className="text-sm font-medium text-[#9FB2AC] uppercase tracking-[0.2em] mb-8 flex items-center gap-3"
                                         >
-                                            <Icon className="w-5 h-5" strokeWidth={1.5} />
-                                            <span className="text-sm hidden sm:inline">{label}</span>
-                                        </a>
-                                    ))}
+                                            <span className="w-8 h-px bg-[#9FB2AC]" />
+                                            Featured Work
+                                        </motion.h3>
+                                        
+                                        <div className="space-y-4">
+                                            {featuredProjects.map((project, index) => (
+                                                <motion.div
+                                                    key={project.title}
+                                                    variants={itemVariants}
+                                                    className="group relative flex items-center gap-5 p-4 rounded-2xl transition-all duration-500 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#9FB2AC]/50 overflow-hidden"
+                                                    onClick={() => handleNavClick('projects')}
+                                                    whileHover={{ x: 8 }}
+                                                    tabIndex={0}
+                                                    role="button"
+                                                    onKeyDown={(e) => {
+                                                        if (e.key === 'Enter' || e.key === ' ') {
+                                                            handleNavClick('projects');
+                                                        }
+                                                    }}
+                                                >
+                                                    {/* Hover background */}
+                                                    <motion.div
+                                                        className="absolute inset-0 bg-gradient-to-r from-[#9FB2AC]/10 to-transparent"
+                                                        initial={{ x: '-100%', opacity: 0 }}
+                                                        whileHover={{ x: 0, opacity: 1 }}
+                                                        transition={{ duration: 0.4 }}
+                                                    />
+                                                    
+                                                    {/* Project Image with frame */}
+                                                    <div className="relative w-24 h-24 lg:w-28 lg:h-28 rounded-xl overflow-hidden flex-shrink-0 ring-2 ring-[#FFFBEB]/10 group-hover:ring-[#9FB2AC]/30 transition-all duration-500">
+                                                        <motion.img
+                                                            src={project.image}
+                                                            alt={project.title}
+                                                            className="w-full h-full object-cover"
+                                                            whileHover={{ scale: 1.1 }}
+                                                            transition={{ duration: 0.6 }}
+                                                        />
+                                                        {/* Overlay gradient */}
+                                                        <div className="absolute inset-0 bg-gradient-to-t from-[#5D0D18]/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                                                        
+                                                        {/* View indicator */}
+                                                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                                            <span className="text-[#FFFBEB] text-xs font-medium tracking-wider uppercase">View</span>
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Project Info */}
+                                                    <div className="flex-1 min-w-0 relative">
+                                                        <span className="text-xs text-[#9FB2AC] uppercase tracking-wider font-medium">
+                                                            {project.category}
+                                                        </span>
+                                                        <h4 className="text-xl lg:text-2xl text-[#FFFBEB] font-medium truncate group-hover:text-[#9FB2AC] transition-colors duration-300 font-fliege">
+                                                            {project.title}
+                                                        </h4>
+                                                        
+                                                        {/* Progress line */}
+                                                        <div className="mt-2 h-px w-12 bg-[#FFFBEB]/20 group-hover:w-full group-hover:bg-[#9FB2AC]/50 transition-all duration-500" />
+                                                    </div>
+
+                                                    {/* Arrow with circle */}
+                                                    <div className="relative w-10 h-10 rounded-full border border-[#FFFBEB]/20 flex items-center justify-center group-hover:border-[#9FB2AC] group-hover:bg-[#9FB2AC] transition-all duration-300 flex-shrink-0">
+                                                        <ArrowRight
+                                                            className="w-4 h-4 text-[#FFFBEB]/50 group-hover:text-[#5D0D18] transition-all duration-300 group-hover:translate-x-0.5"
+                                                            strokeWidth={2}
+                                                        />
+                                                    </div>
+                                                </motion.div>
+                                            ))}
+                                        </div>
+                                        
+                                        {/* View all link */}
+                                        <motion.button
+                                            variants={itemVariants}
+                                            onClick={() => handleNavClick('projects')}
+                                            className="group flex items-center gap-2 text-[#9FB2AC] hover:text-[#FFFBEB] transition-colors duration-300 mt-6 text-sm font-medium"
+                                        >
+                                            <span>View all projects</span>
+                                            <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                                        </motion.button>
+                                    </motion.div>
                                 </div>
+
+                                {/* Footer */}
+                                <motion.div
+                                    variants={itemVariants}
+                                    className="mt-16 lg:mt-24 pt-8 border-t border-[#FFFBEB]/10"
+                                >
+                                    <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
+                                        {/* Newsletter */}
+                                        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full lg:w-auto">
+                                            <span className="text-sm text-[#FFFBEB]/60 font-light">Stay updated</span>
+                                            <motion.div 
+                                                className="flex items-center gap-3 px-5 py-3 rounded-full border border-[#FFFBEB]/20 bg-[#FFFBEB]/5 focus-within:border-[#9FB2AC] focus-within:bg-[#9FB2AC]/10 transition-all duration-300 w-full sm:w-auto"
+                                                whileFocus={{ scale: 1.02 }}
+                                            >
+                                                <Mail className="w-4 h-4 text-[#9FB2AC]" />
+                                                <input
+                                                    type="email"
+                                                    placeholder="your@email.com"
+                                                    className="bg-transparent text-sm text-[#FFFBEB] placeholder:text-[#FFFBEB]/30 focus:outline-none w-full sm:w-48"
+                                                    aria-label="Email for updates"
+                                                />
+                                                <motion.button
+                                                    whileHover={{ scale: 1.1 }}
+                                                    whileTap={{ scale: 0.9 }}
+                                                    className="text-[#9FB2AC] hover:text-[#FFFBEB] transition-colors"
+                                                >
+                                                    <ArrowRight className="w-4 h-4" />
+                                                </motion.button>
+                                            </motion.div>
+                                        </div>
+
+                                        {/* Social Links */}
+                                        <div className="flex items-center gap-2">
+                                            {[
+                                                { icon: Twitter, label: 'Twitter', href: 'https://twitter.com/singhharshitt' },
+                                                { icon: Linkedin, label: 'LinkedIn', href: 'https://linkedin.com/in/singh-harshit-' },
+                                                { icon: Github, label: 'GitHub', href: 'https://github.com/singhharshitt' },
+                                            ].map(({ icon: Icon, label, href }, index) => (
+                                                <motion.a
+                                                    key={label}
+                                                    href={href}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="group relative w-12 h-12 rounded-full border border-[#FFFBEB]/20 flex items-center justify-center overflow-hidden"
+                                                    whileHover={{ scale: 1.1, borderColor: '#9FB2AC' }}
+                                                    whileTap={{ scale: 0.95 }}
+                                                    aria-label={label}
+                                                >
+                                                    {/* Hover fill */}
+                                                    <motion.div
+                                                        className="absolute inset-0 bg-[#9FB2AC]"
+                                                        initial={{ y: '100%' }}
+                                                        whileHover={{ y: 0 }}
+                                                        transition={{ duration: 0.3 }}
+                                                    />
+                                                    
+                                                    <Icon 
+                                                        className="w-5 h-5 text-[#FFFBEB]/60 group-hover:text-[#5D0D18] transition-colors duration-300 relative z-10" 
+                                                        strokeWidth={1.5} 
+                                                    />
+                                                </motion.a>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    
+                                    {/* Bottom text */}
+                                    <div className="mt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs text-[#FFFBEB]/30">
+                                        <span>© 2026 Harshit. All rights reserved.</span>
+                                        <span className="flex items-center gap-2">
+                                            <span className="w-2 h-2 rounded-full bg-[#9FB2AC] animate-pulse" />
+                                            Available for freelance work
+                                        </span>
+                                    </div>
+                                </motion.div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
+                </motion.div>
+            )}
+        </AnimatePresence>
     );
 }

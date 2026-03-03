@@ -1,285 +1,64 @@
-import { useState, useRef, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, Sparkles } from 'lucide-react';
+import { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { ChevronDown } from 'lucide-react';
 
-// Warm Parchment palette
-const THEME = {
-  terracotta: '#C2743A',
-  gold: '#C9A66B',
-  sage: '#B7B77A',
-  olive: '#6E6B2F',
-  parchment: '#E9E2D6',
-  cream: '#F5F0E8',
-  textDark: '#4A4A3A',
-  textMuted: '#8A8570',
-};
-
-import { EASE_PREMIUM, SPRING_BOUNCE, DURATION_REVEAL, STAGGER_CHILDREN } from '../utils/animationConstants';
-
-// Cinematic easing
-const EASE = EASE_PREMIUM;
-
-/**
- * SkillsAccordion — Expandable skills list with project preview
- */
 export default function SkillsAccordion({ skills = [] }) {
-  const [activeIndex, setActiveIndex] = useState(null);
-  const containerRef = useRef(null);
-
-  const toggle = useCallback((index) => {
-    setActiveIndex((prev) => (prev === index ? null : index));
-  }, []);
-
-  // Staggered reveal variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.08,
-        delayChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5, ease: EASE },
-    },
-  };
+  const [activeIndex, setActiveIndex] = useState(0);
 
   return (
-    <motion.div
-      ref={containerRef}
-      variants={containerVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.1 }}
-      className="w-full rounded-2xl overflow-hidden relative"
-      style={{
-        backgroundColor: `${THEME.cream}73`,
-        border: `1px solid ${THEME.sage}50`,
-        boxShadow: `0 20px 60px rgba(110, 107, 47, 0.06)`,
-      }}
-    >
-      {/* Top accent line */}
-      <motion.div
-        className="absolute top-0 left-0 right-0 h-0.5 origin-left z-10"
-        style={{
-          background: `linear-gradient(90deg, ${THEME.terracotta}, ${THEME.gold}, ${THEME.sage})`,
-        }}
-        initial={{ scaleX: 0 }}
-        whileInView={{ scaleX: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 1.2, ease: EASE, delay: 0.3 }}
-      />
+    <div className="w-full">
+      {skills.map((skill, index) => {
+        const isOpen = activeIndex === index;
 
-      {skills.map((skill, index) => (
-        <AccordionItem
-          key={skill.id || index}
-          skill={skill}
-          index={index}
-          isActive={activeIndex === index}
-          onToggle={() => toggle(index)}
-          variants={itemVariants}
-        />
-      ))}
-    </motion.div>
-  );
-}
-
-// Individual accordion item
-function AccordionItem({ skill, index, isActive, onToggle, variants }) {
-  const itemRef = useRef(null);
-
-  return (
-    <motion.div
-      ref={itemRef}
-      variants={variants}
-      className="relative"
-      style={{
-        borderBottom: `1px solid ${THEME.sage}40`,
-        borderLeftWidth: '4px',
-        borderLeftStyle: 'solid',
-        borderLeftColor: isActive ? THEME.terracotta : 'transparent',
-        backgroundColor: isActive ? 'rgba(245, 240, 232, 0.65)' : 'transparent',
-        boxShadow: isActive ? `inset 3px 0 0 ${THEME.terracotta}` : 'none',
-        opacity: isActive ? 1 : 0.75,
-        transition: 'background-color 0.3s ease, border-left-color 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease',
-      }}
-      whileHover={{
-        backgroundColor: isActive ? 'rgba(245, 240, 232, 0.65)' : 'rgba(245, 240, 232, 0.35)',
-        borderLeftColor: isActive ? THEME.terracotta : `${THEME.terracotta}70`,
-        opacity: 1,
-      }}
-    >
-      <button
-        onClick={onToggle}
-        className="w-full flex items-center justify-between gap-4 py-5 px-4 sm:px-6 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C9A66B]/50 cursor-pointer group"
-        aria-expanded={isActive}
-        style={{ WebkitTapHighlightColor: 'transparent' }}
-      >
-        <div className="flex items-center gap-4 min-w-0">
-          {/* Icon with animation */}
-          {skill.icon && (
-            <motion.span
-              className="text-2xl shrink-0"
-              style={{ color: isActive ? THEME.terracotta : THEME.textMuted }}
-              animate={{
-                color: isActive ? THEME.terracotta : THEME.textMuted,
-                scale: isActive ? 1.1 : 1,
-                rotate: isActive ? [0, -10, 10, 0] : 0,
-              }}
-              transition={{ duration: 0.4 }}
-            >
-              {skill.icon}
-            </motion.span>
-          )}
-
-          <div className="min-w-0">
-            <h3
-              className="font-serif text-xl md:text-2xl font-bold leading-snug transition-colors duration-300"
-              style={{
-                color: isActive ? THEME.terracotta : THEME.textDark,
-                fontFamily: "'Playfair Display', Georgia, serif",
-              }}
-            >
-              {skill.title}
-            </h3>
-
-            {skill.subtitle && (
-              <motion.p
-                className="text-sm mt-1 leading-relaxed"
-                style={{ color: THEME.textMuted }}
-                animate={{ opacity: isActive ? 1 : 0.7 }}
-              >
-                {skill.subtitle}
-              </motion.p>
-            )}
-          </div>
-        </div>
-
-        {/* Chevron with rotation */}
-        <motion.div
-          animate={{
-            rotate: isActive ? 180 : 0,
-            color: isActive ? THEME.terracotta : THEME.textMuted,
-          }}
-          transition={{
-            rotate: { type: 'spring', ...SPRING_BOUNCE },
-            color: { duration: 0.3 },
-          }}
-          className="shrink-0"
-        >
-          <ChevronDown className="w-6 h-6" />
-        </motion.div>
-      </button>
-
-      {/* Expandable content */}
-      <AnimatePresence initial={false}>
-        {isActive && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.5, ease: EASE }}
-            className="overflow-hidden"
+        return (
+          <div
+            key={skill.id || skill.title}
+            className="border-b border-[#6B6B6B]/20"
+            style={{ backgroundColor: isOpen ? '#E8EDE4' : 'transparent' }}
           >
-            <div className="pb-6 px-4 sm:px-6 flex flex-col md:flex-row gap-6">
-              <div className="flex-1">
-                <motion.p
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2, duration: 0.4, ease: EASE }}
-                  className="text-sm sm:text-base leading-relaxed mb-4"
-                  style={{ color: `${THEME.textDark}CC` }}
-                >
-                  {skill.description}
-                </motion.p>
-
-                {skill.technologies && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.2, duration: 0.4 }}
-                    className="flex flex-wrap gap-2"
-                  >
-                    {skill.technologies.map((tech, i) => (
-                      <motion.span
-                        key={i}
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.2 + i * 0.05, duration: 0.3 }}
-                        className="px-3 py-1 text-xs font-medium rounded-full transition-colors duration-200 hover:scale-105 cursor-default"
-                        style={{
-                          backgroundColor: `${THEME.gold}15`,
-                          color: THEME.olive,
-                          border: `1px solid ${THEME.gold}30`,
-                        }}
-                        whileHover={{
-                          backgroundColor: `${THEME.gold}25`,
-                        }}
-                      >
-                        {tech}
-                      </motion.span>
-                    ))}
-                  </motion.div>
-                )}
+            <button
+              onClick={() => setActiveIndex(isOpen ? -1 : index)}
+              className="flex w-full items-center justify-between gap-6 py-6 text-left"
+              aria-expanded={isOpen}
+            >
+              <div>
+                <h3 className="text-2xl font-semibold text-[#2D2D2D]">{skill.title}</h3>
+                {skill.subtitle && <p className="mt-1 text-sm text-[#6B6B6B]">{skill.subtitle}</p>}
               </div>
+              <motion.span animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}>
+                <ChevronDown className="h-5 w-5 text-[#6B7B3C]" />
+              </motion.span>
+            </button>
 
-              {/* Preview image */}
-              {skill.previewImage && (
+            <AnimatePresence initial={false}>
+              {isOpen && (
                 <motion.div
-                  initial={{ opacity: 0, scale: 0.9, x: 20 }}
-                  animate={{ opacity: 1, scale: 1, x: 0 }}
-                  exit={{ opacity: 0, scale: 0.9, x: 20 }}
-                  transition={{ delay: 0.15, duration: 0.5, ease: EASE }}
-                  className="w-full md:w-52 aspect-4/3 rounded-xl overflow-hidden shadow-lg relative group/image"
-                  style={{
-                    border: `1px solid ${THEME.sage}40`,
-                  }}
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+                  className="overflow-hidden"
                 >
-                  <motion.img
-                    src={skill.previewImage}
-                    alt={`${skill.title} preview`}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                    whileHover={{ scale: 1.05 }}
-                    transition={{ duration: 0.4 }}
-                  />
-
-                  {/* Hover overlay */}
-                  <div
-                    className="absolute inset-0 opacity-0 group-hover/image:opacity-100 transition-opacity duration-300 flex items-center justify-center"
-                    style={{
-                      backgroundColor: `${THEME.olive}60`,
-                    }}
-                  >
-                    <Sparkles className="w-6 h-6 text-white" />
+                  <div className="pb-6">
+                    <p className="max-w-3xl text-[16px] leading-7 text-[#5C5C5C]">{skill.description}</p>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {(skill.technologies || []).map((tech) => (
+                        <span
+                          key={tech}
+                          className="rounded-full px-3 py-1 text-xs font-medium"
+                          style={{ backgroundColor: 'rgba(199, 91, 46, 0.1)', color: '#C75B2E' }}
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </motion.div>
               )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Active indicator glow */}
-      {isActive && (
-        <motion.div
-          layoutId="activeGlow"
-          className="absolute inset-0 pointer-events-none -z-10"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          style={{
-            background: `linear-gradient(90deg, ${THEME.terracotta}08 0%, transparent 50%)`,
-          }}
-        />
-      )}
-    </motion.div>
+            </AnimatePresence>
+          </div>
+        );
+      })}
+    </div>
   );
 }

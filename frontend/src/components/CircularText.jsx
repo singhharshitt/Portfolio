@@ -1,8 +1,8 @@
-import React from 'react';
+﻿import React from 'react';
 
-export default function CircularText({ 
-  text = 'DEVELOPER · DESIGNER · CREATOR · ', 
-  size = 150, 
+export default function CircularText({
+  text = 'DEVELOPER / DESIGNER / CREATOR / ',
+  size = 150,
   className = '',
   duration = 20,
   reverse = false,

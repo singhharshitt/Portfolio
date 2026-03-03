@@ -1,581 +1,400 @@
-import React, { useRef, useState, useEffect, useCallback } from 'react';
-import { motion, useInView } from 'framer-motion';
-import {
-  SiGithub,
-  SiReact,
-  SiNodedotjs,
-  SiMongodb,
-  SiExpress,
-  SiTailwindcss,
-  SiTypescript,
-  SiNextdotjs,
-  SiPython,
-  SiDocker,
-} from 'react-icons/si';
-import { ExternalLink, ArrowUpRight, FolderOpen, ChevronLeft, ChevronRight } from 'lucide-react';
-import useReducedMotion from '../hooks/useReducedMotion';
-import useScrollReveal from '../hooks/useScrollReveal';
-import {
-  EASE_PREMIUM,
-  EASE_SMOOTH,
-  DURATION_REVEAL,
-  STAGGER_CHILDREN,
-  SPRING_BOUNCE,
-  BREAKPOINTS,
-} from '../utils/animationConstants';
+import { useRef, useState } from 'react';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { ArrowUpRight, Github, ExternalLink, FileText, ChevronLeft, ChevronRight } from 'lucide-react';
 
-// Warm Parchment palette
-const THEME = {
-  terracotta: '#C2743A',
-  gold: '#C9A66B',
-  sage: '#B7B77A',
-  olive: '#6E6B2F',
-  parchment: '#E9E2D6',
-  cream: '#F5F0E8',
-  textDark: '#4A4A3A',
-  textMuted: '#8A8570',
-};
-
-const projects = [
+const PROJECTS = [
   {
-    id: 1,
-    title: 'GRABDESK - E-Commerce Platform',
-    description: 'A full-stack MERN e-commerce platform with real-time features, admin dashboard, analytics, and payment integration.',
-    tech: [
-      { name: 'React', icon: SiReact, color: '#61DAFB' },
-      { name: 'Node.js', icon: SiNodedotjs, color: '#339933' },
-      { name: 'MongoDB', icon: SiMongodb, color: '#47A248' },
-      { name: 'Express', icon: SiExpress, color: '#000000' },
-    ],
-    github: 'https://github.com/singhharshitt/grabdesk',
-    liveDemo: null,
-    category: 'Full Stack',
-    accentColor: THEME.terracotta,
+    title: 'GrabDesk Marketplace',
+    description: 'MERN commerce platform with auth, product workflows, and analytics modules.',
+    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format&fit=crop',
+    tags: ['MERN', 'Auth', 'Dashboard'],
+    date: '2026',
+    highlight: true,
+    featured: true,
+    liveUrl: 'https://grabdesk.vercel.app',
+    githubUrl: 'https://github.com/singhharshitt/grabdesk',
+    caseStudyUrl: '#case-study-grabdesk',
   },
   {
-    id: 2,
-    title: 'SKY-X Currency Converter',
-    description: 'Smart currency exchange application supporting both fiat and cryptocurrency conversions with real-time rates.',
-    tech: [
-      { name: 'React', icon: SiReact, color: '#61DAFB' },
-      { name: 'Tailwind', icon: SiTailwindcss, color: '#06B6D4' },
-      { name: 'API', icon: SiNodedotjs, color: '#339933' },
-    ],
-    github: 'https://github.com/singhharshitt/sky-x',
-    liveDemo: 'https://sky-x-demo.vercel.app',
-    category: 'Frontend',
-    accentColor: THEME.gold,
+    title: 'Portfolio v3',
+    description: 'Story-driven portfolio with blur reveals, parallax motion, and structured content.',
+    image: 'https://images.unsplash.com/photo-1522542550221-31fd19575a2d?q=80&w=1200&auto=format&fit=crop',
+    tags: ['React', 'Motion', 'Design System'],
+    date: '2026',
+    featured: true,
+    liveUrl: 'https://harshit.dev',
+    githubUrl: 'https://github.com/singhharshitt/portfolio-v3',
+    caseStudyUrl: '#case-study-portfolio',
   },
   {
-    id: 3,
-    title: 'Portfolio Website',
-    description: 'Modern, responsive portfolio website showcasing projects and skills with smooth animations and dark mode support.',
-    tech: [
-      { name: 'React', icon: SiReact, color: '#61DAFB' },
-      { name: 'Tailwind', icon: SiTailwindcss, color: '#06B6D4' },
-      { name: 'Motion', icon: SiReact, color: '#FF0055' },
-    ],
-    github: 'https://github.com/singhharshitt/portfolio',
-    liveDemo: 'https://harshitsingh.dev',
-    category: 'Frontend',
-    accentColor: THEME.sage,
+    title: 'Task Collaboration Suite',
+    description: 'Role-based team planner with activity history and productivity insights.',
+    image: 'https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?q=80&w=1200&auto=format&fit=crop',
+    tags: ['Node', 'MongoDB', 'JWT'],
+    date: '2025',
+    liveUrl: 'https://taskflow.vercel.app',
+    githubUrl: 'https://github.com/singhharshitt/task-suite',
+    caseStudyUrl: '#case-study-taskflow',
   },
   {
-    id: 4,
-    title: 'Task Management System',
-    description: 'Collaborative task management tool with real-time updates, team collaboration features, and project tracking.',
-    tech: [
-      { name: 'Next.js', icon: SiNextdotjs, color: '#000000' },
-      { name: 'TypeScript', icon: SiTypescript, color: '#3178C6' },
-      { name: 'MongoDB', icon: SiMongodb, color: '#47A248' },
-    ],
-    github: 'https://github.com/singhharshitt/task-manager',
-    liveDemo: null,
-    category: 'Full Stack',
-    accentColor: THEME.olive,
-  },
-  {
-    id: 5,
-    title: 'AI Chat Application',
-    description: 'Intelligent chatbot application powered by AI with context-aware responses and multi-language support.',
-    tech: [
-      { name: 'Python', icon: SiPython, color: '#3776AB' },
-      { name: 'React', icon: SiReact, color: '#61DAFB' },
-      { name: 'Node.js', icon: SiNodedotjs, color: '#339933' },
-    ],
-    github: 'https://github.com/singhharshitt/ai-chat',
-    liveDemo: null,
-    category: 'AI/ML',
-    accentColor: THEME.terracotta,
-  },
-  {
-    id: 6,
-    title: 'DevOps Pipeline Automation',
-    description: 'Automated CI/CD pipeline setup with Docker containerization, automated testing, and deployment workflows.',
-    tech: [
-      { name: 'Docker', icon: SiDocker, color: '#2496ED' },
-      { name: 'Node.js', icon: SiNodedotjs, color: '#339933' },
-      { name: 'GitHub', icon: SiGithub, color: '#181717' },
-    ],
-    github: 'https://github.com/singhharshitt/devops-pipeline',
-    liveDemo: null,
-    category: 'DevOps',
-    accentColor: THEME.gold,
+    title: 'Realtime Insights Board',
+    description: 'Metric dashboard for commits, streaks, and challenge progress.',
+    image: 'https://images.unsplash.com/photo-1551281044-8a29f0865f0f?q=80&w=1200&auto=format&fit=crop',
+    tags: ['Charts', 'API', 'Analytics'],
+    date: '2025',
+    liveUrl: 'https://insights-board.vercel.app',
+    githubUrl: 'https://github.com/singhharshitt/insights',
+    caseStudyUrl: '#case-study-insights',
   },
 ];
 
-// ─── Enhanced Project Card ─────────────────────────────────
-const ProjectCard = ({ project, index, isCenter }) => {
-  const cardRef = useRef(null);
-  const reduced = useReducedMotion();
-  const [isHovered, setIsHovered] = useState(false);
+const ActionButton = ({ href, icon: Icon, label, variant = 'primary' }) => {
+  const isExternal = href.startsWith('http');
+  
+  return (
+    <motion.a
+      href={href}
+      target={isExternal ? "_blank" : undefined}
+      rel={isExternal ? "noopener noreferrer" : undefined}
+      className={`group relative flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-medium overflow-hidden transition-all duration-300 ${
+        variant === 'primary' 
+          ? 'bg-[#5D0D18] text-[#FFFBEB] hover:shadow-lg hover:shadow-[#5D0D18]/20' 
+          : variant === 'secondary'
+          ? 'bg-[#9FB2AC] text-[#5D0D18] hover:shadow-lg hover:shadow-[#9FB2AC]/20'
+          : 'bg-transparent border-2 border-[#5D0D18]/20 text-[#5D0D18] hover:border-[#5D0D18]'
+      }`}
+      whileHover={{ scale: 1.05, y: -2 }}
+      whileTap={{ scale: 0.95 }}
+    >
+      <motion.div
+        className={`absolute inset-0 ${
+          variant === 'primary' ? 'bg-[#9FB2AC]' : 
+          variant === 'secondary' ? 'bg-[#5D0D18]' : 'bg-[#5D0D18]/5'
+        }`}
+        initial={{ x: '-100%' }}
+        whileHover={{ x: 0 }}
+        transition={{ duration: 0.3 }}
+      />
+      <span className={`relative z-10 flex items-center gap-2 ${variant === 'secondary' ? 'group-hover:text-[#FFFBEB]' : variant === 'outline' ? 'group-hover:text-[#5D0D18]' : ''}`}>
+        <Icon size={16} className="transition-transform group-hover:rotate-12" />
+        {label}
+      </span>
+    </motion.a>
+  );
+};
 
-  const cardVariants = {
-    hidden: reduced ? {} : { opacity: 0, y: 60, scale: 0.9 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: {
-        duration: DURATION_REVEAL,
-        delay: index * 0.1,
-        ease: EASE_PREMIUM,
-      },
-    },
-  };
+const ProjectCard = ({ project, index }) => {
+  const cardRef = useRef(null);
+  const [isHovered, setIsHovered] = useState(false);
+  
+  const { scrollYProgress } = useScroll({
+    target: cardRef,
+    offset: ["start end", "end start"]
+  });
+  
+  const y = useTransform(scrollYProgress, [0, 1], [50, -50]);
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.9, 1, 0.9]);
+  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0.8]);
 
   return (
     <motion.article
       ref={cardRef}
-      variants={cardVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: '-60px' }}
+      className={`relative group ${project.featured ? 'lg:col-span-2' : ''}`}
+      style={{ y, scale, opacity }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="group relative flex flex-col snap-center shrink-0"
-      style={{
-        width: 'min(70vw, 900px)',
-        minHeight: '500px',
-        perspective: '1000px',
-        willChange: 'transform',
-      }}
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: index * 0.1 }}
+      viewport={{ once: true, margin: "-100px" }}
     >
-      {/* Glassmorphism card */}
-      <motion.div
-        className="relative h-full rounded-2xl overflow-hidden flex flex-col"
-        style={{
-          background: `linear-gradient(145deg, rgba(245,240,232,0.95) 0%, rgba(233,226,214,0.9) 100%)`,
-          backdropFilter: 'blur(20px)',
-          border: `1px solid ${THEME.sage}40`,
-          boxShadow: isHovered
-            ? `0 25px 60px rgba(110,107,47,0.15), 0 0 0 1px ${project.accentColor}30`
-            : `0 8px 30px rgba(110,107,47,0.08)`,
-          transition: 'box-shadow 0.5s ease, transform 0.5s ease',
-          transform: isHovered ? 'translateY(-8px) translateZ(30px)' : 'translateY(0) translateZ(0)',
-        }}
-      >
-        {/* Top gradient accent strip */}
-        <div
-          className="h-1.5 w-full"
-          style={{
-            background: `linear-gradient(90deg, ${project.accentColor}, ${project.accentColor}60, transparent)`,
-          }}
-        />
-
-        {/* Card number watermark */}
-        <span
-          className="absolute top-6 right-6 font-serif text-7xl font-bold pointer-events-none select-none transition-colors duration-500"
-          style={{ color: isHovered ? `${project.accentColor}20` : `${THEME.textDark}08` }}
-        >
-          {String(index + 1).padStart(2, '0')}
-        </span>
-
-        <div className="relative z-10 p-8 flex flex-col h-full">
-          {/* Category badge */}
-          <motion.div className="mb-4">
-            <span
-              className="inline-flex items-center gap-1.5 px-4 py-1.5 text-xs font-bold uppercase tracking-wider border rounded-full transition-all duration-300"
-              style={{
-                color: project.accentColor,
-                borderColor: `${project.accentColor}50`,
-                backgroundColor: isHovered ? `${project.accentColor}15` : `${project.accentColor}08`,
-              }}
+      <div className="relative overflow-hidden rounded-2xl bg-white border border-[#5D0D18]/10 shadow-lg hover:shadow-2xl hover:shadow-[#5D0D18]/10 transition-all duration-500">
+        {/* Image Container */}
+        <div className="relative aspect-[16/10] overflow-hidden">
+          <motion.img
+            src={project.image}
+            alt={project.title}
+            className="w-full h-full object-cover"
+            animate={{ scale: isHovered ? 1.1 : 1 }}
+            transition={{ duration: 0.6 }}
+          />
+          
+          {/* Gradient Overlay */}
+          <motion.div 
+            className="absolute inset-0 bg-gradient-to-t from-[#1a1a1a] via-[#1a1a1a]/20 to-transparent"
+            initial={{ opacity: 0.4 }}
+            animate={{ opacity: isHovered ? 0.8 : 0.4 }}
+          />
+          
+          {/* Featured Badge */}
+          {project.featured && (
+            <motion.div
+              className="absolute top-4 left-4 px-3 py-1 bg-[#5D0D18] text-[#FFFBEB] text-xs font-bold rounded-full"
+              initial={{ x: -20, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: 0.3 }}
             >
-              <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: project.accentColor }} />
-              {project.category}
-            </span>
-          </motion.div>
-
-          {/* Title */}
-          <h3
-            className="text-2xl sm:text-3xl font-serif font-bold mb-4 transition-colors duration-300 leading-tight"
-            style={{
-              color: isHovered ? project.accentColor : THEME.textDark,
-              fontFamily: "'Playfair Display', Georgia, serif",
-            }}
+              Featured
+            </motion.div>
+          )}
+          
+          {/* Action Buttons Overlay */}
+          <motion.div
+            className="absolute inset-0 flex items-center justify-center gap-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isHovered ? 1 : 0 }}
+            transition={{ duration: 0.3 }}
           >
-            {project.title}
-          </h3>
+            <div className="flex flex-wrap justify-center gap-3 p-4">
+              <ActionButton 
+                href={project.caseStudyUrl} 
+                icon={FileText} 
+                label="Case Study" 
+                variant="primary"
+              />
+              <ActionButton 
+                href={project.liveUrl} 
+                icon={ExternalLink} 
+                label="Live Demo" 
+                variant="secondary"
+              />
+              <ActionButton 
+                href={project.githubUrl} 
+                icon={Github} 
+                label="GitHub" 
+                variant="outline"
+              />
+            </div>
+          </motion.div>
+        </div>
 
-          {/* Description */}
-          <p className="text-base leading-relaxed mb-6 grow" style={{ color: THEME.textMuted }}>
-            {project.description}
-          </p>
-
-          {/* Tech stack with glow */}
-          <div className="flex flex-wrap gap-2.5 mb-6">
-            {project.tech.map((tech, techIndex) => {
-              const Icon = tech.icon;
-              return (
-                <motion.div
-                  key={techIndex}
-                  whileHover={{ scale: 1.08, y: -2 }}
-                  className="flex items-center gap-2 text-sm px-3 py-2 rounded-xl cursor-default transition-all duration-300"
-                  style={{
-                    backgroundColor: `${tech.color}12`,
-                    color: tech.color,
-                    border: `1px solid ${tech.color}20`,
-                    boxShadow: isHovered ? `0 2px 12px ${tech.color}15` : 'none',
-                  }}
-                >
-                  <Icon className="w-4 h-4" />
-                  <span className="font-medium">{tech.name}</span>
-                </motion.div>
-              );
-            })}
-          </div>
-
-          {/* Action buttons */}
-          <div className="flex gap-3 pt-4 border-t mt-auto" style={{ borderColor: `${THEME.sage}30` }}>
+        {/* Content */}
+        <div className="p-6 lg:p-8">
+          <div className="flex items-start justify-between gap-4 mb-4">
+            <div>
+              <motion.h3 
+                className="text-2xl lg:text-3xl font-bold text-[#1a1a1a] font-fliege mb-2 group-hover:text-[#5D0D18] transition-colors"
+              >
+                {project.title}
+              </motion.h3>
+              <p className="text-[#1a1a1a]/60 text-sm leading-relaxed line-clamp-2">
+                {project.description}
+              </p>
+            </div>
+            
+            {/* Quick Link */}
             <motion.a
-              href={project.github}
+              href={project.liveUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 flex items-center justify-center gap-2 px-5 py-3 text-sm font-bold rounded-xl transition-all duration-300 relative overflow-hidden"
-              style={{
-                color: THEME.terracotta,
-                border: `2px solid ${THEME.terracotta}`,
-              }}
-              whileHover={{
-                backgroundColor: THEME.terracotta,
-                color: '#F5F0E8',
-              }}
-              whileTap={{ scale: 0.98 }}
+              className="flex-shrink-0 w-12 h-12 rounded-full bg-[#5D0D18]/10 flex items-center justify-center text-[#5D0D18] hover:bg-[#5D0D18] hover:text-[#FFFBEB] transition-all duration-300"
+              whileHover={{ scale: 1.1, rotate: 45 }}
+              whileTap={{ scale: 0.9 }}
             >
-              <SiGithub className="w-4 h-4 relative z-10" />
-              <span className="relative z-10">GitHub</span>
+              <ArrowUpRight size={20} />
             </motion.a>
+          </div>
 
-            {project.liveDemo ? (
-              <motion.a
-                href={project.liveDemo}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1 flex items-center justify-center gap-2 px-5 py-3 text-sm font-bold rounded-xl transition-all duration-300"
-                style={{
-                  backgroundColor: project.accentColor,
-                  color: '#F5F0E8',
-                }}
-                whileHover={{
-                  scale: 1.03,
-                  boxShadow: `0 12px 35px ${project.accentColor}40`,
-                }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <ExternalLink className="w-4 h-4" />
-                Live Demo
-              </motion.a>
-            ) : (
-              <div
-                className="flex-1 flex items-center justify-center gap-2 px-5 py-3 text-sm font-bold rounded-xl opacity-50 cursor-not-allowed"
-                style={{ backgroundColor: `${THEME.sage}30`, color: THEME.textMuted }}
-              >
-                <FolderOpen className="w-4 h-4" />
-                Coming Soon
-              </div>
-            )}
+          {/* Tags & Date */}
+          <div className="flex items-center justify-between pt-4 border-t border-[#5D0D18]/10">
+            <div className="flex flex-wrap gap-2">
+              {project.tags.map((tag, tagIndex) => (
+                <motion.span
+                  key={tag}
+                  className={`px-3 py-1 text-xs font-medium rounded-full ${
+                    tagIndex === 0 && project.highlight
+                      ? 'bg-[#5D0D18] text-[#FFFBEB]'
+                      : 'bg-[#9FB2AC]/20 text-[#5D0D18]'
+                  }`}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.1 * tagIndex }}
+                >
+                  {tag}
+                </motion.span>
+              ))}
+            </div>
+            <span className="text-sm text-[#9FB2AC] font-medium">{project.date}</span>
           </div>
         </div>
-      </motion.div>
+      </div>
     </motion.article>
   );
 };
 
-// ─── Progress Bar ──────────────────────────────────────────
-const ScrollProgressBar = ({ progress }) => (
-  <div className="flex justify-center mt-8 gap-2 items-center px-4">
-    <div className="w-full max-w-xs h-0.5 rounded-full overflow-hidden" style={{ backgroundColor: `${THEME.sage}30` }}>
-      <motion.div
-        className="h-full rounded-full"
-        style={{
-          width: `${progress}%`,
-          background: `linear-gradient(90deg, ${THEME.terracotta}, ${THEME.gold}, ${THEME.olive})`,
-          transition: 'width 0.3s ease',
-        }}
-      />
-    </div>
-    <span className="text-xs font-mono" style={{ color: THEME.textMuted }}>
-      {Math.round(progress)}%
-    </span>
-  </div>
-);
+const HorizontalScrollGallery = () => {
+  const containerRef = useRef(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
 
-// ─── Section Header ────────────────────────────────────────
-const SectionHeader = () => {
-  const { ref, controls } = useScrollReveal();
-
-  const headerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: STAGGER_CHILDREN, delayChildren: 0.1 },
-    },
+  const checkScroll = () => {
+    if (containerRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = containerRef.current;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
+    }
   };
 
-  const childVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0, transition: { duration: DURATION_REVEAL, ease: EASE_PREMIUM } },
+  const scroll = (direction) => {
+    if (containerRef.current) {
+      const scrollAmount = 400;
+      containerRef.current.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+      });
+    }
   };
 
   return (
-    <motion.div
-      ref={ref}
-      variants={headerVariants}
-      initial="hidden"
-      animate={controls}
-      className="text-center mb-16 px-4"
-    >
-      <motion.span
-        variants={childVariants}
-        className="text-xs font-mono uppercase tracking-[0.3em] mb-4 block"
-        style={{ color: THEME.olive }}
-      >
-        Featured Work
-      </motion.span>
-
-      <div className="overflow-hidden">
-        <motion.h2
-          variants={childVariants}
-          className="text-5xl sm:text-6xl font-serif"
-          style={{ color: THEME.textDark, fontFamily: "'Playfair Display', Georgia, serif" }}
+    <div className="relative">
+      {/* Navigation Buttons */}
+      <div className="hidden lg:flex absolute -top-20 right-0 gap-2 z-10">
+        <motion.button
+          onClick={() => scroll('left')}
+          className={`w-12 h-12 rounded-full border-2 flex items-center justify-center transition-all ${
+            canScrollLeft 
+              ? 'border-[#5D0D18] text-[#5D0D18] hover:bg-[#5D0D18] hover:text-[#FFFBEB]' 
+              : 'border-[#5D0D18]/20 text-[#5D0D18]/20 cursor-not-allowed'
+          }`}
+          whileHover={canScrollLeft ? { scale: 1.1 } : {}}
+          whileTap={canScrollLeft ? { scale: 0.9 } : {}}
+          disabled={!canScrollLeft}
         >
-          Selected <em className="italic" style={{ color: THEME.terracotta }}>Projects</em>
-        </motion.h2>
+          <ChevronLeft size={24} />
+        </motion.button>
+        <motion.button
+          onClick={() => scroll('right')}
+          className={`w-12 h-12 rounded-full border-2 flex items-center justify-center transition-all ${
+            canScrollRight 
+              ? 'border-[#5D0D18] text-[#5D0D18] hover:bg-[#5D0D18] hover:text-[#FFFBEB]' 
+              : 'border-[#5D0D18]/20 text-[#5D0D18]/20 cursor-not-allowed'
+          }`}
+          whileHover={canScrollRight ? { scale: 1.1 } : {}}
+          whileTap={canScrollRight ? { scale: 0.9 } : {}}
+          disabled={!canScrollRight}
+        >
+          <ChevronRight size={24} />
+        </motion.button>
       </div>
 
-      <motion.p
-        variants={childVariants}
-        className="mt-4 text-lg max-w-2xl mx-auto"
-        style={{ color: THEME.textMuted }}
+      {/* Scrollable Container */}
+      <div
+        ref={containerRef}
+        onScroll={checkScroll}
+        className="flex gap-6 overflow-x-auto pb-8 snap-x snap-mandatory scrollbar-hide lg:overflow-visible lg:grid lg:grid-cols-2"
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
-        A collection of projects that showcase my skills in full-stack development, UI/UX design, and problem-solving.
-      </motion.p>
-    </motion.div>
+        {PROJECTS.map((project, index) => (
+          <div 
+            key={project.title} 
+            className={`flex-shrink-0 w-[85vw] sm:w-[60vw] lg:w-auto snap-center ${project.featured ? 'lg:col-span-2' : ''}`}
+          >
+            <ProjectCard project={project} index={index} />
+          </div>
+        ))}
+      </div>
+    </div>
   );
 };
 
-// ─── Main Section ──────────────────────────────────────────
-const ProjectsSection = () => {
-  const scrollRef = useRef(null);
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  // Responsive — detect mobile for vertical stack
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < BREAKPOINTS.mobile);
-    check();
-    window.addEventListener('resize', check);
-    return () => window.removeEventListener('resize', check);
-  }, []);
-
-  // Track scroll position for progress bar + active card
-  const handleScroll = useCallback(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const maxScroll = el.scrollWidth - el.clientWidth;
-    if (maxScroll <= 0) return;
-    const progress = (el.scrollLeft / maxScroll) * 100;
-    setScrollProgress(progress);
-
-    // Determine which card is centered
-    const cardWidth = el.children[0]?.offsetWidth || 0;
-    const gap = 32; // 2rem
-    const idx = Math.round(el.scrollLeft / (cardWidth + gap));
-    setActiveIndex(Math.min(idx, projects.length - 1));
-  }, []);
-
-  // ResizeObserver to recalculate on window resize
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el || isMobile) return;
-
-    const observer = new ResizeObserver(() => handleScroll());
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [handleScroll, isMobile]);
-
-  // Keyboard navigation
-  useEffect(() => {
-    if (isMobile) return;
-    const onKeyDown = (e) => {
-      const el = scrollRef.current;
-      if (!el) return;
-      const cardWidth = el.children[0]?.offsetWidth || 0;
-      const gap = 32;
-      if (e.key === 'ArrowRight') {
-        el.scrollBy({ left: cardWidth + gap, behavior: 'smooth' });
-      } else if (e.key === 'ArrowLeft') {
-        el.scrollBy({ left: -(cardWidth + gap), behavior: 'smooth' });
-      }
-    };
-    window.addEventListener('keydown', onKeyDown);
-    return () => window.removeEventListener('keydown', onKeyDown);
-  }, [isMobile]);
-
-  const scrollTo = (dir) => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const cardWidth = el.children[0]?.offsetWidth || 0;
-    el.scrollBy({ left: dir * (cardWidth + 32), behavior: 'smooth' });
-  };
+export default function ProjectsSection() {
+  const headerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: headerRef,
+    offset: ["start end", "end start"]
+  });
+  
+  const headerY = useTransform(scrollYProgress, [0, 1], [100, -100]);
+  const headerOpacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0]);
 
   return (
-    <section
-      id="projects-showcase"
-      className="relative py-24 lg:py-32 overflow-hidden"
-      style={{ backgroundColor: THEME.parchment }}
-    >
-      {/* Background orbs */}
-      <div
-        className="absolute top-20 left-10 w-72 h-72 rounded-full opacity-20 blur-3xl pointer-events-none"
-        style={{ backgroundColor: `${THEME.gold}25` }}
-      />
-      <div
-        className="absolute bottom-20 right-10 w-96 h-96 rounded-full opacity-15 blur-3xl pointer-events-none"
-        style={{ backgroundColor: `${THEME.terracotta}15` }}
-      />
+    <section id="projects-showcase" className="relative min-h-screen w-full bg-[#FFFBEB] py-20 lg:py-32 overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute inset-0 pointer-events-none">
+        <motion.div 
+          className="absolute top-40 right-20 w-96 h-96 rounded-full bg-[#9FB2AC]/10 blur-3xl"
+          animate={{ y: [0, 30, 0], scale: [1, 1.1, 1] }}
+          transition={{ duration: 8, repeat: Infinity }}
+        />
+      </div>
 
-      <div className="relative z-10">
-        <SectionHeader />
+      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+        {/* Header */}
+        <motion.div 
+          ref={headerRef}
+          className="mb-16 lg:mb-20"
+          style={{ y: headerY, opacity: headerOpacity }}
+        >
+          <motion.span 
+            className="inline-flex items-center gap-2 text-[#9FB2AC] text-sm font-medium tracking-widest uppercase mb-4"
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <span className="w-8 h-px bg-[#9FB2AC]" />
+            Selected Work
+          </motion.span>
+          
+          <motion.h2 
+            className="text-4xl sm:text-5xl lg:text-7xl font-bold text-[#1a1a1a] font-fliege"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+            viewport={{ once: true }}
+          >
+            Projects With{' '}
+            <span className="text-[#5D0D18] italic">Impact</span>
+          </motion.h2>
+          
+          <motion.p 
+            className="mt-6 text-lg text-[#1a1a1a]/60 max-w-2xl"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
+            A curated selection of projects that demonstrate technical depth, design excellence, and real-world problem solving.
+          </motion.p>
+        </motion.div>
 
-        {isMobile ? (
-          /* ── Mobile: Vertical card stack ── */
-          <div className="grid grid-cols-1 gap-6 px-4">
-            {projects.map((project, index) => (
-              <ProjectCard key={project.id} project={project} index={index} isCenter={false} />
-            ))}
-          </div>
-        ) : (
-          /* ── Desktop/Tablet: Horizontal CSS scroll-snap gallery ── */
-          <div className="relative">
-            {/* Navigation arrows */}
-            <button
-              onClick={() => scrollTo(-1)}
-              className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full border backdrop-blur-md transition-all duration-300 hover:scale-110 hidden md:flex items-center justify-center"
-              style={{
-                backgroundColor: `${THEME.cream}90`,
-                borderColor: `${THEME.sage}40`,
-                color: THEME.textDark,
-              }}
-              aria-label="Previous project"
-            >
-              <ChevronLeft className="w-5 h-5" />
-            </button>
-            <button
-              onClick={() => scrollTo(1)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full border backdrop-blur-md transition-all duration-300 hover:scale-110 hidden md:flex items-center justify-center"
-              style={{
-                backgroundColor: `${THEME.cream}90`,
-                borderColor: `${THEME.sage}40`,
-                color: THEME.textDark,
-              }}
-              aria-label="Next project"
-            >
-              <ChevronRight className="w-5 h-5" />
-            </button>
+        {/* Projects Gallery */}
+        <HorizontalScrollGallery />
 
-            {/* Scroll container */}
-            <div
-              ref={scrollRef}
-              onScroll={handleScroll}
-              className="flex gap-8 overflow-x-auto px-[15vw] pb-4"
-              style={{
-                scrollSnapType: 'x mandatory',
-                scrollBehavior: 'smooth',
-                WebkitOverflowScrolling: 'touch',
-                msOverflowStyle: 'none',
-                scrollbarWidth: 'none',
-              }}
-            >
-              {projects.map((project, index) => (
-                <ProjectCard
-                  key={project.id}
-                  project={project}
-                  index={index}
-                  isCenter={index === activeIndex}
-                />
-              ))}
-            </div>
-
-            {/* Right fade hint */}
-            <div
-              className="absolute top-0 right-0 w-24 h-full pointer-events-none z-10"
-              style={{
-                background: `linear-gradient(to left, ${THEME.parchment}, transparent)`,
-              }}
-            />
-            {/* Left fade hint */}
-            <div
-              className="absolute top-0 left-0 w-24 h-full pointer-events-none z-10"
-              style={{
-                background: `linear-gradient(to right, ${THEME.parchment}, transparent)`,
-              }}
-            />
-
-            {/* Progress bar */}
-            <ScrollProgressBar progress={scrollProgress} />
-
-            {/* Hide scrollbar */}
-            <style>{`
-              div[style*="scroll-snap-type"]::-webkit-scrollbar { display: none; }
-            `}</style>
-          </div>
-        )}
-
-        {/* View all CTA */}
-        <motion.div
+        {/* View All CTA */}
+        <motion.div 
+          className="mt-16 text-center"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.4, ease: EASE_SMOOTH }}
-          className="text-center mt-16"
         >
           <motion.a
             href="https://github.com/singhharshitt"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 px-8 py-3 rounded-full font-medium transition-all duration-300 border-2"
-            style={{
-              borderColor: THEME.terracotta,
-              color: THEME.terracotta,
-            }}
-            whileHover={{
-              backgroundColor: THEME.terracotta,
-              color: '#F5F0E8',
-              scale: 1.03,
-            }}
-            whileTap={{ scale: 0.98 }}
+            className="inline-flex items-center gap-3 px-8 py-4 bg-[#5D0D18] text-[#FFFBEB] rounded-full font-medium text-lg hover:shadow-xl hover:shadow-[#5D0D18]/20 transition-all"
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.95 }}
           >
-            <SiGithub className="w-5 h-5" />
-            <span>View All on GitHub</span>
-            <ArrowUpRight className="w-4 h-4" />
+            <Github size={20} />
+            View All Projects on GitHub
+            <motion.span
+              animate={{ x: [0, 5, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+            >
+              <ArrowUpRight size={18} />
+            </motion.span>
           </motion.a>
         </motion.div>
       </div>
+
+      {/* Add custom scrollbar hide styles */}
+      <style jsx>{`
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
     </section>
   );
-};
-
-export default ProjectsSection;
+}
