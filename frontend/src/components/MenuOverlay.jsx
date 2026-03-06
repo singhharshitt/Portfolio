@@ -1,11 +1,12 @@
-import { useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect } from 'react';
+import { motion, AnimatePresence } from '../utils/motion';
 import { ArrowRight, Mail, Github, Linkedin, Twitter } from 'lucide-react';
 
 const mainNavItems = [
     { label: 'Work', section: 'projects-showcase', description: 'Selected projects' },
     { label: 'About', section: 'about', description: 'My story' },
     { label: 'Tech Stack', section: 'techstack', description: 'What I use' },
+    { label: 'Interests', section: 'interests', description: 'What drives me' },
     { label: 'Journey', section: 'timeline', description: 'My path' },
     { label: 'Connect', section: 'connect', description: 'Get in touch' },
 ];
@@ -90,8 +91,6 @@ const slideUpVariants = {
 };
 
 export default function MenuOverlay({ isOpen, onClose, onNavigate }) {
-    const overlayRef = useRef(null);
-
     // Handle escape key
     useEffect(() => {
         const handleKeyDown = (e) => {
@@ -112,7 +111,6 @@ export default function MenuOverlay({ isOpen, onClose, onNavigate }) {
         <AnimatePresence>
             {isOpen && (
                 <motion.div
-                    ref={overlayRef}
                     initial="hidden"
                     animate="visible"
                     exit="exit"
@@ -301,6 +299,8 @@ export default function MenuOverlay({ isOpen, onClose, onNavigate }) {
                                                             src={project.image}
                                                             alt={project.title}
                                                             className="w-full h-full object-cover"
+                                                            loading="lazy"
+                                                            decoding="async"
                                                             whileHover={{ scale: 1.1 }}
                                                             transition={{ duration: 0.6 }}
                                                         />
@@ -373,6 +373,7 @@ export default function MenuOverlay({ isOpen, onClose, onNavigate }) {
                                                     whileHover={{ scale: 1.1 }}
                                                     whileTap={{ scale: 0.9 }}
                                                     className="text-[#9FB2AC] hover:text-[#FFFBEB] transition-colors"
+                                                    aria-label="Submit email"
                                                 >
                                                     <ArrowRight className="w-4 h-4" />
                                                 </motion.button>

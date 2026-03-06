@@ -1,13 +1,13 @@
-import { useState, useRef, useEffect } from 'react';
-import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion';
-import { 
-  Layers, 
-  Server, 
-  Users, 
-  Sparkles, 
-  Code2, 
-  Palette, 
-  Database, 
+import React, { memo, useMemo, useRef, useState } from 'react';
+import { motion, useScroll, useTransform, AnimatePresence } from '../utils/motion';
+import {
+  Layers,
+  Server,
+  Users,
+  Sparkles,
+  Code2,
+  Palette,
+  Database,
   GitBranch,
   Terminal,
   Figma,
@@ -46,10 +46,10 @@ const SOFT_SKILLS = [
   { name: 'Planning', level: 86, icon: Layers },
 ];
 
-const ProficiencyOrbit = ({ level, color, size = 120 }) => {
+const ProficiencyOrbit = memo(function ProficiencyOrbit({ level, color, size = 120 }) {
   const circumference = 2 * Math.PI * 45;
   const strokeDashoffset = circumference - (level / 100) * circumference;
-  
+
   return (
     <div className="relative" style={{ width: size, height: size }}>
       <svg className="transform -rotate-90 w-full h-full">
@@ -119,12 +119,12 @@ const ProficiencyOrbit = ({ level, color, size = 120 }) => {
       ))}
     </div>
   );
-};
+});
 
-const SkillConstellation = ({ skill, index, isHovered, onHover }) => {
+const SkillConstellation = memo(function SkillConstellation({ skill, index, isHovered, onHover }) {
   const Icon = skill.icon;
   const intensity = skill.level > 90 ? 'high' : skill.level > 80 ? 'medium' : 'low';
-  
+
   const glowColors = {
     high: 'shadow-[#5D0D18]/30',
     medium: 'shadow-[#6B7A3D]/30',
@@ -144,22 +144,21 @@ const SkillConstellation = ({ skill, index, isHovered, onHover }) => {
     >
       {/* Star/node */}
       <motion.div
-        className={`relative w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-300 ${
-          isHovered 
-            ? `bg-[#5D0D18] shadow-lg ${glowColors[intensity]}` 
+        className={`relative w-16 h-16 rounded-2xl flex items-center justify-center transition-all duration-300 ${isHovered
+            ? `bg-[#5D0D18] shadow-lg ${glowColors[intensity]}`
             : 'bg-white/80 border border-[#5D0D18]/10'
-        }`}
+          }`}
         animate={{
-          boxShadow: isHovered 
+          boxShadow: isHovered
             ? `0 0 30px ${skill.level > 90 ? '#5D0D18' : skill.level > 80 ? '#6B7A3D' : '#9FB2AC'}40`
             : '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
         }}
       >
-        <Icon 
-          size={24} 
-          className={`transition-colors duration-300 ${isHovered ? 'text-[#FFFBEB]' : 'text-[#5D0D18]'}`} 
+        <Icon
+          size={24}
+          className={`transition-colors duration-300 ${isHovered ? 'text-[#FFFBEB]' : 'text-[#5D0D18]'}`}
         />
-        
+
         {/* Level indicator ring */}
         <svg className="absolute inset-0 w-full h-full -rotate-90">
           <circle
@@ -177,7 +176,7 @@ const SkillConstellation = ({ skill, index, isHovered, onHover }) => {
 
       {/* Connection lines to neighbors */}
       <motion.div
-        className="absolute top-1/2 -right-8 w-8 h-px bg-linear-to-r from-[#5D0D18]/20 to-transparent"
+        className="absolute top-1/2 -right-8 w-8 h-px bg-gradient-to-r from-[#5D0D18]/20 to-transparent"
         initial={{ scaleX: 0 }}
         whileInView={{ scaleX: 1 }}
         transition={{ duration: 0.5, delay: index * 0.1 + 0.3 }}
@@ -191,13 +190,13 @@ const SkillConstellation = ({ skill, index, isHovered, onHover }) => {
             initial={{ opacity: 0, y: 10, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.9 }}
-            className="absolute -bottom-24 left-1/2 -translate-x-1/2 z-20 w-48 p-4 bg-white rounded-xl shadow-xl border border-[#5D0D18]/10"
+            className="absolute -bottom-24 left-0 sm:left-1/2 sm:-translate-x-1/2 z-20 w-44 sm:w-48 p-3 sm:p-4 bg-white rounded-xl shadow-xl border border-[#5D0D18]/10"
           >
             <h4 className="font-bold text-[#5D0D18] mb-1">{skill.name}</h4>
             <p className="text-xs text-[#1a1a1a]/60 mb-2">{skill.description}</p>
             <div className="flex items-center gap-2">
               <div className="flex-1 h-1 bg-[#5D0D18]/10 rounded-full overflow-hidden">
-                <motion.div 
+                <motion.div
                   className="h-full bg-[#5D0D18] rounded-full"
                   initial={{ width: 0 }}
                   animate={{ width: `${skill.level}%` }}
@@ -211,21 +210,20 @@ const SkillConstellation = ({ skill, index, isHovered, onHover }) => {
       </AnimatePresence>
 
       {/* Label below */}
-      <motion.p 
-        className={`mt-3 text-xs font-medium text-center transition-colors ${
-          isHovered ? 'text-[#5D0D18]' : 'text-[#1a1a1a]/60'
-        }`}
+      <motion.p
+        className={`mt-3 text-xs font-medium text-center transition-colors ${isHovered ? 'text-[#5D0D18]' : 'text-[#1a1a1a]/60'
+          }`}
       >
         {skill.name}
       </motion.p>
     </motion.div>
   );
-};
+});
 
-const SoftSkillPillar = ({ skill, index }) => {
+const SoftSkillPillar = memo(function SoftSkillPillar({ skill, index }) {
   const Icon = skill.icon;
   const height = `${skill.level}%`;
-  
+
   return (
     <motion.div
       className="relative flex flex-col items-center gap-4"
@@ -238,7 +236,7 @@ const SoftSkillPillar = ({ skill, index }) => {
       <div className="relative w-20 h-48 bg-[#5D0D18]/5 rounded-2xl overflow-hidden">
         {/* Liquid fill effect */}
         <motion.div
-          className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-[#5D0D18] to-[#9FB2AC] rounded-2xl"
+          className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#5D0D18] to-[#9FB2AC] rounded-2xl"
           initial={{ height: 0 }}
           whileInView={{ height }}
           transition={{ duration: 1, delay: index * 0.2, ease: "easeOut" }}
@@ -262,7 +260,7 @@ const SoftSkillPillar = ({ skill, index }) => {
             />
           ))}
         </motion.div>
-        
+
         {/* Level marker */}
         <motion.div
           className="absolute right-0 w-8 h-px bg-[#5D0D18]"
@@ -277,7 +275,7 @@ const SoftSkillPillar = ({ skill, index }) => {
           </span>
         </motion.div>
       </div>
-      
+
       {/* Icon and label */}
       <div className="flex flex-col items-center gap-2">
         <div className="p-2 bg-[#5D0D18]/10 rounded-lg">
@@ -287,46 +285,51 @@ const SoftSkillPillar = ({ skill, index }) => {
       </div>
     </motion.div>
   );
-};
+});
 
 export default function SkillsVisualization() {
   const [hoveredSkill, setHoveredSkill] = useState(null);
-  const [activeGroup, setActiveGroup] = useState(0);
   const containerRef = useRef(null);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start center", "end center"]
   });
+  const topGlowOpacity = useTransform(scrollYProgress, [0, 0.5], [0, 1]);
+  const bottomGlowOpacity = useTransform(scrollYProgress, [0, 0.5], [0, 1]);
+  const groupAverages = useMemo(
+    () => SKILL_GROUPS.map((group) => Math.round(group.skills.reduce((total, skill) => total + skill.level, 0) / group.skills.length)),
+    []
+  );
 
   return (
-    <section 
-      id="skills" 
+    <section
+      id="skills"
       ref={containerRef}
       className="relative min-h-screen w-full bg-[#FFFBEB] py-20 lg:py-32 overflow-hidden"
     >
       {/* Background Elements */}
       <div className="absolute inset-0 pointer-events-none">
-        <motion.div 
+        <motion.div
           className="absolute top-20 left-20 w-96 h-96 rounded-full bg-[#9FB2AC]/10 blur-3xl"
-          style={{ opacity: useTransform(scrollYProgress, [0, 0.5], [0, 1]) }}
+          style={{ opacity: topGlowOpacity }}
         />
-        <motion.div 
+        <motion.div
           className="absolute bottom-20 right-20 w-80 h-80 rounded-full bg-[#5D0D18]/5 blur-3xl"
-          style={{ opacity: useTransform(scrollYProgress, [0, 0.5], [0, 1]) }}
+          style={{ opacity: bottomGlowOpacity }}
         />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
         {/* Header */}
-        <motion.div 
+        <motion.div
           className="text-center mb-16"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <motion.span 
+          <motion.span
             className="inline-flex items-center gap-2 text-[#9FB2AC] text-sm font-medium tracking-widest uppercase mb-4"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -337,8 +340,8 @@ export default function SkillsVisualization() {
             Expertise
             <span className="w-8 h-px bg-[#9FB2AC]" />
           </motion.span>
-          
-          <motion.h2 
+
+          <motion.h2
             className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#1a1a1a] font-fliege"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -354,8 +357,7 @@ export default function SkillsVisualization() {
         <div className="space-y-20">
           {SKILL_GROUPS.map((group, groupIndex) => {
             const GroupIcon = group.icon;
-            const isActive = activeGroup === groupIndex;
-            
+
             return (
               <motion.div
                 key={group.title}
@@ -364,16 +366,15 @@ export default function SkillsVisualization() {
                 whileInView={{ opacity: 1 }}
                 transition={{ duration: 0.8 }}
                 viewport={{ once: true }}
-                onMouseEnter={() => setActiveGroup(groupIndex)}
               >
                 {/* Group Header with Orbit */}
                 <div className="flex flex-col lg:flex-row items-center gap-8 mb-12">
-                  <motion.div 
+                  <motion.div
                     className="relative"
                     whileHover={{ scale: 1.05 }}
                   >
-                    <ProficiencyOrbit 
-                      level={Math.round(group.skills.reduce((a, s) => a + s.level, 0) / group.skills.length)}
+                    <ProficiencyOrbit
+                      level={groupAverages[groupIndex]}
                       color={group.color}
                       size={140}
                     />
@@ -381,9 +382,9 @@ export default function SkillsVisualization() {
                       <GroupIcon size={32} className="text-[#5D0D18]" />
                     </div>
                   </motion.div>
-                  
+
                   <div className="text-center lg:text-left">
-                    <motion.h3 
+                    <motion.h3
                       className="text-2xl lg:text-3xl font-bold text-[#1a1a1a] mb-2"
                       initial={{ opacity: 0, x: -20 }}
                       whileInView={{ opacity: 1, x: 0 }}
@@ -393,7 +394,7 @@ export default function SkillsVisualization() {
                       {group.title}
                     </motion.h3>
                     <p className="text-[#1a1a1a]/60 max-w-md">
-                      {groupIndex === 0 
+                      {groupIndex === 0
                         ? 'Building responsive, accessible, and performant user interfaces with modern frameworks.'
                         : 'Designing robust APIs, database schemas, and server-side logic for scalable applications.'}
                     </p>
@@ -416,7 +417,7 @@ export default function SkillsVisualization() {
                       viewport={{ once: true }}
                     />
                   </svg>
-                  
+
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12 justify-items-center">
                     {group.skills.map((skill, index) => (
                       <SkillConstellation
@@ -435,14 +436,14 @@ export default function SkillsVisualization() {
         </div>
 
         {/* Soft Skills - Pillar Section */}
-        <motion.div 
+        <motion.div
           className="mt-24 pt-16 border-t border-[#5D0D18]/10"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <motion.h3 
+          <motion.h3
             className="text-2xl font-bold text-[#1a1a1a] text-center mb-12"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -450,7 +451,7 @@ export default function SkillsVisualization() {
           >
             Professional <span className="text-[#5D0D18] italic">Competencies</span>
           </motion.h3>
-          
+
           <div className="flex flex-wrap justify-center gap-8 lg:gap-16">
             {SOFT_SKILLS.map((skill, index) => (
               <SoftSkillPillar key={skill.name} skill={skill} index={index} />
@@ -459,7 +460,7 @@ export default function SkillsVisualization() {
         </motion.div>
 
         {/* Bottom Insight */}
-        <motion.div 
+        <motion.div
           className="mt-20 text-center"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -467,8 +468,8 @@ export default function SkillsVisualization() {
           viewport={{ once: true }}
         >
           <p className="text-[#1a1a1a]/60 text-sm max-w-2xl mx-auto">
-            Proficiency levels represent confidence in production environments, 
-            not just theoretical knowledge. Each skill is backed by shipped projects 
+            Proficiency levels represent confidence in production environments,
+            not just theoretical knowledge. Each skill is backed by shipped projects
             and real-world problem solving.
           </p>
         </motion.div>

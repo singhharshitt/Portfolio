@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useMemo, useState } from 'react';
+import React, { lazy, Suspense, useEffect, useMemo, useState } from 'react';
 
 export default function dynamic(loader, options = {}) {
   const { ssr = true, loading: LoadingComponent = null } = options;

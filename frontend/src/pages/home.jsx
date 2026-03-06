@@ -1,34 +1,49 @@
-import { useEffect } from 'react';
+import React, { lazy, Suspense, useCallback, useEffect } from 'react';
 import Navbar from '../components/Navbar.jsx';
 import Footer from '../components/Footer.jsx';
 import Hero from '../Sections/Hero.jsx';
-import Aboutme from '../Sections/Aboutme.jsx';
-import JourneyTimeline from '../components/TimeLine.jsx';
-import TechStack from '../Sections/TechStack.jsx';
-import ProjectsSection from '../Sections/ProjectsSection.jsx';
-import SkillsVisualization from '../Sections/SkillsVisualization.jsx';
-import CodingActivity from '../Sections/CodingActivity.jsx';
-import Certificates from '../Sections/Certificates.jsx';
-import BlogSection from '../Sections/BlogSection.jsx';
-import ConnectSection from '../Sections/ConnectSection.jsx';
-import dynamic from '../utils/dynamic.jsx';
-import { EMPTY_GFG_STATS, EMPTY_GITHUB_STATS, EMPTY_LEETCODE_STATS } from '../types/activityStats';
 
-const Dashboard = dynamic(() => import('../Sections/DeveloperActivityDashboard.jsx'), { ssr: false });
+const Aboutme = lazy(() => import('../Sections/Aboutme.jsx'));
+const JourneyTimeline = lazy(() => import('../components/TimeLine.jsx'));
+const TechStack = lazy(() => import('../Sections/TechStack.jsx'));
+const ProjectsSection = lazy(() => import('../Sections/ProjectsSection.jsx'));
+const SkillsVisualization = lazy(() => import('../Sections/SkillsVisualization.jsx'));
+const Certificates = lazy(() => import('../Sections/Certificates.jsx'));
+const BlogSection = lazy(() => import('../Sections/BlogSection.jsx'));
+const ConnectSection = lazy(() => import('../Sections/ConnectSection.jsx'));
+const InterestsSection = lazy(() => import('../Sections/InterestsSection.jsx'));
+const ExploringWeb3 = lazy(() => import('../Sections/ExploringWeb3.jsx'));
 
-const DASHBOARD_PROPS = Object.freeze({
-  githubStats: EMPTY_GITHUB_STATS,
-  leetCodeStats: EMPTY_LEETCODE_STATS,
-  gfgStats: EMPTY_GFG_STATS,
-});
+// the heavy realtime dashboard was replaced by a static interests section
+// const Dashboard = dynamic(() => import('../Sections/DeveloperActivityDashboard.jsx'), { ssr: false });
+// const DASHBOARD_PROPS = Object.freeze({
+//   githubStats: EMPTY_GITHUB_STATS,
+//   leetCodeStats: EMPTY_LEETCODE_STATS,
+//   gfgStats: EMPTY_GFG_STATS,
+// });
 
 function Home() {
   useEffect(() => {
-    const elements = Array.from(
-      document.querySelectorAll(
-        '.reveal-item, .skill-category, .stat-card, .certificate-card, .blog-card, .tech-item, .timeline-node'
-      )
-    );
+    const revealSelector =
+      '.reveal-item, .skill-category, .stat-card, .certificate-card, .blog-card, .tech-item, .timeline-node';
+    const observedElements = new WeakSet();
+
+    const observeNode = (node) => {
+      if (!(node instanceof Element)) return;
+
+      if (node.matches(revealSelector) && !observedElements.has(node)) {
+        observedElements.add(node);
+        observer.observe(node);
+      }
+
+      const descendants = node.querySelectorAll(revealSelector);
+      descendants.forEach((element) => {
+        if (observedElements.has(element)) return;
+        observedElements.add(element);
+        observer.observe(element);
+      });
+    };
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -52,13 +67,28 @@ function Home() {
       }
     );
 
-    elements.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
+    document.querySelectorAll(revealSelector).forEach((element) => {
+      observedElements.add(element);
+      observer.observe(element);
+    });
+
+    const mutationObserver = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        mutation.addedNodes.forEach(observeNode);
+      });
+    });
+
+    mutationObserver.observe(document.body, { childList: true, subtree: true });
+
+    return () => {
+      mutationObserver.disconnect();
+      observer.disconnect();
+    };
   }, []);
 
-  const scrollToSection = (sectionId) => {
+  const scrollToSection = useCallback((sectionId) => {
     document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
-  };
+  }, []);
 
   return (
     <>
@@ -66,16 +96,36 @@ function Home() {
 
       <main className="site-main">
         <Hero />
-        <Aboutme />
-        <TechStack />
-        <SkillsVisualization />
-        <ProjectsSection />
-        <JourneyTimeline />
-        <CodingActivity />
-        <Dashboard {...DASHBOARD_PROPS} />
-        <Certificates />
-        <BlogSection />
-        <ConnectSection />
+        <Suspense fallback={null}>
+          <Aboutme />
+        </Suspense>
+        <Suspense fallback={null}>
+          <TechStack />
+        </Suspense>
+        <Suspense fallback={null}>
+          <SkillsVisualization />
+        </Suspense>
+        <Suspense fallback={null}>
+          <ProjectsSection />
+        </Suspense>
+        <Suspense fallback={null}>
+          <JourneyTimeline />
+        </Suspense>
+        <Suspense fallback={null}>
+          <InterestsSection />
+        </Suspense>
+        <Suspense fallback={null}>
+          <ExploringWeb3 />
+        </Suspense>
+        <Suspense fallback={null}>
+          <Certificates />
+        </Suspense>
+        <Suspense fallback={null}>
+          <BlogSection />
+        </Suspense>
+        <Suspense fallback={null}>
+          <ConnectSection />
+        </Suspense>
       </main>
 
       <Footer />

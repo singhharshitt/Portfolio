@@ -1,6 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
+/*---------------------------------------------------------------------------
+   local font faces
+   run `npm run generate:fonts` (or call the helper script directly) to
+   regenerate `fonts.css` whenever you add or remove files in
+   src/fonts.  every font file becomes its own family named after the file
+   (e.g. `FliegeMono-Bold`, `SNPro-RegularItalic`, etc.).
+---------------------------------------------------------------------------*/
+@import "./fonts.css";
+
 :root {
   --cherry-red:#9E1B2D;--cherry-red-light:#B52E3F;--cherry-red-dark:#7A1524;
   --sandy-taupe:#837D5E;--dusty-beige:#B5AC8A;--dusty-beige-light:#C9C2A6;--dusty-beige-dark:#9A9275;

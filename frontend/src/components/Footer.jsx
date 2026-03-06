@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { ArrowUpRight } from 'lucide-react';
 
 const COLUMN_LINKS = [
@@ -14,7 +15,7 @@ const COLUMN_LINKS = [
     links: [
       { label: 'Tech Stack', section: 'techstack' },
       { label: 'Projects', section: 'projects-showcase' },
-      { label: 'Activity', section: 'coding-activity' },
+      { label: 'Interests', section: 'interests' },
     ],
   },
   {
@@ -31,7 +32,7 @@ function scrollTo(section) {
   document.getElementById(section)?.scrollIntoView({ behavior: 'smooth' });
 }
 
-export default function Footer() {
+function Footer() {
   return (
     <footer className="footer">
       <div className="footer-grid">
@@ -70,3 +71,5 @@ export default function Footer() {
     </footer>
   );
 }
+
+export default memo(Footer);

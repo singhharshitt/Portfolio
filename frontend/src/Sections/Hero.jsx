@@ -1,4 +1,4 @@
-import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
+import { motion, useScroll, useSpring, useTransform } from '../utils/motion';
 import { ArrowDown, ArrowRight } from 'lucide-react';
 
 function scrollTo(sectionId) {
@@ -77,7 +77,6 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
         >
-          <p className="hero-greeting">Full Stack Developer and UI Engineer</p>
         </MotionDiv>
 
         <MotionH1
@@ -110,6 +109,7 @@ export default function Hero() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.5 }}
         >
+          <p className="text-2xl md:xl  DepartureMono-Regular">Full Stack Developer</p>
           I design clean interfaces and build reliable, high-performance web products with
           modern frontend and backend engineering.
         </MotionParagraph>
@@ -177,7 +177,7 @@ export default function Hero() {
         transition={{ delay: 1.2 }}
         aria-label="Scroll to About section"
       >
-        <span>Scroll</span>
+        
         <MotionDiv
           animate={{ y: [0, 6, 0] }}
           transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}

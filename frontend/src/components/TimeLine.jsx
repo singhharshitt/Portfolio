@@ -1,50 +1,50 @@
 import { useState, useRef, useEffect } from 'react';
-import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring } from '../utils/motion';
 import { Briefcase, GraduationCap, Rocket, Target, Sparkles } from 'lucide-react';
 
 const MILESTONES = [
   {
-    date: '2023',
-    title: 'B.Tech Started',
-    subtitle: 'Computer Science',
-    description: 'Started the core CS path with a strong focus on systems, DSA, and web foundations.',
+    date: 'Mar 2021',
+    title: 'Matriculation Completed',
+    subtitle: 'Jeevandeep Public School, Varanasi',
+    description: 'Completed Matriculation with 80% (April 2020 - March 2021).',
     status: 'completed',
     icon: GraduationCap,
     color: '#9FB2AC',
   },
   {
-    date: '2024',
-    title: 'First Production Launch',
-    subtitle: 'Portfolio and client pages',
-    description: 'Shipped responsive products with smoother UX and better performance baselines.',
+    date: 'Mar 2023',
+    title: 'Intermediate Completed',
+    subtitle: 'Jeevandeep Public School, Varanasi',
+    description: 'Completed Intermediate with 76% (April 2022 - March 2023).',
     status: 'completed',
-    icon: Rocket,
+    icon: GraduationCap,
     color: '#6B7A3D',
   },
   {
-    date: '2025',
-    title: 'Full Stack Training',
-    subtitle: 'Code Tantra',
-    description: 'Built complete MERN workflows with authentication, dashboards, and API modules.',
+    date: 'Aug 2023',
+    title: 'B.Tech CSE Started',
+    subtitle: 'Lovely Professional University, Phagwara',
+    description: 'Started B.Tech in Computer Science and Engineering (CGPA: 7.45, expected completion May 2027).',
     status: 'completed',
-    icon: Briefcase,
+    icon: Rocket,
     color: '#C67C4E',
   },
   {
-    date: '2026',
-    title: 'Current Focus',
-    subtitle: 'Scalable UI and motion systems',
-    description: 'Deepening architecture, design systems, and polished interaction design.',
+    date: '2025',
+    title: 'Training and Live Project Delivery',
+    subtitle: 'Code Tantra + Deployed Portfolio Projects',
+    description: 'Completed Full Stack training (June-August 2025) and delivered projects including MoviesMagicChatbot (Mar-Apr 2025), Inkdrop (Jul 2025), and GrabDesk (Nov-Dec 2025).',
     status: 'current',
     featured: true,
-    icon: Sparkles,
+    icon: Briefcase,
     color: '#5D0D18',
   },
   {
-    date: '2027',
-    title: 'Next Milestone',
-    subtitle: 'Product-led engineering',
-    description: 'Targeting larger product collaborations with measurable user impact.',
+    date: 'May 2027',
+    title: 'Expected B.Tech Graduation',
+    subtitle: 'Lovely Professional University',
+    description: 'Target graduation milestone for B.Tech in Computer Science and Engineering.',
     status: 'upcoming',
     icon: Target,
     color: '#9FB2AC',
@@ -54,7 +54,6 @@ const MILESTONES = [
 export default function JourneyTimeline() {
   const [activeIndex, setActiveIndex] = useState(3);
   const containerRef = useRef(null);
-  const [lineProgress, setLineProgress] = useState(0);
   
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -62,23 +61,18 @@ export default function JourneyTimeline() {
   });
   
   const smoothProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
-  
-  // Transform for background year
-  const bgYear = useTransform(smoothProgress, [0, 0.25, 0.5, 0.75, 1], ['2023', '2024', '2025', '2026', '2027']);
-  
+
   // Line draw animation
   const lineHeight = useTransform(smoothProgress, [0, 1], ["0%", "100%"]);
   
   useEffect(() => {
     const unsubscribe = smoothProgress.on("change", (v) => {
       const newIndex = Math.min(Math.floor(v * MILESTONES.length), MILESTONES.length - 1);
-      if (newIndex !== activeIndex && newIndex >= 0) {
-        setActiveIndex(newIndex);
-      }
-      setLineProgress(v * 100);
+      if (newIndex < 0) return;
+      setActiveIndex((current) => (newIndex === current ? current : newIndex));
     });
     return () => unsubscribe();
-  }, [smoothProgress, activeIndex]);
+  }, [smoothProgress]);
 
   return (
     <section 

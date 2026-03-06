@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { AnimatePresence, motion, useScroll, useSpring, useTransform } from 'framer-motion';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { AnimatePresence, motion, useScroll, useSpring, useTransform } from '../utils/motion';
 import { ArrowUpRight, ChevronLeft, ChevronRight, Eye, FileText, Github, X } from 'lucide-react';
 
 const PROJECTS = [
@@ -367,15 +367,15 @@ const HorizontalScrollGallery = ({ onOpenPreview, onOpenCaseStudy }) => {
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
 
-  const checkScroll = () => {
+  const checkScroll = useCallback(() => {
     if (containerRef.current) {
       const { scrollLeft, scrollWidth, clientWidth } = containerRef.current;
       setCanScrollLeft(scrollLeft > 0);
       setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
     }
-  };
+  }, []);
 
-  const scroll = (direction) => {
+  const scroll = useCallback((direction) => {
     if (containerRef.current) {
       const scrollAmount = 400;
       containerRef.current.scrollBy({
@@ -383,13 +383,20 @@ const HorizontalScrollGallery = ({ onOpenPreview, onOpenCaseStudy }) => {
         behavior: 'smooth',
       });
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    checkScroll();
+    window.addEventListener('resize', checkScroll, { passive: true });
+    return () => window.removeEventListener('resize', checkScroll);
+  }, [checkScroll]);
 
   return (
     <div className="relative">
       <div className="absolute -top-20 right-0 z-10 hidden gap-2 lg:flex">
         <motion.button
           onClick={() => scroll('left')}
+          aria-label="Scroll projects left"
           className={`flex h-12 w-12 items-center justify-center rounded-full border-2 transition-all ${
             canScrollLeft
               ? 'border-[#5D0D18] text-[#5D0D18] hover:bg-[#5D0D18] hover:text-[#FFFBEB]'
@@ -403,6 +410,7 @@ const HorizontalScrollGallery = ({ onOpenPreview, onOpenCaseStudy }) => {
         </motion.button>
         <motion.button
           onClick={() => scroll('right')}
+          aria-label="Scroll projects right"
           className={`flex h-12 w-12 items-center justify-center rounded-full border-2 transition-all ${
             canScrollRight
               ? 'border-[#5D0D18] text-[#5D0D18] hover:bg-[#5D0D18] hover:text-[#FFFBEB]'
@@ -472,15 +480,18 @@ export default function ProjectsSection() {
     };
   }, [activePreviewProject, activeCaseStudyProject]);
 
-  const openPreview = (project) => {
+  const closePreview = useCallback(() => setActivePreviewProject(null), []);
+  const closeCaseStudy = useCallback(() => setActiveCaseStudyProject(null), []);
+
+  const openPreview = useCallback((project) => {
     setActiveCaseStudyProject(null);
     setActivePreviewProject(project);
-  };
+  }, []);
 
-  const openCaseStudy = (project) => {
+  const openCaseStudy = useCallback((project) => {
     setActivePreviewProject(null);
     setActiveCaseStudyProject(project);
-  };
+  }, []);
 
   return (
     <section id="projects-showcase" className="relative min-h-screen w-full overflow-hidden bg-[#FFFBEB] py-20 lg:py-32">
@@ -493,7 +504,7 @@ export default function ProjectsSection() {
       </div>
 
       <div className="relative z-10 mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
-        <motion.div ref={headerRef} className="mb-16 lg:mb-20" style={{ y: headerY, opacity: headerOpacity }}>
+        <motion.div ref={headerRef} className="relative mb-16 lg:mb-20" style={{ y: headerY, opacity: headerOpacity }}>
           <motion.span
             className="mb-4 inline-flex items-center gap-2 text-sm font-medium uppercase tracking-widest text-[#9FB2AC]"
             initial={{ opacity: 0, x: -20 }}
@@ -571,7 +582,7 @@ export default function ProjectsSection() {
           <LivePreviewOverlay
             key={`preview-${activePreviewProject.title}`}
             project={activePreviewProject}
-            onClose={() => setActivePreviewProject(null)}
+            onClose={closePreview}
           />
         ) : null}
       </AnimatePresence>
@@ -581,12 +592,12 @@ export default function ProjectsSection() {
           <CaseStudyOverlay
             key={`case-study-${activeCaseStudyProject.title}`}
             project={activeCaseStudyProject}
-            onClose={() => setActiveCaseStudyProject(null)}
+            onClose={closeCaseStudy}
           />
         ) : null}
       </AnimatePresence>
 
-      <style jsx>{`
+      <style>{`
         .scrollbar-hide::-webkit-scrollbar {
           display: none;
         }

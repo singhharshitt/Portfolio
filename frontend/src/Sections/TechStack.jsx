@@ -1,5 +1,5 @@
-import { useState, useMemo, useRef, useEffect } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import React, { useState, useMemo, useRef } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform } from '../utils/motion';
 import { ExternalLink, ArrowRight } from 'lucide-react';
 import {
   SiReact,
@@ -89,7 +89,7 @@ const TAB_LABELS = [
 
 // Marquee tech items
 const MARQUEE_TECHS = [
-  'React', 'Node.js', 'TypeScript', 'MongoDB', 'Docker', 'AWS', 
+  'React', 'Node.js', 'TypeScript', 'MongoDB', 'Docker', 'AWS',
   'Tailwind', 'GraphQL', 'Redis', 'Kubernetes', 'PostgreSQL', 'Next.js',
   'Framer Motion', 'Prisma', 'GitHub Actions', 'Figma', 'Vercel', 'Express'
 ];
@@ -117,7 +117,7 @@ const MARQUEE_TECH_ICONS = {
 
 const OrbCard = ({ tech, index }) => {
   const Icon = tech.icon;
-  
+
   return (
     <motion.a
       href={tech.url}
@@ -138,26 +138,26 @@ const OrbCard = ({ tech, index }) => {
           className="absolute inset-0 rounded-full blur-xl opacity-0 group-hover:opacity-40 transition-opacity duration-500"
           style={{ backgroundColor: tech.color }}
         />
-        
+
         {/* Main orb */}
         <motion.div
           className="relative w-full h-full rounded-full flex items-center justify-center border-2 transition-all duration-300"
-          style={{ 
+          style={{
             backgroundColor: `${tech.color}15`,
             borderColor: `${tech.color}30`,
           }}
-          whileHover={{ 
+          whileHover={{
             backgroundColor: `${tech.color}30`,
             borderColor: tech.color,
             boxShadow: `0 0 30px ${tech.color}40`
           }}
         >
-          <Icon 
-            size={32} 
+          <Icon
+            size={32}
             className="transition-all duration-300 group-hover:scale-110"
             style={{ color: tech.color }}
           />
-          
+
           {/* Orbiting ring */}
           <motion.div
             className="absolute inset-0 rounded-full border border-dashed opacity-20"
@@ -166,7 +166,7 @@ const OrbCard = ({ tech, index }) => {
             transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
           />
         </motion.div>
-        
+
         {/* External link indicator */}
         <motion.div
           className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-[#5D0D18] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
@@ -176,9 +176,9 @@ const OrbCard = ({ tech, index }) => {
           <ExternalLink size={12} className="text-[#FFFBEB]" />
         </motion.div>
       </div>
-      
+
       {/* Text info */}
-      <motion.h3 
+      <motion.h3
         className="text-sm font-bold text-[#1a1a1a] mb-1 group-hover:text-[#5D0D18] transition-colors"
       >
         {tech.name}
@@ -205,15 +205,14 @@ const TabSlider = ({ activeTab, onTabChange }) => {
         transition={{ type: "spring", stiffness: 400, damping: 30 }}
         style={{ left: 6, top: 6 }}
       />
-      
+
       {TAB_LABELS.map((tab) => (
         <button
           key={tab.id}
           type="button"
           onClick={() => onTabChange(tab.id)}
-          className={`relative z-10 px-6 py-2.5 rounded-full text-sm font-medium transition-colors duration-300 ${
-            activeTab === tab.id ? 'text-[#FFFBEB]' : 'text-[#5D0D18] hover:text-[#5D0D18]/80'
-          }`}
+          className={`relative z-10 px-3 sm:px-6 py-2.5 rounded-full text-sm font-medium transition-colors duration-300 ${activeTab === tab.id ? 'text-[#FFFBEB]' : 'text-[#5D0D18] hover:text-[#5D0D18]/80'
+            }`}
         >
           {tab.label}
         </button>
@@ -242,16 +241,16 @@ const MarqueeRow = ({ items, direction = 'left', speed = 30 }) => {
         {[...items, ...items, ...items].map((tech, index) => {
           const TechLogo = MARQUEE_TECH_ICONS[tech];
           return (
-          <span
-            key={`${tech}-${index}`}
-            className="inline-flex flex-col items-center gap-2.5 px-4 py-3 bg-[#5D0D18]/5 rounded-xl border border-[#5D0D18]/10 hover:bg-[#5D0D18]/10 transition-colors cursor-default"
-          >
-            <span className="w-12 h-12 rounded-lg border border-[#5D0D18]/15 bg-white/50 flex items-center justify-center">
-              {TechLogo ? <TechLogo size={22} style={{ color: '#5D0D18' }} /> : null}
+            <span
+              key={`${tech}-${index}`}
+              className="inline-flex flex-col items-center gap-2.5 px-4 py-3 bg-[#5D0D18]/5 rounded-xl border border-[#5D0D18]/10 hover:bg-[#5D0D18]/10 transition-colors cursor-default"
+            >
+              <span className="w-12 h-12 rounded-lg border border-[#5D0D18]/15 bg-white/50 flex items-center justify-center">
+                {TechLogo ? <TechLogo size={22} style={{ color: '#5D0D18' }} /> : null}
+              </span>
+              <span className="text-xs font-semibold leading-none text-[#5D0D18]">{tech}</span>
             </span>
-            <span className="text-xs font-semibold leading-none text-[#5D0D18]">{tech}</span>
-          </span>
-        );
+          );
         })}
       </motion.div>
     </div>
@@ -260,44 +259,45 @@ const MarqueeRow = ({ items, direction = 'left', speed = 30 }) => {
 
 export default function TechStack() {
   const [activeTab, setActiveTab] = useState('frontend');
-  const [hoveredTech, setHoveredTech] = useState(null);
   const containerRef = useRef(null);
-  
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start center", "end center"]
   });
+  const topGlowOpacity = useTransform(scrollYProgress, [0, 0.5], [0, 1]);
+  const bottomGlowOpacity = useTransform(scrollYProgress, [0, 0.5], [0, 1]);
 
   const panelItems = useMemo(() => TECH_STACK[activeTab] ?? [], [activeTab]);
 
   return (
-    <section 
-      id="techstack" 
+    <section
+      id="techstack"
       ref={containerRef}
       className="relative min-h-screen w-full bg-[#FFFBEB] py-20 lg:py-32 overflow-hidden"
     >
       {/* Background Elements */}
       <div className="absolute inset-0 pointer-events-none">
-        <motion.div 
+        <motion.div
           className="absolute top-40 left-20 w-96 h-96 rounded-full bg-[#9FB2AC]/10 blur-3xl"
-          style={{ opacity: useTransform(scrollYProgress, [0, 0.5], [0, 1]) }}
+          style={{ opacity: topGlowOpacity }}
         />
-        <motion.div 
+        <motion.div
           className="absolute bottom-40 right-20 w-80 h-80 rounded-full bg-[#5D0D18]/5 blur-3xl"
-          style={{ opacity: useTransform(scrollYProgress, [0, 0.5], [0, 1]) }}
+          style={{ opacity: bottomGlowOpacity }}
         />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
         {/* Header */}
-        <motion.div 
+        <motion.div
           className="text-center mb-8"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <motion.span 
+          <motion.span
             className="inline-flex items-center gap-2 text-[#9FB2AC] text-sm font-medium tracking-widest uppercase mb-4"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -308,8 +308,8 @@ export default function TechStack() {
             Technology
             <span className="w-8 h-px bg-[#9FB2AC]" />
           </motion.span>
-          
-          <motion.h2 
+
+          <motion.h2
             className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#1a1a1a] font-fliege"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -322,7 +322,7 @@ export default function TechStack() {
         </motion.div>
 
         {/* Marquee Section */}
-        <motion.div 
+        <motion.div
           className="mb-16 opacity-60"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 0.6 }}
@@ -336,7 +336,7 @@ export default function TechStack() {
         <TabSlider activeTab={activeTab} onTabChange={setActiveTab} />
 
         {/* Tech Orbs Grid */}
-        <div className="relative min-h-100">
+        <div className="relative min-h-[400px]">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}
@@ -344,7 +344,7 @@ export default function TechStack() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
-              className="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12 justify-items-center"
+              className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 lg:gap-12 justify-items-center"
             >
               {panelItems.map((tech, index) => (
                 <OrbCard key={tech.name} tech={tech} index={index} />
@@ -354,7 +354,7 @@ export default function TechStack() {
         </div>
 
         {/* Stats Summary */}
-        <motion.div 
+        <motion.div
           className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-8"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -384,7 +384,7 @@ export default function TechStack() {
         </motion.div>
 
         {/* CTA */}
-        <motion.div 
+        <motion.div
           className="mt-16 text-center"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
