@@ -7,16 +7,26 @@ export default {
     theme: {
         extend: {
             colors: {
-                // Custom color palette for sand/beige aesthetics
-                sand: {
-                    100: '#F7F4F3',  // Warm off-white
-                    200: '#ECE2D0',  // Soft neutral beige  
-                    300: '#DCC48E',  // Soft gold-beige
+                // New palette: Vinho / Gelo / Névoa / Aço
+                vinho: {
+                    DEFAULT: '#69212C',  // Primary accent
+                    light:   '#7d2835',
+                    dark:    '#561825',
                 },
-                // Charcoal colors
-                charcoal: '#252627',  // Dark charcoal for text
-                bronze: {
-                    400: '#C69C72',  // Muted bronze
+                gelo: {
+                    DEFAULT: '#DCE0E9',  // Light background
+                    light:   '#e8ecf3',
+                    dark:    '#cdd3de',
+                },
+                nevoa: {
+                    DEFAULT: '#8CA2AD',  // Secondary neutral
+                    light:   '#b8c6ce',
+                    dark:    '#6d8894',
+                },
+                aco: {
+                    DEFAULT: '#27353E',  // Dark surface
+                    light:   '#3d4f5a',
+                    dark:    '#1d2a32',
                 },
             },
             fontFamily: {

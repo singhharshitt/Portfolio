@@ -9,9 +9,7 @@ export default function CircularText({
   hoverPause = true,
 }) {
   const radius = size / 2 - 15;
-  const id = `circular-text-${size}-${text.length}`;
-
-  // Animation direction
+  const id = `circular-text-${size}-${text.length}-${Math.random().toString(36).substr(2, 9)}`;
   const rotationDirection = reverse ? 'reverse' : 'normal';
 
   return (
@@ -22,34 +20,18 @@ export default function CircularText({
         height: size,
         animation: `spinSlow ${duration}s linear infinite ${rotationDirection}`,
         willChange: 'transform',
-        ...(hoverPause && {
-          animationPlayState: 'running',
-        }),
       }}
       onMouseEnter={hoverPause ? (e) => { e.currentTarget.style.animationPlayState = 'paused'; } : undefined}
       onMouseLeave={hoverPause ? (e) => { e.currentTarget.style.animationPlayState = 'running'; } : undefined}
     >
-      {/* Inject keyframes */}
       <style>{`
         @keyframes spinSlow {
           from { transform: rotate(0deg); }
           to { transform: rotate(360deg); }
         }
-        
-        @keyframes spinSlowReverse {
-          from { transform: rotate(360deg); }
-          to { transform: rotate(0deg); }
-        }
       `}</style>
 
-      <svg 
-        viewBox={`0 0 ${size} ${size}`} 
-        width={size} 
-        height={size}
-        style={{
-          overflow: 'visible',
-        }}
-      >
+      <svg viewBox={`0 0 ${size} ${size}`} width={size} height={size} style={{ overflow: 'visible' }}>
         <defs>
           <path
             id={id}
@@ -58,34 +40,24 @@ export default function CircularText({
           />
         </defs>
         
-        {/* Glow effect */}
         <text
-          fontSize="12"
+          fontSize="11"
           fontWeight="600"
-          letterSpacing="3"
+          letterSpacing="2.5"
           fill="currentColor"
-          style={{ 
-            textTransform: 'uppercase',
-            filter: 'blur(8px)',
-            opacity: 0.3,
-          }}
+          style={{ textTransform: 'uppercase', filter: 'blur(4px)', opacity: 0.4 }}
         >
-          <textPath href={`#${id}`} startOffset="0%">
-            {text}
-          </textPath>
+          <textPath href={`#${id}`} startOffset="0%">{text}</textPath>
         </text>
         
-        {/* Main text */}
         <text
-          fontSize="12"
+          fontSize="11"
           fontWeight="600"
-          letterSpacing="3"
+          letterSpacing="2.5"
           fill="currentColor"
           style={{ textTransform: 'uppercase' }}
         >
-          <textPath href={`#${id}`} startOffset="0%">
-            {text}
-          </textPath>
+          <textPath href={`#${id}`} startOffset="0%">{text}</textPath>
         </text>
       </svg>
     </div>
