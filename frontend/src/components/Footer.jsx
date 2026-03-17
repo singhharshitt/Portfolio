@@ -34,13 +34,11 @@ function scrollTo(section) {
 
 function Footer() {
   return (
-    <footer className="pt-20 pb-10 px-10 bg-[var(--bg-secondary)] border-t border-[var(--border)]">
-      {/* Main footer grid */}
-      <div className="max-w-[1400px] mx-auto grid grid-cols-[2fr_1fr_1fr_1fr_2fr] gap-12 max-[1200px]:grid-cols-[1fr_1fr_1fr] max-[768px]:grid-cols-1 max-[768px]:gap-7">
-        {/* Brand column */}
+    <footer className="border-t border-[#DF6C4F]/20 bg-[#452215] px-10 pb-10 pt-20">
+      <div className="mx-auto grid max-w-350 grid-cols-[2fr_1fr_1fr_1fr_2fr] gap-12 max-[1200px]:grid-cols-[1fr_1fr_1fr] max-[768px]:grid-cols-1 max-[768px]:gap-7">
         <div>
-          <h3 className="mb-4 font-[var(--font-display)] text-[2rem] m-0">Harshit.</h3>
-          <p className="m-0 max-w-[280px] text-[.95rem] leading-relaxed text-[var(--text-secondary)]">
+          <h3 className="font-fliege m-0 mb-4 text-[2rem] text-[#FFFFF0]">Harshit.</h3>
+          <p className="font-bodycopy m-0 max-w-70 text-[.95rem] leading-relaxed text-[#FFF8EE]">
             Building products with careful structure, expressive interfaces, and measurable outcomes.
           </p>
         </div>
@@ -48,7 +46,7 @@ function Footer() {
         {/* Nav columns */}
         {COLUMN_LINKS.map((column) => (
           <div key={column.title}>
-            <h4 className="m-0 mb-5 font-[var(--font-mono)] text-[.75rem] tracking-[.1em] uppercase text-[var(--text-muted)]">
+            <h4 className="font-mono-ui m-0 mb-5 text-[.75rem] uppercase tracking-[.18em] text-[#FF9398]">
               {column.title}
             </h4>
             {column.links.map((link) => (
@@ -56,7 +54,7 @@ function Footer() {
                 key={link.section}
                 type="button"
                 onClick={() => scrollTo(link.section)}
-                className="block w-max border-0 bg-transparent p-0 mb-3 text-[.9rem] text-[var(--text-secondary)] cursor-pointer transition-colors duration-[.2s] hover:text-[var(--cherry-red)]"
+                className="font-ui mb-3 block w-max cursor-pointer border-0 bg-transparent p-0 text-[.9rem] text-[#FFF8EE] transition-colors duration-200 hover:text-[#49C5B6]"
               >
                 {link.label}
               </button>
@@ -64,12 +62,11 @@ function Footer() {
           </div>
         ))}
 
-        {/* Legal column */}
-        <div className="text-[.8rem] leading-relaxed text-[var(--text-muted)]">
+        <div className="font-bodycopy text-[.8rem] leading-relaxed text-[#FFF8EE]">
           <p>Based in India. Working globally.</p>
           <a
             href="mailto:singhharshit2410@gmail.com"
-            className="inline-block my-1.5 text-[var(--text-secondary)] underline underline-offset-[2px] transition-colors duration-[.2s] hover:text-[var(--cherry-red)]"
+            className="my-1.5 inline-block text-[#FFF8EE] underline underline-offset-2 transition-colors duration-200 hover:text-[#49C5B6]"
           >
             singhharshit2410@gmail.com
           </a>
@@ -77,14 +74,13 @@ function Footer() {
         </div>
       </div>
 
-      {/* Bottom bar */}
-      <div className="max-w-[1400px] mx-auto mt-[60px] pt-10 border-t border-[var(--border)] flex justify-between items-center gap-4 flex-wrap">
-        <p className="m-0 font-[var(--font-mono)] text-[.8rem] text-[var(--text-muted)]">
+      <div className="mx-auto mt-15 flex max-w-350 flex-wrap items-center justify-between gap-4 border-t border-[#DF6C4F]/20 pt-10">
+        <p className="font-mono-ui m-0 text-[.8rem] text-[#FFF8EE]">
           © 2026 Harshit Singh. All rights reserved.
         </p>
         <button
           type="button"
-          className="border-0 bg-transparent p-0 inline-flex items-center gap-2 cursor-pointer text-[var(--text-secondary)] transition-colors duration-[.2s] hover:text-[var(--cherry-red)]"
+          className="font-ui inline-flex cursor-pointer items-center gap-2 border-0 bg-transparent p-0 text-[#FFF8EE] transition-colors duration-200 hover:text-[#49C5B6]"
           onClick={() => scrollTo('hero')}
         >
           <span>Back to top</span>

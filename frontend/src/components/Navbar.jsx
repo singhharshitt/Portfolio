@@ -1,28 +1,43 @@
-import React, { memo, useState, useEffect, useCallback } from 'react';
+import React, { memo, useState, useEffect, useCallback, useRef } from 'react';
 import { motion } from '../utils/motion';
 import MenuOverlay from './MenuOverlay';
 import { HamburgerButton } from './HamburgerButton';
+import useScrollNavbar from '../hooks/useScrollNavbar';
 
 function Navbar({ onNavigate }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const scrollFrameRef = useRef(null);
+  const showNavbar = useScrollNavbar({ threshold: 10, topAt: 50 });
 
-  // Handle scroll effect
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+    const updateScrollState = () => {
+      scrollFrameRef.current = null;
+      const nextIsScrolled = window.scrollY > 50;
+      setIsScrolled((current) => (current === nextIsScrolled ? current : nextIsScrolled));
     };
+
+    const handleScroll = () => {
+      if (scrollFrameRef.current !== null) return;
+      scrollFrameRef.current = window.requestAnimationFrame(updateScrollState);
+    };
+
+    updateScrollState();
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (scrollFrameRef.current !== null) {
+        window.cancelAnimationFrame(scrollFrameRef.current);
+      }
+    };
   }, []);
 
-  // Lock body scroll when menu is open
   useEffect(() => {
     document.body.style.overflow = isMenuOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [isMenuOpen]);
 
-  const toggleMenu = useCallback(() => setIsMenuOpen(prev => !prev), []);
+  const toggleMenu = useCallback(() => setIsMenuOpen((prev) => !prev), []);
   const closeMenu = useCallback(() => setIsMenuOpen(false), []);
 
   const handleNavigate = useCallback((section) => {
@@ -30,49 +45,30 @@ function Navbar({ onNavigate }) {
     setTimeout(() => onNavigate?.(section), 300);
   }, [closeMenu, onNavigate]);
 
+  const headerVisible = isMenuOpen || showNavbar;
+
   return (
     <>
-
-      <header
-        className="fixed top-0 left-0 right-0 z-50"
-      >
-
-
+      <header className={`fixed left-0 right-0 top-0 z-50 transition-transform duration-300 ease-out ${headerVisible ? 'translate-y-0' : '-translate-y-full'}`}>
         <div className="relative w-full px-6 sm:px-8 lg:px-12 xl:px-16">
-          <nav className="flex items-center justify-between h-20 lg:h-24">
-
-            {/* Logo with Magnetic Effect */}
-            <a
-              href="#hero">
-              <div
-                className="relative"
-
-              >
-                <h1 className="font-fliege text-3xl lg:text-4xl font-extrabold tracking-tight">
-                  <span className={`
-                    transition-colors duration-500
-                    ${isMenuOpen ? 'text-[#FFFBEB]' : 'text-[#1a1a1a]'}
-                  `}>
-                    HARSHIT
+          <nav className="flex h-20 items-center justify-between lg:h-24">
+            <a href="#hero">
+              <div className="relative">
+                <h1 className="font-fliege text-3xl tracking-tight lg:text-4xl">
+                  <span className={`transition-colors duration-500 ${isMenuOpen ? 'text-[#FFFFF0]' : isScrolled ? 'text-[#452215]' : 'text-[#FFFFF0]'}`}>
+                    H
                   </span>
-                  <span
-                    className="font-snpro text-5xl lg:text-6xl inline-block"
-
-                  >
-                    .
-                  </span>
+                  <span className="font-ui inline-block text-5xl text-[#FF9398] lg:text-6xl">.</span>
                 </h1>
 
-
                 <motion.div
-                  className="absolute -bottom-1 left-0 h-0.5 bg-[#5D0D18]" // Bloodstone
+                  className="absolute -bottom-1 left-0 h-0.5 bg-[#49C5B6]"
                   initial={{ width: 0 }}
                   whileHover={{ width: '100%' }}
                   transition={{ duration: 0.3 }}
                 />
               </div>
             </a>
-
 
             <HamburgerButton
               isOpen={isMenuOpen}
@@ -81,9 +77,7 @@ function Navbar({ onNavigate }) {
             />
           </nav>
         </div>
-
       </header>
-
 
       <MenuOverlay
         isOpen={isMenuOpen}

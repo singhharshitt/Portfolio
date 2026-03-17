@@ -12,7 +12,6 @@ const Certificates = lazy(() => import('../Sections/Certificates.jsx'));
 const BlogSection = lazy(() => import('../Sections/BlogSection.jsx'));
 const ConnectSection = lazy(() => import('../Sections/ConnectSection.jsx'));
 const InterestsSection = lazy(() => import('../Sections/InterestsSection.jsx'));
-const ExploringWeb3 = lazy(() => import('../Sections/ExploringWeb3.jsx'));
 
 // the heavy realtime dashboard was replaced by a static interests section
 // const Dashboard = dynamic(() => import('../Sections/DeveloperActivityDashboard.jsx'), { ssr: false });
@@ -27,6 +26,7 @@ function Home() {
     const revealSelector =
       '.reveal-item, .skill-category, .stat-card, .certificate-card, .blog-card, .tech-item, .timeline-node';
     const observedElements = new WeakSet();
+    const revealTimeouts = new Set();
 
     const observeNode = (node) => {
       if (!(node instanceof Element)) return;
@@ -54,10 +54,12 @@ function Home() {
           const index = siblings.indexOf(entry.target);
           const delayAttr = Number(entry.target.getAttribute('data-reveal-delay') || '0');
           const delay = Number.isFinite(delayAttr) && delayAttr > 0 ? delayAttr * 1000 : Math.max(index, 0) * 100;
-          window.setTimeout(() => {
+          const timeoutId = window.setTimeout(() => {
+            revealTimeouts.delete(timeoutId);
             entry.target.classList.add('is-visible');
             entry.target.classList.add('animate-in');
           }, delay);
+          revealTimeouts.add(timeoutId);
           observer.unobserve(entry.target);
         });
       },
@@ -81,6 +83,8 @@ function Home() {
     mutationObserver.observe(document.body, { childList: true, subtree: true });
 
     return () => {
+      revealTimeouts.forEach((timeoutId) => window.clearTimeout(timeoutId));
+      revealTimeouts.clear();
       mutationObserver.disconnect();
       observer.disconnect();
     };
@@ -113,9 +117,6 @@ function Home() {
         </Suspense>
         <Suspense fallback={null}>
           <InterestsSection />
-        </Suspense>
-        <Suspense fallback={null}>
-          <ExploringWeb3 />
         </Suspense>
         <Suspense fallback={null}>
           <Certificates />

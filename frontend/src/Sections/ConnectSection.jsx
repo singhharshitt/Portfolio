@@ -11,15 +11,14 @@ export default function ConnectSection() {
   return (
     <section
       id="connect"
-      className="py-[160px] bg-[var(--bg-primary)] text-center relative overflow-hidden"
+      className="relative overflow-hidden bg-[#FFF8EE] py-40 text-center"
     >
-      <div className="w-[min(1400px,calc(100%-80px))] mx-auto">
-        {/* Decorative wavy SVG */}
-        <div className="max-w-[500px] mx-auto mb-12 opacity-90 reveal-item" aria-hidden="true">
+      <div className="mx-auto w-[min(1400px,calc(100%-80px))]">
+        <div className="reveal-item mx-auto mb-12 max-w-125 opacity-90" aria-hidden="true">
           <svg viewBox="0 0 600 140" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M20 70C115 15 190 125 300 70C410 15 495 125 580 70"
-              stroke="var(--burnt-caramel)"
+              stroke="#DF6C4F"
               strokeWidth="3"
               strokeLinecap="round"
               strokeDasharray="8 10"
@@ -27,15 +26,14 @@ export default function ConnectSection() {
           </svg>
         </div>
 
-        <h2 className="m-0 mb-4 font-[var(--font-display)] text-[clamp(2.5rem,6vw,4.5rem)] reveal-item">
+        <h2 className="font-fliege reveal-item m-0 mb-4 text-[clamp(2.5rem,6vw,4.5rem)] text-[#452215]">
           Let&apos;s Build Together
         </h2>
-        <p className="mt-0 mx-auto mb-12 max-w-[500px] font-[var(--font-heading)] text-xl text-[var(--text-secondary)] reveal-item">
+        <p className="font-bodycopy reveal-item mx-auto mb-12 mt-0 max-w-125 text-xl text-[#452215]">
           Open to freelance, full-time, and collaboration opportunities.
         </p>
 
-        {/* Social links */}
-        <div className="flex justify-center gap-4 mb-12 flex-wrap">
+        <div className="mb-12 flex flex-wrap justify-center gap-4">
           {SOCIALS.map((item, index) => {
             const Icon = item.icon;
             return (
@@ -44,7 +42,7 @@ export default function ConnectSection() {
                 href={item.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 px-7 py-4 border border-[var(--border)] rounded-full no-underline text-[var(--text-secondary)] transition-all duration-[.4s] hover:bg-[var(--cherry-red)] hover:text-[var(--text-inverse)] hover:border-[var(--cherry-red)] hover:-translate-y-[3px] hover:shadow-[0_10px_30px_rgba(158,27,45,.25)] reveal-item"
+                className="font-ui reveal-item inline-flex items-center gap-3 rounded-full border border-[#FFFFF0] bg-[#FFFFF0] px-7 py-4 no-underline text-[#452215] transition-all duration-[.4s] hover:border-[#DF6C4F] hover:bg-[#DF6C4F] hover:text-[#FFFFF0] hover:-translate-y-0.75"
                 data-reveal-delay={`${index * 0.06}`}
               >
                 <Icon />
@@ -54,10 +52,9 @@ export default function ConnectSection() {
           })}
         </div>
 
-        {/* Email CTA */}
         <a
           href="mailto:singhharshit2410@gmail.com"
-          className="inline-flex items-center gap-4 px-10 py-5 rounded-full no-underline bg-[rgba(158,27,45,.08)] text-[var(--cherry-red)] text-[1.05rem] font-medium transition-all duration-[.4s] hover:bg-[var(--cherry-red)] hover:text-[var(--text-inverse)] hover:translate-x-2 hover:shadow-[0_15px_40px_rgba(158,27,45,.3)] reveal-item"
+          className="font-ui reveal-item inline-flex items-center gap-4 rounded-full bg-[#452215] px-10 py-5 text-[1.05rem] text-[#FFFFF0] no-underline transition-all duration-[.4s] hover:bg-[#FF9398] hover:text-[#452215] hover:translate-x-2"
         >
           <Mail size={20} />
           <span>singhharshit2410@gmail.com</span>

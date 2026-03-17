@@ -16,20 +16,20 @@ const IMAGE_EXTENSIONS = new Set(['jpg', 'jpeg', 'png', 'webp']);
    METADATA RESOLUTION
    ───────────────────────────────────────────── */
 const CERTIFICATE_ISSUER_RULES = [
-  { pattern: /coursera/i, issuer: 'Coursera', color: '#0056D2' },
-  { pattern: /udemy/i, issuer: 'Udemy', color: '#A435F0' },
-  { pattern: /google|gen ai google/i, issuer: 'Google', color: '#4285F4' },
-  { pattern: /adobe/i, issuer: 'Adobe', color: '#FF0000' },
-  { pattern: /iit/i, issuer: 'IIT Ropar', color: '#9E1B2D' },
-  { pattern: /neo/i, issuer: 'Neo Colab', color: '#6B7A3D' },
-  { pattern: /lpu/i, issuer: 'LPU', color: '#7A1524' },
+  { pattern: /coursera/i, issuer: 'Coursera', color: '#452215' },
+  { pattern: /udemy/i, issuer: 'Udemy', color: '#DF6C4F' },
+  { pattern: /google|gen ai google/i, issuer: 'Google', color: '#FF9398' },
+  { pattern: /adobe/i, issuer: 'Adobe', color: '#DF6C4F' },
+  { pattern: /iit/i, issuer: 'IIT Ropar', color: '#452215' },
+  { pattern: /neo/i, issuer: 'Neo Colab', color: '#FF9398' },
+  { pattern: /lpu/i, issuer: 'LPU', color: '#452215' },
 ];
 
 const resolveIssuerMetadata = (name) => {
   for (const rule of CERTIFICATE_ISSUER_RULES) {
     if (rule.pattern.test(name)) return { issuer: rule.issuer, color: rule.color };
   }
-  return { issuer: 'Certificate', color: '#5D0D18' };
+  return { issuer: 'Certificate', color: '#452215' };
 };
 
 const normalizeTitle = (rawName) => {
@@ -91,18 +91,18 @@ const CertificateModal = memo(function CertificateModal({ cert, onClose }) {
 
   return (
     <motion.div
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-8"
+      className="fixed inset-0 z-9999 flex items-center justify-center p-4 sm:p-8"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.22 }}
       onClick={onClose}
     >
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
+      <div className="absolute inset-0 bg-[#452215]/70 backdrop-blur-sm" />
 
       <motion.div
         className="relative z-10 w-full max-w-3xl rounded-2xl overflow-hidden shadow-2xl"
-        style={{ background: '#FFFBEB', maxHeight: '90vh' }}
+        style={{ background: '#FFFFF0', maxHeight: '90vh' }}
         initial={{ opacity: 0, scale: 0.88, y: 30 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.92, y: 16 }}
@@ -110,19 +110,19 @@ const CertificateModal = memo(function CertificateModal({ cert, onClose }) {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal header */}
-        <div className="flex items-start justify-between p-5 border-b" style={{ borderColor: '#9FB2AC33' }}>
+        <div className="flex items-start justify-between border-b p-5" style={{ borderColor: '#FFF8EE' }}>
           <div>
-            <p className="text-xs font-bold tracking-widest uppercase mb-1" style={{ color: '#9FB2AC' }}>
+            <p className="font-mono-ui mb-1 text-xs uppercase tracking-widest" style={{ color: '#DF6C4F' }}>
               {cert.issuer}
             </p>
-            <h3 className="text-lg font-bold font-fliege line-clamp-2" style={{ color: '#5D0D18' }}>
+            <h3 className="font-ui line-clamp-2 text-lg" style={{ color: '#452215' }}>
               {cert.title}
             </h3>
           </div>
           <button
             onClick={onClose}
-            className="ml-4 flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center border transition-colors hover:bg-[#5D0D18] hover:text-white"
-            style={{ borderColor: '#9FB2AC44', color: '#5D0D18' }}
+            className="ml-4 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border transition-colors hover:bg-[#DF6C4F] hover:text-[#FFFFF0]"
+            style={{ borderColor: '#FFF8EE', color: '#452215' }}
             aria-label="Close preview"
           >
             <X size={18} />
@@ -130,7 +130,7 @@ const CertificateModal = memo(function CertificateModal({ cert, onClose }) {
         </div>
 
         {/* Preview */}
-        <div className="overflow-auto" style={{ maxHeight: 'calc(90vh - 140px)' }}>
+        <div className="relative overflow-auto" style={{ maxHeight: 'calc(90vh - 140px)' }}>
           {cert.previewType === 'image' ? (
             <img
               src={cert.previewUrl}
@@ -143,28 +143,28 @@ const CertificateModal = memo(function CertificateModal({ cert, onClose }) {
             <iframe
               src={cert.previewEmbedUrl}
               title={`${cert.title} full preview`}
-              className="w-full border-0 bg-white"
+              className="w-full border-0 bg-[#FFFFF0]"
               style={{ height: '65vh' }}
             />
           )}
         </div>
 
         {/* Modal footer */}
-        <div className="flex items-center gap-3 p-4 border-t" style={{ borderColor: '#9FB2AC33' }}>
+        <div className="flex items-center gap-3 border-t p-4" style={{ borderColor: '#FFF8EE' }}>
           <a
             href={cert.viewUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium"
-            style={{ background: '#5D0D1812', color: '#5D0D18', border: '1.5px solid #5D0D1830' }}
+            style={{ background: '#FFFFF0', color: '#452215', border: '1.5px solid #FFF8EE' }}
           >
             <ExternalLink size={14} /> Open
           </a>
           <a
             href={cert.downloadUrl}
             download
-            className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium text-[#FFFBEB]"
-            style={{ background: '#5D0D18' }}
+            className="font-ui flex items-center gap-2 rounded-full px-4 py-2 text-sm text-[#FFFFF0]"
+            style={{ background: '#DF6C4F' }}
           >
             <Download size={14} /> Download
           </a>
@@ -196,12 +196,12 @@ const CertificateCard = memo(function CertificateCard({ cert, index, onPreview }
       onClick={() => onPreview(cert)}
     >
       <div
-        className="relative bg-white rounded-2xl overflow-hidden border"
+        className="relative overflow-hidden rounded-2xl border bg-[#FFFFF0]"
         style={{
-          borderColor: hovered ? `${cert.color}55` : '#9FB2AC22',
+          borderColor: hovered ? `${cert.color}55` : '#FFF8EE',
           boxShadow: hovered
-            ? `0 20px 48px -8px ${cert.color}28, 0 6px 20px -4px rgba(93,13,24,0.08)`
-            : '0 4px 20px rgba(0,0,0,0.06)',
+            ? `0 20px 48px -8px ${cert.color}18, 0 6px 20px -4px rgba(153,0,0,0.06)`
+            : '0 4px 20px rgba(153,0,0,0.04)',
           transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
         }}
       >
@@ -228,25 +228,25 @@ const CertificateCard = memo(function CertificateCard({ cert, index, onPreview }
               <iframe
                 src={cert.previewEmbedUrl}
                 title={`${cert.title} preview`}
-                className="w-full h-full border-0 pointer-events-none bg-white"
+                className="pointer-events-none h-full w-full border-0 bg-[#FFFFF0]"
                 loading="lazy"
               />
             )}
           </div>
 
-          {/* Gradient overlay */}
+          {/* Solid overlay */}
           <div
             className="absolute inset-0"
             style={{
-              background: `linear-gradient(to top, ${cert.color}cc 0%, ${cert.color}22 50%, transparent 100%)`,
-              opacity: hovered ? 0.85 : 0.55,
+              background: cert.color,
+              opacity: hovered ? 0.18 : 0.1,
               transition: 'opacity 0.3s ease',
             }}
           />
 
           {/* Platform badge */}
           <div
-            className="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[11px] font-bold flex items-center gap-1 text-white"
+            className="font-ui absolute left-3 top-3 flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] text-[#FFFFF0]"
             style={{ background: cert.color }}
           >
             <Building2 size={10} />
@@ -254,8 +254,8 @@ const CertificateCard = memo(function CertificateCard({ cert, index, onPreview }
           </div>
 
           {/* Verified badge */}
-          <div className="absolute top-3 right-3 w-9 h-9 rounded-full bg-[#FFFBEB] flex items-center justify-center shadow">
-            <BadgeCheck size={18} className="text-[#6B7A3D]" />
+          <div className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-[#FFFFF0] shadow">
+            <BadgeCheck size={18} className="text-[#FF9398]" />
           </div>
 
           {/* Zoom hint on hover */}
@@ -265,9 +265,9 @@ const CertificateCard = memo(function CertificateCard({ cert, index, onPreview }
           >
             <div
               className="w-12 h-12 rounded-full flex items-center justify-center"
-              style={{ background: 'rgba(255,251,235,0.88)', backdropFilter: 'blur(4px)' }}
+              style={{ background: 'rgba(244,242,241,0.92)', backdropFilter: 'blur(4px)' }}
             >
-              <ZoomIn size={22} style={{ color: '#5D0D18' }} />
+              <ZoomIn size={22} style={{ color: '#452215' }} />
             </div>
           </div>
         </div>
@@ -277,7 +277,7 @@ const CertificateCard = memo(function CertificateCard({ cert, index, onPreview }
           <div
             className="h-px mb-4 rounded"
             style={{
-              background: `linear-gradient(90deg, transparent, ${cert.color}44, transparent)`,
+              background: cert.color,
               transform: hovered ? 'scaleX(1)' : 'scaleX(0.3)',
               transition: 'transform 0.55s ease',
               transformOrigin: 'left',
@@ -285,20 +285,20 @@ const CertificateCard = memo(function CertificateCard({ cert, index, onPreview }
           />
 
           <h3
-            className="text-[15px] font-bold mb-2.5 font-fliege line-clamp-2"
-            style={{ color: hovered ? '#5D0D18' : '#1a1a1a', transition: 'color 0.2s ease' }}
+            className="font-ui mb-2.5 line-clamp-2 text-[15px]"
+            style={{ color: hovered ? '#452215' : '#452215', transition: 'color 0.2s ease' }}
           >
             {cert.title}
           </h3>
 
           <div className="space-y-1.5">
-            <div className="flex items-center gap-1.5 text-xs" style={{ color: 'rgba(26,26,26,0.55)' }}>
-              <Calendar size={12} style={{ color: '#9FB2AC' }} />
+            <div className="font-caption flex items-center gap-1.5 text-xs" style={{ color: 'rgba(51,51,51,0.72)' }}>
+              <Calendar size={12} style={{ color: '#DF6C4F' }} />
               {cert.date}
             </div>
             <div
-              className="flex items-center gap-1.5 text-[11px] font-mono rounded px-2 py-0.5 w-fit"
-              style={{ background: '#9FB2AC18', color: '#9FB2AC' }}
+              className="font-mono-ui flex w-fit items-center gap-1.5 rounded px-2 py-0.5 text-[11px]"
+              style={{ background: '#FFF8EE', color: '#DF6C4F' }}
             >
               <Hash size={10} />
               {cert.certificateId}
@@ -309,14 +309,14 @@ const CertificateCard = memo(function CertificateCard({ cert, index, onPreview }
           <div
             className="flex items-center gap-2 mt-3 pt-3 border-t"
             style={{
-              borderColor: '#9FB2AC22',
+              borderColor: '#FFF8EE',
               opacity: hovered ? 1 : 0.4,
               transition: 'opacity 0.25s ease',
             }}
           >
             <button
-              className="flex items-center gap-1 text-[11px] font-medium px-2.5 py-1 rounded-full"
-              style={{ background: '#5D0D1810', color: '#5D0D18' }}
+              className="font-ui flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px]"
+              style={{ background: '#FFF8EE', color: '#452215' }}
               onClick={(e) => { e.stopPropagation(); onPreview(cert); }}
             >
               <Eye size={11} /> Preview
@@ -324,8 +324,8 @@ const CertificateCard = memo(function CertificateCard({ cert, index, onPreview }
             <a
               href={cert.downloadUrl}
               download
-              className="flex items-center gap-1 text-[11px] font-medium px-2.5 py-1 rounded-full"
-              style={{ background: '#9FB2AC18', color: '#9FB2AC' }}
+              className="font-ui flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px]"
+              style={{ background: '#FFFFF0', color: '#DF6C4F' }}
               onClick={(e) => e.stopPropagation()}
             >
               <Download size={11} /> Save
@@ -335,8 +335,8 @@ const CertificateCard = memo(function CertificateCard({ cert, index, onPreview }
                 href={cert.verifyUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1 text-[11px] font-medium px-2.5 py-1 rounded-full"
-                style={{ background: '#6B7A3D18', color: '#6B7A3D' }}
+                className="font-ui flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px]"
+                style={{ background: '#FFFFF0', color: '#FF9398' }}
                 onClick={(e) => e.stopPropagation()}
               >
                 <ExternalLink size={11} /> Verify
@@ -355,23 +355,23 @@ const CertificateCard = memo(function CertificateCard({ cert, index, onPreview }
 const StatCard = memo(function StatCard({ value, label, icon: Icon, delay }) {
   return (
     <motion.div
-      className="flex items-center gap-4 p-4 rounded-xl border"
-      style={{ background: 'rgba(255,255,255,0.5)', borderColor: '#5D0D1815' }}
+      className="flex items-center gap-4 rounded-xl border p-4"
+      style={{ background: 'rgba(244,242,241,0.8)', borderColor: '#FFF8EE' }}
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay, duration: 0.5 }}
-      whileHover={{ scale: 1.02, backgroundColor: 'rgba(255,255,255,0.85)' }}
+      whileHover={{ scale: 1.02, backgroundColor: 'rgba(244,242,241,1)' }}
     >
       <div
-        className="w-12 h-12 rounded-full flex items-center justify-center"
-        style={{ background: '#5D0D1812' }}
+        className="flex h-12 w-12 items-center justify-center rounded-full"
+        style={{ background: '#FFF8EE' }}
       >
-        <Icon size={22} style={{ color: '#5D0D18' }} />
+        <Icon size={22} style={{ color: '#452215' }} />
       </div>
       <div>
-        <div className="text-2xl font-bold font-fliege" style={{ color: '#5D0D18' }}>{value}</div>
-        <div className="text-sm" style={{ color: 'rgba(26,26,26,0.55)' }}>{label}</div>
+        <div className="font-fliege text-2xl" style={{ color: '#452215' }}>{value}</div>
+        <div className="font-caption text-sm" style={{ color: 'rgba(51,51,51,0.72)' }}>{label}</div>
       </div>
     </motion.div>
   );
@@ -400,12 +400,12 @@ export default function Certificates() {
     <section
       id="certificates-section"
       className="relative min-h-screen w-full py-20 lg:py-32 overflow-hidden"
-      style={{ background: '#FFFBEB' }}
+      style={{ background: '#FFFFF0' }}
     >
       {/* Background blobs */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        <div className="absolute top-20 left-10 w-72 h-72 rounded-full blur-3xl" style={{ background: '#9FB2AC18' }} />
-        <div className="absolute bottom-20 right-10 w-96 h-96 rounded-full blur-3xl" style={{ background: '#5D0D180D' }} />
+        <div className="absolute top-20 left-10 h-72 w-72 rounded-full blur-3xl" style={{ background: '#FFF8EE' }} />
+        <div className="absolute bottom-20 right-10 h-96 w-96 rounded-full blur-3xl" style={{ background: '#FF939820' }} />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
@@ -419,32 +419,32 @@ export default function Certificates() {
             transition={{ duration: 0.8 }}
           >
             <motion.span
-              className="inline-flex items-center gap-2 text-sm font-medium tracking-widest uppercase mb-4"
-              style={{ color: '#9FB2AC' }}
+              className="font-ui mb-4 inline-flex items-center gap-2 text-sm uppercase tracking-[0.28em]"
+              style={{ color: '#DF6C4F' }}
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
             >
-              <span className="w-8 h-px bg-[#9FB2AC]" />
+              <span className="h-px w-8 bg-[#DF6C4F]" />
               Credentials
             </motion.span>
 
             <motion.h2
-              className="text-4xl sm:text-5xl lg:text-6xl font-bold font-fliege"
-              style={{ color: '#1a1a1a' }}
+              className="font-fliege text-4xl sm:text-5xl lg:text-6xl"
+              style={{ color: '#452215' }}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.1 }}
             >
               Verified{' '}
-              <span className="italic" style={{ color: '#5D0D18' }}>Certificates</span>
+              <span className="italic" style={{ color: '#DF6C4F' }}>Certificates</span>
             </motion.h2>
 
             <motion.p
               className="mt-4 text-lg max-w-xl"
-              style={{ color: 'rgba(26,26,26,0.58)' }}
+              style={{ color: 'rgba(51,51,51,0.8)' }}
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
@@ -485,12 +485,12 @@ export default function Certificates() {
             <motion.button
               type="button"
               onClick={toggleShowAll}
-              className="inline-flex items-center gap-2 rounded-full border-2 px-7 py-3 text-sm font-semibold transition-all duration-300 hover:text-[#FFFBEB]"
+              className="font-ui inline-flex items-center gap-2 rounded-full border-2 px-7 py-3 text-sm transition-all duration-300 hover:text-[#FFFFF0]"
               style={{
-                borderColor: '#5D0D18',
-                color: '#5D0D18',
+                borderColor: '#452215',
+                color: '#452215',
               }}
-              whileHover={{ scale: 1.04, y: -1, backgroundColor: '#5D0D18', color: '#FFFBEB' }}
+              whileHover={{ scale: 1.04, y: -1, backgroundColor: '#DF6C4F', color: '#FFFFF0' }}
               whileTap={{ scale: 0.97 }}
               aria-expanded={showAll}
             >
@@ -521,8 +521,8 @@ export default function Certificates() {
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-3 px-8 py-4 border-2 rounded-full font-medium transition-all"
-            style={{ borderColor: '#5D0D18', color: '#5D0D18' }}
-            whileHover={{ scale: 1.05, backgroundColor: '#5D0D18', color: '#FFFBEB' }}
+            style={{ borderColor: '#452215', color: '#452215' }}
+            whileHover={{ scale: 1.05, backgroundColor: '#DF6C4F', color: '#FFFFF0' }}
             whileTap={{ scale: 0.95 }}
           >
             <BadgeCheck size={20} />

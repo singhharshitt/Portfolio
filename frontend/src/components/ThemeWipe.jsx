@@ -1,30 +1,25 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// Warm Parchment palette
 const THEME = {
-  olive: '#6E6B2F',
-  cream: '#F5F0E8',
-  terracotta: '#C2743A',
-  gold: '#C9A66B',
-  sage: '#B7B77A',
+  strong: '#452215',
+  light: '#FFFFF0',
+  accent: '#DF6C4F',
+  highlight: '#FF9398',
 };
 
-// Cinematic easing
 const EASE = {
   smooth: [0.16, 1, 0.3, 1],
-  dramatic: [0.87, 0, 0.13, 1],
 };
 
 export default function ThemeWipe({ sectionIds = [], variant = 'center' }) {
   const [isWiping, setIsWiping] = useState(false);
-  const [wipeColor, setWipeColor] = useState(THEME.olive);
+  const [wipeColor, setWipeColor] = useState(THEME.strong);
   const [wipeDirection, setWipeDirection] = useState('down');
   const prevSection = useRef(null);
   const wipeQueue = useRef([]);
   const isProcessing = useRef(false);
 
-  // Process wipe queue to prevent overlapping animations
   const processQueue = useCallback(() => {
     if (isProcessing.current || wipeQueue.current.length === 0) return;
 
@@ -44,7 +39,6 @@ export default function ThemeWipe({ sectionIds = [], variant = 'center' }) {
     }, 800);
   }, []);
 
-  // Queue a new wipe
   const queueWipe = useCallback((color, direction) => {
     wipeQueue.current.push({ color, direction });
     processQueue();
@@ -62,16 +56,13 @@ export default function ThemeWipe({ sectionIds = [], variant = 'center' }) {
       const observer = new IntersectionObserver(
         ([entry]) => {
           if (entry.isIntersecting && prevSection.current !== sectionId.id) {
-            const prevIndex = sectionIds.findIndex(s => s.id === prevSection.current);
+            const prevIndex = sectionIds.findIndex((s) => s.id === prevSection.current);
             const direction = index > prevIndex ? 'down' : 'up';
 
-            // Only wipe when transitioning between different themed sections
             if (prevSection.current !== null) {
-              const prevTheme = sectionIds.find(s => s.id === prevSection.current)?.theme;
+              const prevTheme = sectionIds.find((s) => s.id === prevSection.current)?.theme;
               if (prevTheme !== sectionId.theme) {
-                const color = sectionId.theme === 'dark'
-                  ? THEME.olive
-                  : THEME.cream;
+                const color = sectionId.theme === 'dark' ? THEME.strong : THEME.light;
                 queueWipe(color, direction);
               }
             }
@@ -85,47 +76,16 @@ export default function ThemeWipe({ sectionIds = [], variant = 'center' }) {
       observers.push(observer);
     });
 
-    return () => observers.forEach(o => o.disconnect());
+    return () => observers.forEach((o) => o.disconnect());
   }, [sectionIds, queueWipe]);
 
-  // Variant-based animation configurations
   const variants = {
-    center: {
-      initial: { scaleY: 0 },
-      animate: { scaleY: 1 },
-      exit: { scaleY: 0 },
-      style: { transformOrigin: 'center' },
-    },
-    top: {
-      initial: { scaleY: 0 },
-      animate: { scaleY: 1 },
-      exit: { scaleY: 0 },
-      style: { transformOrigin: 'top' },
-    },
-    bottom: {
-      initial: { scaleY: 0 },
-      animate: { scaleY: 1 },
-      exit: { scaleY: 0 },
-      style: { transformOrigin: 'bottom' },
-    },
-    left: {
-      initial: { scaleX: 0 },
-      animate: { scaleX: 1 },
-      exit: { scaleX: 0 },
-      style: { transformOrigin: 'left' },
-    },
-    right: {
-      initial: { scaleX: 0 },
-      animate: { scaleX: 1 },
-      exit: { scaleX: 0 },
-      style: { transformOrigin: 'right' },
-    },
-    circle: {
-      initial: { scale: 0, borderRadius: '50%' },
-      animate: { scale: 3, borderRadius: '0%' },
-      exit: { scale: 0, borderRadius: '50%' },
-      style: { transformOrigin: 'center' },
-    },
+    center: { initial: { scaleY: 0 }, animate: { scaleY: 1 }, exit: { scaleY: 0 }, style: { transformOrigin: 'center' } },
+    top: { initial: { scaleY: 0 }, animate: { scaleY: 1 }, exit: { scaleY: 0 }, style: { transformOrigin: 'top' } },
+    bottom: { initial: { scaleY: 0 }, animate: { scaleY: 1 }, exit: { scaleY: 0 }, style: { transformOrigin: 'bottom' } },
+    left: { initial: { scaleX: 0 }, animate: { scaleX: 1 }, exit: { scaleX: 0 }, style: { transformOrigin: 'left' } },
+    right: { initial: { scaleX: 0 }, animate: { scaleX: 1 }, exit: { scaleX: 0 }, style: { transformOrigin: 'right' } },
+    circle: { initial: { scale: 0, borderRadius: '50%' }, animate: { scale: 3, borderRadius: '0%' }, exit: { scale: 0, borderRadius: '50%' }, style: { transformOrigin: 'center' } },
   };
 
   const currentVariant = variants[variant] || variants.center;
@@ -134,30 +94,24 @@ export default function ThemeWipe({ sectionIds = [], variant = 'center' }) {
     <AnimatePresence mode="wait">
       {isWiping && (
         <>
-          {/* Primary wipe layer */}
           <motion.div
             key="primary-wipe"
-            className="fixed inset-0 z-9999 pointer-events-none"
-            style={{
-              backgroundColor: wipeColor,
-              ...currentVariant.style,
-            }}
+            className="pointer-events-none fixed inset-0 z-9999"
+            style={{ backgroundColor: wipeColor, ...currentVariant.style }}
             initial={currentVariant.initial}
             animate={currentVariant.animate}
             exit={currentVariant.exit}
             transition={{ duration: 0.6, ease: EASE.smooth }}
           />
 
-          {/* Secondary accent line */}
           <motion.div
             key="accent-line"
-            className="fixed z-9998 pointer-events-none"
+            className="pointer-events-none fixed z-9998"
             style={{
-              backgroundColor: THEME.gold,
+              backgroundColor: THEME.highlight,
               ...(variant === 'left' || variant === 'right'
                 ? { top: 0, bottom: 0, width: '4px', left: variant === 'left' ? 0 : 'auto', right: variant === 'right' ? 0 : 'auto' }
-                : { left: 0, right: 0, height: '4px', top: wipeDirection === 'down' ? 0 : 'auto', bottom: wipeDirection === 'up' ? 0 : 'auto' }
-              ),
+                : { left: 0, right: 0, height: '4px', top: wipeDirection === 'down' ? 0 : 'auto', bottom: wipeDirection === 'up' ? 0 : 'auto' }),
             }}
             initial={{ scale: variant === 'left' || variant === 'right' ? 1 : 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -165,17 +119,12 @@ export default function ThemeWipe({ sectionIds = [], variant = 'center' }) {
             transition={{ duration: 0.4, delay: 0.1, ease: EASE.smooth }}
           />
 
-          {/* Particle burst effect */}
-          <div className="fixed inset-0 z-9997 pointer-events-none overflow-hidden">
+          <div className="pointer-events-none fixed inset-0 z-9997 overflow-hidden">
             {Array.from({ length: 8 }).map((_, i) => (
               <motion.div
                 key={`particle-${i}`}
-                className="absolute w-2 h-2 rounded-full"
-                style={{
-                  backgroundColor: THEME.sage,
-                  left: '50%',
-                  top: '50%',
-                }}
+                className="absolute h-2 w-2 rounded-full"
+                style={{ backgroundColor: THEME.highlight, left: '50%', top: '50%' }}
                 initial={{ scale: 0, x: 0, y: 0, opacity: 1 }}
                 animate={{
                   scale: [0, 1, 0],

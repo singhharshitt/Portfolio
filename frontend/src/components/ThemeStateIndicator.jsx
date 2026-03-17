@@ -1,21 +1,18 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// Warm Parchment palette
 const THEME = {
-  olive: '#6E6B2F',
-  cream: '#F5F0E8',
-  gold: '#C9A66B',
-  terracotta: '#C2743A',
+  strong: '#452215',
+  light: '#FFFFF0',
+  accent: '#DF6C4F',
+  highlight: '#FF9398',
 };
 
-// Cinematic easing
 const EASE = [0.16, 1, 0.3, 1];
 
 export default function ThemeStateIndicator({ isDarkTheme = false }) {
   const [isAnimating, setIsAnimating] = useState(false);
 
-  // Trigger animation on theme change
   useEffect(() => {
     setIsAnimating(true);
     const timer = setTimeout(() => setIsAnimating(false), 600);
@@ -24,10 +21,10 @@ export default function ThemeStateIndicator({ isDarkTheme = false }) {
 
   return (
     <motion.div
-      className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-2 rounded-full backdrop-blur-md border"
+      className="fixed bottom-6 right-6 z-50 flex items-center gap-3 rounded-full border px-4 py-2 backdrop-blur-md"
       style={{
-        backgroundColor: isDarkTheme ? 'rgba(110, 107, 47, 0.8)' : 'rgba(245, 240, 232, 0.8)',
-        borderColor: isDarkTheme ? 'rgba(201, 166, 107, 0.3)' : 'rgba(194, 116, 58, 0.2)',
+        backgroundColor: isDarkTheme ? 'rgba(153,0,0,0.84)' : 'rgba(244,242,241,0.88)',
+        borderColor: isDarkTheme ? 'rgba(250,138,60,0.35)' : 'rgba(219,64,12,0.18)',
       }}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -35,51 +32,31 @@ export default function ThemeStateIndicator({ isDarkTheme = false }) {
       aria-live="polite"
       aria-label={isDarkTheme ? 'Dark theme active' : 'Light theme active'}
     >
-      {/* Animated dot */}
       <motion.span
-        className="relative w-3 h-3 rounded-full"
-        style={{
-          backgroundColor: isDarkTheme ? THEME.gold : THEME.gold,
-        }}
+        className="relative h-3 w-3 rounded-full"
+        style={{ backgroundColor: THEME.highlight }}
         animate={{
           scale: isAnimating ? [1, 1.5, 1] : 1,
           boxShadow: isAnimating
-            ? [
-              `0 0 0 0 ${THEME.gold}00`,
-              `0 0 0 8px ${THEME.gold}40`,
-              `0 0 0 0 ${THEME.gold}00`,
-            ]
-            : `0 0 0 0 ${THEME.gold}00`,
+            ? [`0 0 0 0 ${THEME.highlight}00`, `0 0 0 8px ${THEME.highlight}40`, `0 0 0 0 ${THEME.highlight}00`]
+            : `0 0 0 0 ${THEME.highlight}00`,
         }}
         transition={{ duration: 0.6, ease: EASE }}
       >
-        {/* Pulse ring */}
         <motion.span
           className="absolute inset-0 rounded-full"
-          style={{
-            backgroundColor: isDarkTheme ? THEME.gold : THEME.gold,
-          }}
-          animate={{
-            scale: [1, 2],
-            opacity: [0.5, 0],
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: "easeOut",
-          }}
+          style={{ backgroundColor: THEME.highlight }}
+          animate={{ scale: [1, 2], opacity: [0.5, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: 'easeOut' }}
         />
       </motion.span>
 
-      {/* Label with slide animation */}
-      <div className="relative overflow-hidden h-5">
+      <div className="relative h-5 overflow-hidden">
         <AnimatePresence mode="wait">
           <motion.span
             key={isDarkTheme ? 'dark' : 'light'}
-            className="block text-xs font-mono font-bold tracking-widest"
-            style={{
-              color: isDarkTheme ? THEME.cream : THEME.olive,
-            }}
+            className="font-mono-ui block text-xs tracking-widest"
+            style={{ color: isDarkTheme ? THEME.light : THEME.strong }}
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -20, opacity: 0 }}
@@ -90,16 +67,13 @@ export default function ThemeStateIndicator({ isDarkTheme = false }) {
         </AnimatePresence>
       </div>
 
-      {/* Decorative line */}
       <motion.div
         className="absolute -left-12 top-1/2 h-px w-10 origin-right"
-        style={{
-          backgroundColor: isDarkTheme ? THEME.gold : THEME.gold,
-        }}
+        style={{ backgroundColor: THEME.highlight }}
         initial={{ scaleX: 0 }}
         animate={{ scaleX: 1 }}
         transition={{ duration: 0.8, delay: 1.2, ease: EASE }}
       />
-    </motion.div >
+    </motion.div>
   );
 }
