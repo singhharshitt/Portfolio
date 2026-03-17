@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring } from '../utils/motion';
 
 /**
  * ScrollProgress — Cinematic reading progress indicator

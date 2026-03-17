@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { AnimatePresence, motion, useScroll, useSpring, useTransform } from '../utils/motion';
+import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
+import { AnimatePresence, motion, useInView, useScroll, useTransform } from '../utils/motion';
 import { ArrowUpRight, ChevronLeft, ChevronRight, Eye, FileText, Github, X } from 'lucide-react';
 
 const PROJECTS = [
@@ -61,7 +61,12 @@ const PROJECTS = [
   },
 ];
 
-const ActionButton = ({ href, icon: Icon, label, variant = 'primary', onClick }) => {
+const INITIAL_VISIBLE = 4;
+
+/* ─────────────────────────────────────────────
+   ACTION BUTTON
+   ───────────────────────────────────────────── */
+const ActionButton = memo(function ActionButton({ href, icon: Icon, label, variant = 'primary', onClick }) {
   const isExternal = href?.startsWith('http');
   const baseClass =
     'group relative inline-flex items-center justify-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium transition-all duration-300';
@@ -69,8 +74,8 @@ const ActionButton = ({ href, icon: Icon, label, variant = 'primary', onClick })
     variant === 'primary'
       ? 'border border-[#452215] bg-[#452215] text-[#FFFBEB] hover:bg-[#5D0D18]'
       : variant === 'secondary'
-      ? 'border border-[#8F5E41] bg-[#E8D7C8] text-[#452215] hover:bg-[#DDC8B4]'
-      : 'border border-[#452215]/35 bg-transparent text-[#452215] hover:border-[#452215] hover:bg-[#452215]/5';
+        ? 'border border-[#8F5E41] bg-[#E8D7C8] text-[#452215] hover:bg-[#DDC8B4]'
+        : 'border border-[#452215]/35 bg-transparent text-[#452215] hover:border-[#452215] hover:bg-[#452215]/5';
 
   if (onClick) {
     return (
@@ -100,32 +105,26 @@ const ActionButton = ({ href, icon: Icon, label, variant = 'primary', onClick })
       {label}
     </motion.a>
   );
-};
+});
 
-const ProjectCard = ({ project, index, onOpenPreview, onOpenCaseStudy }) => {
+/* ─────────────────────────────────────────────
+   PROJECT CARD
+   Per-card scroll hooks removed — replaced with
+   a lightweight useInView entrance animation.
+   This eliminates 21 MotionValues (~7× cards ×
+   3 springs) firing on every scroll frame.
+   ───────────────────────────────────────────── */
+const ProjectCard = memo(function ProjectCard({ project, index, onOpenPreview, onOpenCaseStudy }) {
   const cardRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: cardRef,
-    offset: ['start end', 'end start'],
-  });
-
-  const y = useTransform(scrollYProgress, [0, 1], [32, -32]);
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.98, 1, 0.98]);
-  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.85, 1], [0, 1, 1, 0.9]);
-
-  const smoothY = useSpring(y, { stiffness: 120, damping: 26, mass: 0.4 });
-  const smoothScale = useSpring(scale, { stiffness: 140, damping: 30, mass: 0.4 });
-  const smoothOpacity = useSpring(opacity, { stiffness: 120, damping: 24, mass: 0.4 });
+  const inView = useInView(cardRef, { once: true, margin: '-80px' });
 
   return (
     <motion.article
       ref={cardRef}
       className="relative"
-      style={{ y: smoothY, scale: smoothScale, opacity: smoothOpacity }}
       initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.55, delay: index * 0.08 }}
-      viewport={{ once: true, margin: '-80px' }}
     >
       <div className="h-full rounded-2xl border-2 border-[#452215] bg-[#FFF8EE] p-6 lg:p-7 shadow-[4px_4px_0_#8F5E41] transition-all duration-300 hover:shadow-[6px_6px_0_#8F5E41] hover:-translate-y-1">
         <div className="flex h-full flex-col gap-6">
@@ -159,9 +158,12 @@ const ProjectCard = ({ project, index, onOpenPreview, onOpenCaseStudy }) => {
       </div>
     </motion.article>
   );
-};
+});
 
-const LivePreviewOverlay = ({ project, onClose }) => {
+/* ─────────────────────────────────────────────
+   LIVE PREVIEW OVERLAY
+   ───────────────────────────────────────────── */
+const LivePreviewOverlay = memo(function LivePreviewOverlay({ project, onClose }) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isBlocked, setIsBlocked] = useState(false);
   const [frameKey, setFrameKey] = useState(0);
@@ -178,11 +180,11 @@ const LivePreviewOverlay = ({ project, onClose }) => {
     return () => window.clearTimeout(timeout);
   }, [isLoaded, isBlocked, frameKey]);
 
-  const retryPreview = () => {
+  const retryPreview = useCallback(() => {
     setIsLoaded(false);
     setIsBlocked(false);
     setFrameKey((current) => current + 1);
-  };
+  }, []);
 
   return (
     <motion.div
@@ -270,15 +272,18 @@ const LivePreviewOverlay = ({ project, onClose }) => {
       </motion.div>
     </motion.div>
   );
-};
+});
 
+/* ─────────────────────────────────────────────
+   CASE STUDY OVERLAY
+   ───────────────────────────────────────────── */
 const buildCaseStudy = (project) => ({
   challenge: `Create a production-ready experience for ${project.title} with clean interaction flow and stable deployment.`,
   approach: `Structured the interface into reusable sections, then paired deployment and source control for transparent delivery.`,
   outcome: `The project is publicly accessible via live URL with code available for review and iteration.`,
 });
 
-const CaseStudyOverlay = ({ project, onClose }) => {
+const CaseStudyOverlay = memo(function CaseStudyOverlay({ project, onClose }) {
   const caseStudy = buildCaseStudy(project);
 
   return (
@@ -360,12 +365,19 @@ const CaseStudyOverlay = ({ project, onClose }) => {
       </motion.aside>
     </motion.div>
   );
-};
+});
 
-const HorizontalScrollGallery = ({ onOpenPreview, onOpenCaseStudy }) => {
+/* ─────────────────────────────────────────────
+   HORIZONTAL SCROLL GALLERY (with Show More)
+   ───────────────────────────────────────────── */
+const HorizontalScrollGallery = memo(function HorizontalScrollGallery({ onOpenPreview, onOpenCaseStudy }) {
   const containerRef = useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
+  const [showAll, setShowAll] = useState(false);
+
+  const visibleProjects = showAll ? PROJECTS : PROJECTS.slice(0, INITIAL_VISIBLE);
+  const hasMore = PROJECTS.length > INITIAL_VISIBLE;
 
   const checkScroll = useCallback(() => {
     if (containerRef.current) {
@@ -391,60 +403,89 @@ const HorizontalScrollGallery = ({ onOpenPreview, onOpenCaseStudy }) => {
     return () => window.removeEventListener('resize', checkScroll);
   }, [checkScroll]);
 
+  // Re-check scroll state when visible projects change
+  useEffect(() => {
+    checkScroll();
+  }, [showAll, checkScroll]);
+
   return (
-    <div className="relative">
-      <div className="absolute -top-20 right-0 z-10 hidden gap-2 lg:flex">
-        <motion.button
-          onClick={() => scroll('left')}
-          aria-label="Scroll projects left"
-          className={`flex h-12 w-12 items-center justify-center rounded-full border-2 transition-all ${
-            canScrollLeft
-              ? 'border-[#5D0D18] text-[#5D0D18] hover:bg-[#5D0D18] hover:text-[#FFFBEB]'
-              : 'cursor-not-allowed border-[#5D0D18]/20 text-[#5D0D18]/20'
-          }`}
-          whileHover={canScrollLeft ? { scale: 1.1 } : {}}
-          whileTap={canScrollLeft ? { scale: 0.9 } : {}}
-          disabled={!canScrollLeft}
+    <div>
+      <div className="relative">
+        <div className="absolute -top-20 right-0 z-10 hidden gap-2 lg:flex">
+          <motion.button
+            onClick={() => scroll('left')}
+            aria-label="Scroll projects left"
+            className={`flex h-12 w-12 items-center justify-center rounded-full border-2 transition-all ${canScrollLeft
+                ? 'border-[#5D0D18] text-[#5D0D18] hover:bg-[#5D0D18] hover:text-[#FFFBEB]'
+                : 'cursor-not-allowed border-[#5D0D18]/20 text-[#5D0D18]/20'
+              }`}
+            whileHover={canScrollLeft ? { scale: 1.1 } : {}}
+            whileTap={canScrollLeft ? { scale: 0.9 } : {}}
+            disabled={!canScrollLeft}
+          >
+            <ChevronLeft size={24} />
+          </motion.button>
+          <motion.button
+            onClick={() => scroll('right')}
+            aria-label="Scroll projects right"
+            className={`flex h-12 w-12 items-center justify-center rounded-full border-2 transition-all ${canScrollRight
+                ? 'border-[#5D0D18] text-[#5D0D18] hover:bg-[#5D0D18] hover:text-[#FFFBEB]'
+                : 'cursor-not-allowed border-[#5D0D18]/20 text-[#5D0D18]/20'
+              }`}
+            whileHover={canScrollRight ? { scale: 1.1 } : {}}
+            whileTap={canScrollRight ? { scale: 0.9 } : {}}
+            disabled={!canScrollRight}
+          >
+            <ChevronRight size={24} />
+          </motion.button>
+        </div>
+
+        <div
+          ref={containerRef}
+          onScroll={checkScroll}
+          className="scrollbar-hide flex snap-x snap-mandatory gap-6 overflow-x-auto pb-8 lg:grid lg:grid-cols-2 lg:overflow-visible"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
-          <ChevronLeft size={24} />
-        </motion.button>
-        <motion.button
-          onClick={() => scroll('right')}
-          aria-label="Scroll projects right"
-          className={`flex h-12 w-12 items-center justify-center rounded-full border-2 transition-all ${
-            canScrollRight
-              ? 'border-[#5D0D18] text-[#5D0D18] hover:bg-[#5D0D18] hover:text-[#FFFBEB]'
-              : 'cursor-not-allowed border-[#5D0D18]/20 text-[#5D0D18]/20'
-          }`}
-          whileHover={canScrollRight ? { scale: 1.1 } : {}}
-          whileTap={canScrollRight ? { scale: 0.9 } : {}}
-          disabled={!canScrollRight}
-        >
-          <ChevronRight size={24} />
-        </motion.button>
+          {visibleProjects.map((project, index) => (
+            <div key={project.title} className="w-[85vw] shrink-0 snap-center sm:w-[60vw] lg:w-auto">
+              <ProjectCard
+                project={project}
+                index={index}
+                onOpenPreview={onOpenPreview}
+                onOpenCaseStudy={onOpenCaseStudy}
+              />
+            </div>
+          ))}
+        </div>
       </div>
 
-      <div
-        ref={containerRef}
-        onScroll={checkScroll}
-        className="scrollbar-hide flex snap-x snap-mandatory gap-6 overflow-x-auto pb-8 lg:grid lg:grid-cols-2 lg:overflow-visible"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-      >
-        {PROJECTS.map((project, index) => (
-          <div key={project.title} className="w-[85vw] shrink-0 snap-center sm:w-[60vw] lg:w-auto">
-            <ProjectCard
-              project={project}
-              index={index}
-              onOpenPreview={onOpenPreview}
-              onOpenCaseStudy={onOpenCaseStudy}
-            />
-          </div>
-        ))}
-      </div>
+      {/* Show More / Show Less */}
+      {hasMore && (
+        <motion.div
+          className="mt-10 flex justify-center"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.2 }}
+        >
+          <motion.button
+            type="button"
+            onClick={() => setShowAll((prev) => !prev)}
+            className="inline-flex items-center gap-2 rounded-full border-2 border-[#5D0D18] px-7 py-3 text-sm font-semibold text-[#5D0D18] transition-all duration-300 hover:bg-[#5D0D18] hover:text-[#FFFBEB]"
+            whileHover={{ scale: 1.04, y: -1 }}
+            whileTap={{ scale: 0.97 }}
+            aria-expanded={showAll}
+          >
+            {showAll ? 'Show Less' : `View More Projects (${PROJECTS.length - INITIAL_VISIBLE} more)`}
+          </motion.button>
+        </motion.div>
+      )}
     </div>
   );
-};
+});
 
+/* ─────────────────────────────────────────────
+   MAIN EXPORT
+   ───────────────────────────────────────────── */
 export default function ProjectsSection() {
   const headerRef = useRef(null);
   const [activePreviewProject, setActivePreviewProject] = useState(null);
@@ -596,12 +637,6 @@ export default function ProjectsSection() {
           />
         ) : null}
       </AnimatePresence>
-
-      <style>{`
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-      `}</style>
     </section>
   );
 }

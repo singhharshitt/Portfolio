@@ -132,20 +132,9 @@ const EDGES = Object.freeze([
    CONSTELLATION SVG — data packet + connection lines
    ========================================================= */
 const ConstellationSVG = memo(function ConstellationSVG({ size, chainPositions }) {
-    const [packetPhase, setPacketPhase] = useState(0);
+    // Packet circle refs — keyed by "edgeIndex-packetIndex"
+    const packetRefs = useRef({});
     const rafRef = useRef(null);
-
-    useEffect(() => {
-        let start = null;
-        const duration = 8000;
-        const tick = (ts) => {
-            if (!start) start = ts;
-            setPacketPhase(((ts - start) % duration) / duration);
-            rafRef.current = requestAnimationFrame(tick);
-        };
-        rafRef.current = requestAnimationFrame(tick);
-        return () => cancelAnimationFrame(rafRef.current);
-    }, []);
 
     const edges = useMemo(() => {
         return EDGES.map(([fromId, toId]) => {
@@ -163,6 +152,33 @@ const ConstellationSVG = memo(function ConstellationSVG({ size, chainPositions }
     const cx = size / 2;
     const cy = size / 2;
     const PACKET_OFFSETS = [0, 0.33, 0.66];
+    const DURATION = 8000;
+
+    // Animate packet positions directly on DOM nodes — zero React re-renders
+    useEffect(() => {
+        let start = null;
+        const tick = (ts) => {
+            if (!start) start = ts;
+            const phase = ((ts - start) % DURATION) / DURATION;
+
+            edges.forEach((e, ei) => {
+                PACKET_OFFSETS.forEach((offset, pi) => {
+                    const t = (phase + offset) % 1;
+                    const px = e.from.x + cx + (e.to.x - e.from.x) * t;
+                    const py = e.from.y + cy + (e.to.y - e.from.y) * t;
+                    const el = packetRefs.current[`${ei}-${pi}`];
+                    if (el) {
+                        el.setAttribute('cx', px);
+                        el.setAttribute('cy', py);
+                    }
+                });
+            });
+
+            rafRef.current = requestAnimationFrame(tick);
+        };
+        rafRef.current = requestAnimationFrame(tick);
+        return () => cancelAnimationFrame(rafRef.current);
+    }, [edges, cx, cy]);
 
     return (
         <svg
@@ -205,27 +221,25 @@ const ConstellationSVG = memo(function ConstellationSVG({ size, chainPositions }
                 />
             ))}
 
-            {/* Data packets — 3 per edge with offsets */}
-            {edges.map((e) =>
-                PACKET_OFFSETS.map((offset, pi) => {
-                    const t = (packetPhase + offset) % 1;
-                    const px = e.from.x + cx + (e.to.x - e.from.x) * t;
-                    const py = e.from.y + cy + (e.to.y - e.from.y) * t;
-                    return (
-                        <circle
-                            key={`${e.gradId}-pkt-${pi}`}
-                            cx={px} cy={py}
-                            r="3.5"
-                            fill={e.fromChain.color}
-                            filter="url(#glow-packet)"
-                            opacity={0.85}
-                        />
-                    );
-                })
+            {/* Data packets — positions driven via direct DOM ref, not React state */}
+            {edges.map((e, ei) =>
+                PACKET_OFFSETS.map((_, pi) => (
+                    <circle
+                        key={`${e.gradId}-pkt-${pi}`}
+                        ref={(el) => { packetRefs.current[`${ei}-${pi}`] = el; }}
+                        cx={e.from.x + cx}
+                        cy={e.from.y + cy}
+                        r="3.5"
+                        fill={e.fromChain.color}
+                        filter="url(#glow-packet)"
+                        opacity={0.85}
+                    />
+                ))
             )}
         </svg>
     );
 });
+
 
 /* =========================================================
    CHAIN NODE

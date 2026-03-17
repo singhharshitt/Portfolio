@@ -1,6 +1,6 @@
 import React, { memo, useMemo, useRef, useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence, useInView } from '../utils/motion';
-import { BadgeCheck, ExternalLink, Download, Award, Calendar, Building2, Hash, Eye, X, ZoomIn } from 'lucide-react';
+import { BadgeCheck, ExternalLink, Download, Award, Calendar, Building2, Hash, Eye, X, ZoomIn, ChevronDown } from 'lucide-react';
 
 /* ─────────────────────────────────────────────
    CERTIFICATE FILE IMPORT (static glob)
@@ -377,17 +377,24 @@ const StatCard = memo(function StatCard({ value, label, icon: Icon, delay }) {
   );
 });
 
+const INITIAL_VISIBLE_CERTS = 3;
+
 /* ─────────────────────────────────────────────
    MAIN EXPORT
    ───────────────────────────────────────────── */
 export default function Certificates() {
   const [previewCert, setPreviewCert] = useState(null);
+  const [showAll, setShowAll] = useState(false);
 
   const totalCertificates = CERTIFICATES.length;
   const totalPlatforms = useMemo(() => new Set(CERTIFICATES.map(c => c.issuer)).size, []);
 
+  const visibleCerts = showAll ? CERTIFICATES : CERTIFICATES.slice(0, INITIAL_VISIBLE_CERTS);
+  const hasMore = CERTIFICATES.length > INITIAL_VISIBLE_CERTS;
+
   const handlePreview = useCallback((cert) => setPreviewCert(cert), []);
   const handleClose = useCallback(() => setPreviewCert(null), []);
+  const toggleShowAll = useCallback(() => setShowAll((prev) => !prev), []);
 
   return (
     <section
@@ -456,7 +463,7 @@ export default function Certificates() {
 
         {/* Certificates grid — 1/2/3 columns */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
-          {CERTIFICATES.map((cert, index) => (
+          {visibleCerts.map((cert, index) => (
             <CertificateCard
               key={cert.certificateId}
               cert={cert}
@@ -465,6 +472,41 @@ export default function Certificates() {
             />
           ))}
         </div>
+
+        {/* Show More / Show Less */}
+        {hasMore && (
+          <motion.div
+            className="mt-10 flex justify-center"
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4 }}
+          >
+            <motion.button
+              type="button"
+              onClick={toggleShowAll}
+              className="inline-flex items-center gap-2 rounded-full border-2 px-7 py-3 text-sm font-semibold transition-all duration-300 hover:text-[#FFFBEB]"
+              style={{
+                borderColor: '#5D0D18',
+                color: '#5D0D18',
+              }}
+              whileHover={{ scale: 1.04, y: -1, backgroundColor: '#5D0D18', color: '#FFFBEB' }}
+              whileTap={{ scale: 0.97 }}
+              aria-expanded={showAll}
+            >
+              <motion.span
+                animate={{ rotate: showAll ? 180 : 0 }}
+                transition={{ duration: 0.3 }}
+                style={{ display: 'flex' }}
+              >
+                <ChevronDown size={16} />
+              </motion.span>
+              {showAll
+                ? 'Show Less'
+                : `View More Certificates (${CERTIFICATES.length - INITIAL_VISIBLE_CERTS} more)`}
+            </motion.button>
+          </motion.div>
+        )}
 
         {/* CTA */}
         <motion.div

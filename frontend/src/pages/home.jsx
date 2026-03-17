@@ -94,7 +94,7 @@ function Home() {
     <>
       <Navbar onNavigate={scrollToSection} />
 
-      <main className="site-main">
+      <main className="pt-[108px]">
         <Hero />
         <Suspense fallback={null}>
           <Aboutme />
