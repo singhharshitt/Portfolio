@@ -1,6 +1,91 @@
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion, useInView, useScroll, useTransform } from '../utils/motion';
 import { ArrowUpRight, ChevronLeft, ChevronRight, Eye, FileText, Github, X } from 'lucide-react';
+import SwapVerse from '../assets/swapverse.png';
+import PrioSync from '../assets/PrioSync.png';
+import SkyX from '../assets/skyx.png';
+import mm from '../assets/mm.png';
+import InkDrop from '../assets/inkdrop.png';
+import WhiskandBloom from '../assets/whiskandbloom.png';
+import GrabDesk from '../assets/grabdesk.png';
+
+import {
+  SiReact,
+  SiNextdotjs,
+  SiTypescript,
+  SiTailwindcss,
+  SiNodedotjs,
+  SiExpress,
+  SiMongodb,
+  SiPostgresql,
+  SiDocker,
+  SiAmazonwebservices,
+  SiVercel,
+  SiGithubactions,
+  SiPrisma,
+  SiRedis,
+  SiGraphql,
+  SiSocketdotio,
+  SiKubernetes,
+  SiTerraform
+} from 'react-icons/si';
+
+// Project images (using placeholder images - replace with actual image URLs)
+const PROJECT_IMAGES = {
+  PrioSync: PrioSync,
+  SkyX: SkyX,
+  MovieMagic: mm,
+  InkDrop: InkDrop,
+  WhiskandBloom: WhiskandBloom,
+  SwapVerse: SwapVerse,
+  GrabDesk: GrabDesk,
+};
+
+// Tech stack for each project
+const PROJECT_TECH_STACK = {
+  PrioSync: [
+    { name: 'React', icon: SiReact, color: '#452215' },
+    { name: 'TypeScript', icon: SiTypescript, color: '#DF6C4F' },
+    { name: 'Tailwind', icon: SiTailwindcss, color: '#FF9398' },
+    { name: 'Vercel', icon: SiVercel, color: '#452215' },
+  ],
+  SkyX: [
+    { name: 'Next.js', icon: SiNextdotjs, color: '#DF6C4F' },
+    { name: 'TypeScript', icon: SiTypescript, color: '#FF9398' },
+    { name: 'Tailwind', icon: SiTailwindcss, color: '#452215' },
+    { name: 'Vercel', icon: SiVercel, color: '#DF6C4F' },
+  ],
+  MovieMagic: [
+    { name: 'React', icon: SiReact, color: '#FF9398' },
+    { name: 'Node.js', icon: SiNodedotjs, color: '#452215' },
+    { name: 'Express', icon: SiExpress, color: '#DF6C4F' },
+    { name: 'MongoDB', icon: SiMongodb, color: '#FF9398' },
+  ],
+  InkDrop: [
+    { name: 'React', icon: SiReact, color: '#452215' },
+    { name: 'Node.js', icon: SiNodedotjs, color: '#DF6C4F' },
+    { name: 'Express', icon: SiExpress, color: '#FF9398' },
+    { name: 'MongoDB', icon: SiMongodb, color: '#452215' },
+  ],
+  WhiskandBloom: [
+    { name: 'React', icon: SiReact, color: '#DF6C4F' },
+    { name: 'TypeScript', icon: SiTypescript, color: '#FF9398' },
+    { name: 'Tailwind', icon: SiTailwindcss, color: '#452215' },
+    { name: 'Vercel', icon: SiVercel, color: '#DF6C4F' },
+  ],
+  SwapVerse: [
+    { name: 'React', icon: SiReact, color: '#FF9398' },
+    { name: 'Node.js', icon: SiNodedotjs, color: '#452215' },
+    { name: 'Express', icon: SiExpress, color: '#DF6C4F' },
+    { name: 'PostgreSQL', icon: SiPostgresql, color: '#FF9398' },
+  ],
+  GrabDesk: [
+    { name: 'Next.js', icon: SiNextdotjs, color: '#452215' },
+    { name: 'TypeScript', icon: SiTypescript, color: '#DF6C4F' },
+    { name: 'Prisma', icon: SiPrisma, color: '#FF9398' },
+    { name: 'PostgreSQL', icon: SiPostgresql, color: '#452215' },
+  ],
+};
 
 const PROJECTS = [
   {
@@ -10,6 +95,8 @@ const PROJECTS = [
     date: 'Production',
     liveUrl: 'https://prio-sync.vercel.app/',
     githubUrl: 'https://github.com/singhharshitt/PrioSync',
+    image: PROJECT_IMAGES.PrioSync,
+    techStack: PROJECT_TECH_STACK.PrioSync,
   },
   {
     title: 'SkyX',
@@ -18,6 +105,8 @@ const PROJECTS = [
     date: 'Production',
     liveUrl: 'https://skyx-v2-0.vercel.app/',
     githubUrl: 'https://github.com/singhharshitt/SKYX-V2.0',
+    image: PROJECT_IMAGES.SkyX,
+    techStack: PROJECT_TECH_STACK.SkyX,
   },
   {
     title: 'MovieMagic',
@@ -26,6 +115,8 @@ const PROJECTS = [
     date: 'Production',
     liveUrl: 'https://moveismagicchatbot.onrender.com',
     githubUrl: 'https://github.com/singhharshitt/MoveisMagicChatbot',
+    image: PROJECT_IMAGES.MovieMagic,
+    techStack: PROJECT_TECH_STACK.MovieMagic,
   },
   {
     title: 'InkDrop',
@@ -34,6 +125,8 @@ const PROJECTS = [
     date: 'Production',
     liveUrl: 'https://inkdrop-v2-0.onrender.com',
     githubUrl: 'https://github.com/singhharshitt/Inkdrop-V2.0',
+    image: PROJECT_IMAGES.InkDrop,
+    techStack: PROJECT_TECH_STACK.InkDrop,
   },
   {
     title: 'WhiskandBloom',
@@ -42,6 +135,8 @@ const PROJECTS = [
     date: 'Production',
     liveUrl: 'https://wishk-and-bloom-the-recipie-page.vercel.app/',
     githubUrl: 'https://github.com/singhharshitt/Whisk-Bloom',
+    image: PROJECT_IMAGES.WhiskandBloom,
+    techStack: PROJECT_TECH_STACK.WhiskandBloom,
   },
   {
     title: 'SwapVerse',
@@ -50,6 +145,8 @@ const PROJECTS = [
     date: 'Production',
     liveUrl: 'https://swappverse.netlify.app',
     githubUrl: 'https://github.com/singhharshitt/SwapVerse',
+    image: PROJECT_IMAGES.SwapVerse,
+    techStack: PROJECT_TECH_STACK.SwapVerse,
   },
   {
     title: 'GrabDesk',
@@ -58,6 +155,8 @@ const PROJECTS = [
     date: 'Production',
     liveUrl: 'https://grabdesk.vercel.app/',
     githubUrl: 'https://github.com/singhharshitt/grabdesk',
+    image: PROJECT_IMAGES.GrabDesk,
+    techStack: PROJECT_TECH_STACK.GrabDesk,
   },
 ];
 
@@ -70,10 +169,8 @@ const ActionButton = memo(function ActionButton({ href, icon: Icon, label, varia
     variant === 'primary'
       ? 'border border-[#DF6C4F] bg-[#DF6C4F] text-[#FFFFF0] hover:border-[#FF9398] hover:bg-[#FF9398] hover:text-[#452215]'
       : variant === 'secondary'
-
         ? 'border border-[#FFF8EE] bg-[#FFFFF0] text-[#452215] hover:border-[#FF9398] hover:bg-[#FFF8EE] hover:text-[#DF6C4F]'
         : 'border border-[#FFF8EE] bg-transparent text-[#452215] hover:border-[#DF6C4F] hover:bg-[#FFFFF0] hover:text-[#DF6C4F]';
-
 
   if (onClick) {
     return (
@@ -117,8 +214,18 @@ const ProjectCard = memo(function ProjectCard({ project, index, onOpenPreview, o
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.55, delay: index * 0.08 }}
     >
-      <div className="h-full rounded-2xl border border-[#FFF8EE] bg-[#FFFFF0] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[#DF6C4F]/30">
+      <div className="h-full rounded-2xl border-2 border-[#452215] shadow-[4px_4px_0_#8F5E41] transition-all duration-300 hover:shadow-[6px_6px_0_#8F5E41] bg-[#FFFFF0] p-6">
         <div className="flex h-full flex-col gap-6">
+          {/* Project Image */}
+          <div className="relative h-48 w-full overflow-hidden rounded-xl border-2 border-[#452215] bg-[#FFF8EE]">
+            <img
+              src={project.image}
+              alt={`${project.title} preview`}
+              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-linear-to-t from-[#452215]/20 to-transparent" />
+          </div>
+
           <div className="space-y-3">
             <div className="flex items-start justify-between gap-4">
               <h3 className="font-ui text-2xl text-[#452215] lg:text-3xl">{project.title}</h3>
@@ -127,6 +234,25 @@ const ProjectCard = memo(function ProjectCard({ project, index, onOpenPreview, o
               </span>
             </div>
             <p className="font-bodycopy text-sm leading-relaxed text-[#452215]">{project.description}</p>
+          </div>
+
+          {/* Tech Stack Icons */}
+          <div className="flex flex-wrap items-center gap-3">
+            {project.techStack.map((tech) => {
+              const Icon = tech.icon;
+              return (
+                <div
+                  key={tech.name}
+                  className="group/tech relative flex h-8 w-8 items-center justify-center rounded-lg border border-[#452215] bg-[#FFFFF0] transition-all duration-300 hover:scale-110"
+                  style={{ borderColor: tech.color }}
+                >
+                  <Icon size={16} style={{ color: tech.color }} />
+                  <span className="absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-[#452215] px-2 py-1 text-[10px] text-[#FFFFF0] opacity-0 transition-opacity group-hover/tech:opacity-100">
+                    {tech.name}
+                  </span>
+                </div>
+              );
+            })}
           </div>
 
           <div className="flex flex-wrap gap-2">
@@ -150,7 +276,6 @@ const ProjectCard = memo(function ProjectCard({ project, index, onOpenPreview, o
     </motion.article>
   );
 });
-
 
 const LivePreviewOverlay = memo(function LivePreviewOverlay({ project, onClose }) {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -187,7 +312,7 @@ const LivePreviewOverlay = memo(function LivePreviewOverlay({ project, onClose }
       aria-label={`${project.title} live preview`}
     >
       <motion.div
-        className="mx-auto mt-6 flex h-[88vh] w-[96vw] max-w-6xl flex-col overflow-hidden rounded-2xl border border-[#FFF8EE] bg-[#FFFFF0]"
+        className="mx-auto mt-6 flex h-[88vh] w-[96vw] max-w-6xl flex-col overflow-hidden rounded-2xl border-2 border-[#452215] shadow-[4px_4px_0_#8F5E41] bg-[#FFFFF0]"
         initial={{ y: 30, opacity: 0, scale: 0.98 }}
         animate={{ y: 0, opacity: 1, scale: 1 }}
         exit={{ y: 20, opacity: 0, scale: 0.98 }}
@@ -287,7 +412,7 @@ const CaseStudyOverlay = memo(function CaseStudyOverlay({ project, onClose }) {
       aria-label={`${project.title} case study`}
     >
       <motion.aside
-        className="absolute right-0 top-0 h-full w-full max-w-2xl overflow-y-auto border-l border-[#FFF8EE] bg-[#FFFFF0] p-6 sm:p-8"
+        className="absolute right-0 top-0 h-full w-full max-w-2xl overflow-y-auto border-l-2 border-[#452215] bg-[#FFFFF0] p-6 sm:p-8"
         initial={{ x: '100%' }}
         animate={{ x: 0 }}
         exit={{ x: '100%' }}
@@ -318,6 +443,24 @@ const CaseStudyOverlay = memo(function CaseStudyOverlay({ project, onClose }) {
           </section>
 
           <section className="space-y-3">
+            <h4 className="font-ui text-sm uppercase tracking-wide text-[#452215]">Tech Stack</h4>
+            <div className="flex flex-wrap gap-3">
+              {project.techStack.map((tech) => {
+                const Icon = tech.icon;
+                return (
+                  <div
+                    key={tech.name}
+                    className="flex items-center gap-2 rounded-full border border-[#452215] bg-[#FFFFF0] px-3 py-1.5"
+                  >
+                    <Icon size={14} style={{ color: tech.color }} />
+                    <span className="font-mono-ui text-xs text-[#452215]">{tech.name}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+
+          <section className="space-y-3">
             <h4 className="font-ui text-sm uppercase tracking-wide text-[#452215]">Challenge</h4>
             <p className="font-bodycopy leading-relaxed text-[#452215]">{caseStudy.challenge}</p>
           </section>
@@ -330,20 +473,6 @@ const CaseStudyOverlay = memo(function CaseStudyOverlay({ project, onClose }) {
           <section className="space-y-3">
             <h4 className="font-ui text-sm uppercase tracking-wide text-[#452215]">Outcome</h4>
             <p className="font-bodycopy leading-relaxed text-[#452215]">{caseStudy.outcome}</p>
-          </section>
-
-          <section className="space-y-3">
-            <h4 className="font-ui text-sm uppercase tracking-wide text-[#452215]">Tech Stack Tags</h4>
-            <div className="flex flex-wrap gap-2">
-              {project.tags.map((tag) => (
-                <span
-                  key={`${project.title}-overlay-${tag}`}
-                  className="font-mono-ui rounded-full border border-[#DF6C4F]/20 bg-[#FFFFF0] px-3 py-1 text-xs text-[#DF6C4F]"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
           </section>
 
           <section className="flex flex-wrap gap-3 pt-2">
@@ -485,7 +614,7 @@ const HorizontalScrollGallery = memo(function HorizontalScrollGallery({ onOpenPr
 /* ─────────────────────────────────────────────
    MAIN EXPORT
    ───────────────────────────────────────────── */
-export default function ProjectsSection() {
+export default memo(function ProjectsSection() {
   const headerRef = useRef(null);
   const [activePreviewProject, setActivePreviewProject] = useState(null);
   const [activeCaseStudyProject, setActiveCaseStudyProject] = useState(null);
@@ -636,4 +765,4 @@ export default function ProjectsSection() {
       </AnimatePresence>
     </section>
   );
-}
+});

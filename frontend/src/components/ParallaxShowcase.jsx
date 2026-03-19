@@ -91,6 +91,7 @@ function ParallaxLayer({ layer, index, total, scrollYProgress, multiplier, isBac
             style={{ y, left: `${20 + offset}px`, zIndex, boxShadow: 'var(--theme-shadow)' }}
             className={`absolute w-70 md:w-100 rounded-2xl overflow-hidden gpu-accelerated border border-(--theme-border-current)/10 transition-colors duration-700 ${isBackground ? 'blur-[1px]' : ''
                 }`}
+            initial={{ willChange: 'transform' }}
         >
             {/* Window chrome */}
             <div className="bg-(--theme-surface-elevated) px-4 py-3 flex items-center gap-2 transition-colors duration-700">

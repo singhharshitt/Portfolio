@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, memo } from 'react';
 import { motion, useInView } from 'framer-motion';
 
 const THEME = {
@@ -8,7 +8,7 @@ const THEME = {
 
 const EASE = [0.16, 1, 0.3, 1];
 
-export default function SectionHeading({
+export default memo(function SectionHeading({
   text,
   className = '',
   accent = THEME.accent,
@@ -98,4 +98,4 @@ export default function SectionHeading({
       </motion.span>
     </div>
   );
-}
+});

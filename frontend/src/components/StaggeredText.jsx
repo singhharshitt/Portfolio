@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, memo } from 'react';
 import { motion, useInView, useSpring, useTransform } from 'framer-motion';
 
 // Cinematic easing
@@ -14,7 +14,7 @@ const EASE_MAP = {
   dramatic: EASE.dramatic,
 };
 
-export default function StaggeredText({
+export default memo(function StaggeredText({
   text,
   as: Tag = 'h2',
   className = '',
@@ -125,4 +125,4 @@ export default function StaggeredText({
       ))}
     </motion.div>
   );
-}
+});

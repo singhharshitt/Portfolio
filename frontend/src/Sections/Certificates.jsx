@@ -1,6 +1,22 @@
 import React, { memo, useMemo, useRef, useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence, useInView } from '../utils/motion';
-import { BadgeCheck, ExternalLink, Download, Award, Calendar, Building2, Hash, Eye, X, ZoomIn, ChevronDown } from 'lucide-react';
+import { 
+  BadgeCheck, 
+  ExternalLink, 
+  Download, 
+  Award, 
+  Calendar, 
+  Building2, 
+  Hash, 
+  Eye, 
+  X, 
+  ZoomIn, 
+  ChevronDown,
+  Sparkles,
+  Star,
+  Shield,
+  Medal
+} from 'lucide-react';
 
 /* ─────────────────────────────────────────────
    CERTIFICATE FILE IMPORT (static glob)
@@ -80,6 +96,40 @@ const CERTIFICATES = Object.entries(CERTIFICATE_FILES)
   .sort((a, b) => a.title.localeCompare(b.title));
 
 /* ─────────────────────────────────────────────
+   FLOATING PARTICLES FOR BACKGROUND
+   ───────────────────────────────────────────── */
+const FloatingParticle = memo(function FloatingParticle({ delay, x, y, size, color }) {
+  return (
+    <motion.div
+      className="absolute rounded-full opacity-20"
+      style={{
+        left: x,
+        top: y,
+        width: size,
+        height: size,
+        backgroundColor: color,
+        filter: 'blur(12px)',
+      }}
+      animate={{
+        y: [0, -40, 0],
+        x: [0, 20, 0],
+        scale: [1, 1.3, 1],
+        opacity: [0.15, 0.3, 0.15],
+      }}
+      transition={{
+        duration: 10,
+        delay,
+        repeat: Infinity,
+        ease: 'easeInOut',
+      }}
+    />
+  );
+});
+
+/* ─────────────────────────────────────────────
+   MODAL PREVIEW
+   ───────────────────────────────────────────── */
+/* ─────────────────────────────────────────────
    MODAL PREVIEW
    ───────────────────────────────────────────── */
 const CertificateModal = memo(function CertificateModal({ cert, onClose }) {
@@ -98,10 +148,10 @@ const CertificateModal = memo(function CertificateModal({ cert, onClose }) {
       transition={{ duration: 0.22 }}
       onClick={onClose}
     >
-      <div className="absolute inset-0 bg-[#452215]/70 backdrop-blur-sm" />
+      <div className="absolute inset-0 bg-[#452215]/80 backdrop-blur-md" />
 
       <motion.div
-        className="relative z-10 w-full max-w-3xl rounded-2xl overflow-hidden shadow-2xl"
+        className="relative z-10 w-full max-w-3xl rounded-2xl overflow-hidden border-2 border-[#452215] shadow-[8px_8px_0_#8F5E41]"
         style={{ background: '#FFFFF0', maxHeight: '90vh' }}
         initial={{ opacity: 0, scale: 0.88, y: 30 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -110,7 +160,7 @@ const CertificateModal = memo(function CertificateModal({ cert, onClose }) {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal header */}
-        <div className="flex items-start justify-between border-b p-5" style={{ borderColor: '#FFF8EE' }}>
+        <div className="flex items-start justify-between border-b-2 border-[#452215] p-5 bg-linear-to-r from-[#FFF8EE] to-[#FFFFF0]">
           <div>
             <p className="font-mono-ui mb-1 text-xs uppercase tracking-widest" style={{ color: '#DF6C4F' }}>
               {cert.issuer}
@@ -119,63 +169,89 @@ const CertificateModal = memo(function CertificateModal({ cert, onClose }) {
               {cert.title}
             </h3>
           </div>
-          <button
+          <motion.button
             onClick={onClose}
-            className="ml-4 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border transition-colors hover:bg-[#DF6C4F] hover:text-[#FFFFF0]"
-            style={{ borderColor: '#FFF8EE', color: '#452215' }}
+            className="ml-4 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border-2 border-[#452215] bg-[#FFFFF0] transition-all hover:bg-[#DF6C4F] hover:text-[#FFFFF0] hover:shadow-[2px_2px_0_#8F5E41]"
+            style={{ color: '#452215' }}
+            whileHover={{ scale: 1.1, rotate: 90 }}
+            whileTap={{ scale: 0.9 }}
             aria-label="Close preview"
           >
             <X size={18} />
-          </button>
+          </motion.button>
         </div>
 
-        {/* Preview */}
-        <div className="relative overflow-auto" style={{ maxHeight: 'calc(90vh - 140px)' }}>
-          {cert.previewType === 'image' ? (
-            <img
-              src={cert.previewUrl}
-              alt={cert.title}
-              className="w-full object-contain"
-              loading="lazy"
-              decoding="async"
-            />
-          ) : (
-            <iframe
-              src={cert.previewEmbedUrl}
-              title={`${cert.title} full preview`}
-              className="w-full border-0 bg-[#FFFFF0]"
-              style={{ height: '65vh' }}
-            />
-          )}
+        {/* Preview - Hidden scrollbar - FIXED */}
+        <div 
+          className="relative overflow-auto bg-[#FFF8EE]" 
+          style={{ 
+            maxHeight: 'calc(90vh - 140px)',
+            scrollbarWidth: 'none',  /* Firefox */
+            msOverflowStyle: 'none',  /* IE and Edge */
+            WebkitOverflowScrolling: 'touch',
+          }}
+        >
+          {/* Hide scrollbar for Chrome/Safari/Opera */}
+          <style dangerouslySetInnerHTML={{
+            __html: `
+              .certificate-modal-preview::-webkit-scrollbar {
+                display: none;
+              }
+            `
+          }} />
+          
+          <div className="certificate-modal-preview w-full h-full">
+            {cert.previewType === 'image' ? (
+              <motion.img
+                src={cert.previewUrl}
+                alt={cert.title}
+                className="w-full object-contain"
+                loading="lazy"
+                decoding="async"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.1 }}
+              />
+            ) : (
+              <iframe
+                src={cert.previewEmbedUrl}
+                title={`${cert.title} full preview`}
+                className="w-full border-0 bg-[#FFFFF0]"
+                style={{ height: '65vh' }}
+              />
+            )}
+          </div>
         </div>
 
         {/* Modal footer */}
-        <div className="flex items-center gap-3 border-t p-4" style={{ borderColor: '#FFF8EE' }}>
-          <a
+        <div className="flex items-center gap-3 border-t-2 border-[#452215] p-4 bg-[#FFF8EE]">
+          <motion.a
             href={cert.viewUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium"
-            style={{ background: '#FFFFF0', color: '#452215', border: '1.5px solid #FFF8EE' }}
+            className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium border-2 border-[#452215] bg-[#FFFFF0] shadow-[2px_2px_0_#8F5E41] transition-all hover:shadow-[4px_4px_0_#8F5E41] hover:-translate-y-0.5"
+            style={{ color: '#452215' }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
             <ExternalLink size={14} /> Open
-          </a>
-          <a
+          </motion.a>
+          <motion.a
             href={cert.downloadUrl}
             download
-            className="font-ui flex items-center gap-2 rounded-full px-4 py-2 text-sm text-[#FFFFF0]"
-            style={{ background: '#DF6C4F' }}
+            className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium border-2 border-[#452215] bg-[#DF6C4F] text-[#FFFFF0] shadow-[2px_2px_0_#8F5E41] transition-all hover:shadow-[4px_4px_0_#8F5E41] hover:-translate-y-0.5"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
             <Download size={14} /> Download
-          </a>
+          </motion.a>
         </div>
       </motion.div>
     </motion.div>
   );
 });
-
 /* ─────────────────────────────────────────────
-   CERTIFICATE CARD  (no per-card useScroll!)
+   CERTIFICATE CARD
    ───────────────────────────────────────────── */
 const CertificateCard = memo(function CertificateCard({ cert, index, onPreview }) {
   const cardRef = useRef(null);
@@ -186,33 +262,42 @@ const CertificateCard = memo(function CertificateCard({ cert, index, onPreview }
     <motion.article
       ref={cardRef}
       className="relative cursor-pointer"
-      initial={{ opacity: 0, y: 36 }}
+      initial={{ opacity: 0, y: 40 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.6, delay: Math.min(index * 0.07, 0.5), ease: [0.25, 0.46, 0.45, 0.94] }}
-      whileHover={{ y: -6, scale: 1.025 }}
+      transition={{ 
+        duration: 0.6, 
+        delay: Math.min(index * 0.07, 0.5), 
+        type: 'spring',
+        stiffness: 100,
+        damping: 15
+      }}
+      whileHover={{ y: -8, scale: 1.02 }}
       style={{ willChange: 'transform' }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       onClick={() => onPreview(cert)}
     >
       <div
-        className="relative overflow-hidden rounded-2xl border bg-[#FFFFF0]"
+        className="relative overflow-hidden rounded-2xl border-2 border-[#452215] bg-[#FFFFF0] shadow-[4px_4px_0_#8F5E41] transition-all duration-300 hover:shadow-[6px_6px_0_#8F5E41]"
         style={{
-          borderColor: hovered ? `${cert.color}55` : '#FFF8EE',
-          boxShadow: hovered
-            ? `0 20px 48px -8px ${cert.color}18, 0 6px 20px -4px rgba(153,0,0,0.06)`
-            : '0 4px 20px rgba(153,0,0,0.04)',
-          transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
+          borderColor: hovered ? cert.color : '#452215',
         }}
       >
+        {/* Background Pattern */}
+        <motion.div
+          className="absolute inset-0 opacity-0 transition-opacity duration-500"
+          style={{
+            backgroundImage: `radial-gradient(circle at 30% 40%, ${cert.color}08 0%, transparent 50%)`,
+            opacity: hovered ? 1 : 0,
+          }}
+        />
+
         {/* Image / iframe preview */}
         <div className="relative overflow-hidden" style={{ aspectRatio: '16/10' }}>
-          <div
+          <motion.div
             className="w-full h-full"
-            style={{
-              transform: hovered ? 'scale(1.07)' : 'scale(1)',
-              transition: 'transform 0.55s ease',
-            }}
+            animate={{ scale: hovered ? 1.08 : 1 }}
+            transition={{ duration: 0.55, ease: 'easeOut' }}
           >
             {cert.previewType === 'image' ? (
               <img
@@ -232,118 +317,161 @@ const CertificateCard = memo(function CertificateCard({ cert, index, onPreview }
                 loading="lazy"
               />
             )}
-          </div>
+          </motion.div>
 
-          {/* Solid overlay */}
-          <div
+          {/* Gradient overlay */}
+          <motion.div
             className="absolute inset-0"
             style={{
-              background: cert.color,
-              opacity: hovered ? 0.18 : 0.1,
-              transition: 'opacity 0.3s ease',
+              background: `linear-gradient(45deg, ${cert.color}30, transparent)`,
+              opacity: hovered ? 0.3 : 0.1,
             }}
+            animate={{ opacity: hovered ? 0.3 : 0.1 }}
+            transition={{ duration: 0.3 }}
           />
 
           {/* Platform badge */}
-          <div
-            className="font-ui absolute left-3 top-3 flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] text-[#FFFFF0]"
+          <motion.div
+            className="absolute left-3 top-3 flex items-center gap-1 rounded-full px-3 py-1.5 text-xs font-medium text-[#FFFFF0] border-2 border-[#452215] shadow-[2px_2px_0_#8F5E41]"
             style={{ background: cert.color }}
+            initial={{ x: -20, opacity: 0 }}
+            animate={inView ? { x: 0, opacity: 1 } : {}}
+            transition={{ delay: index * 0.07 + 0.2 }}
+            whileHover={{ scale: 1.05, y: -1 }}
           >
-            <Building2 size={10} />
+            <Building2 size={12} />
             {cert.issuer}
-          </div>
+          </motion.div>
 
-          {/* Verified badge */}
-          <div className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-[#FFFFF0] shadow">
-            <BadgeCheck size={18} className="text-[#FF9398]" />
-          </div>
+          {/* Verified badge with animation */}
+          <motion.div 
+            className="absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full border-2 border-[#452215] bg-[#FFFFF0] shadow-[2px_2px_0_#8F5E41]"
+            initial={{ scale: 0, rotate: -180 }}
+            animate={inView ? { scale: 1, rotate: 0 } : {}}
+            transition={{ delay: index * 0.07 + 0.3, type: 'spring' }}
+            whileHover={{ scale: 1.1, rotate: 10 }}
+          >
+            <Shield size={18} className="text-[#FF9398]" />
+          </motion.div>
 
           {/* Zoom hint on hover */}
-          <div
+          <motion.div
             className="absolute inset-0 flex items-center justify-center"
-            style={{ opacity: hovered ? 1 : 0, transition: 'opacity 0.25s ease' }}
+            animate={{ opacity: hovered ? 1 : 0 }}
+            transition={{ duration: 0.25 }}
           >
-            <div
-              className="w-12 h-12 rounded-full flex items-center justify-center"
-              style={{ background: 'rgba(244,242,241,0.92)', backdropFilter: 'blur(4px)' }}
+            <motion.div
+              className="w-14 h-14 rounded-full flex items-center justify-center border-2 border-[#452215] bg-[#FFFFF0] shadow-[3px_3px_0_#8F5E41]"
+              whileHover={{ scale: 1.1 }}
+              animate={{ y: [0, -5, 0] }}
+              transition={{ duration: 2, repeat: Infinity }}
             >
-              <ZoomIn size={22} style={{ color: '#452215' }} />
-            </div>
-          </div>
+              <ZoomIn size={24} style={{ color: '#DF6C4F' }} />
+            </motion.div>
+          </motion.div>
+
+          {/* Corner sparkle */}
+          <motion.div
+            className="absolute -right-1 -top-1"
+            animate={{ rotate: [0, 15, 0] }}
+            transition={{ duration: 3, repeat: Infinity }}
+          >
+            <Star size={20} style={{ color: cert.color }} fill={cert.color} />
+          </motion.div>
         </div>
 
         {/* Card content */}
         <div className="p-5">
-          <div
-            className="h-px mb-4 rounded"
+          <motion.div
+            className="h-1 mb-4 rounded-full"
             style={{
               background: cert.color,
-              transform: hovered ? 'scaleX(1)' : 'scaleX(0.3)',
-              transition: 'transform 0.55s ease',
-              transformOrigin: 'left',
+              width: hovered ? '100%' : '30%',
             }}
+            animate={{ width: hovered ? '100%' : '30%' }}
+            transition={{ duration: 0.55, ease: 'easeOut' }}
           />
 
           <h3
-            className="font-ui mb-2.5 line-clamp-2 text-[15px]"
-            style={{ color: hovered ? '#452215' : '#452215', transition: 'color 0.2s ease' }}
+            className="font-ui mb-2.5 line-clamp-2 text-base"
+            style={{ color: hovered ? cert.color : '#452215' }}
           >
             {cert.title}
           </h3>
 
-          <div className="space-y-1.5">
-            <div className="font-caption flex items-center gap-1.5 text-xs" style={{ color: 'rgba(51,51,51,0.72)' }}>
+          <div className="space-y-2">
+            <motion.div 
+              className="flex items-center gap-1.5 text-xs"
+              style={{ color: 'rgba(69,34,21,0.7)' }}
+              animate={{ x: hovered ? 5 : 0 }}
+              transition={{ duration: 0.3 }}
+            >
               <Calendar size={12} style={{ color: '#DF6C4F' }} />
               {cert.date}
-            </div>
-            <div
-              className="font-mono-ui flex w-fit items-center gap-1.5 rounded px-2 py-0.5 text-[11px]"
+            </motion.div>
+            
+            <motion.div
+              className="flex w-fit items-center gap-1.5 rounded-full border-2 border-[#452215] px-2.5 py-1 text-[10px] font-mono shadow-[2px_2px_0_#8F5E41]"
               style={{ background: '#FFF8EE', color: '#DF6C4F' }}
+              animate={{ scale: hovered ? 1.05 : 1 }}
+              transition={{ duration: 0.3 }}
             >
               <Hash size={10} />
-              {cert.certificateId}
-            </div>
+              {cert.certificateId.slice(0, 8)}...
+            </motion.div>
           </div>
 
           {/* Action row */}
-          <div
-            className="flex items-center gap-2 mt-3 pt-3 border-t"
-            style={{
-              borderColor: '#FFF8EE',
-              opacity: hovered ? 1 : 0.4,
-              transition: 'opacity 0.25s ease',
-            }}
+          <motion.div
+            className="flex items-center gap-2 mt-4 pt-3 border-t-2 border-[#452215]"
+            animate={{ opacity: hovered ? 1 : 0.5 }}
+            transition={{ duration: 0.25 }}
           >
-            <button
-              className="font-ui flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px]"
-              style={{ background: '#FFF8EE', color: '#452215' }}
+            <motion.button
+              className="flex items-center gap-1.5 rounded-full border-2 border-[#452215] px-3 py-1.5 text-xs font-medium bg-[#FFFFF0] shadow-[2px_2px_0_#8F5E41] transition-all hover:shadow-[3px_3px_0_#8F5E41] hover:-translate-y-0.5"
+              style={{ color: '#452215' }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={(e) => { e.stopPropagation(); onPreview(cert); }}
             >
-              <Eye size={11} /> Preview
-            </button>
-            <a
+              <Eye size={12} /> Preview
+            </motion.button>
+            
+            <motion.a
               href={cert.downloadUrl}
               download
-              className="font-ui flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px]"
-              style={{ background: '#FFFFF0', color: '#DF6C4F' }}
+              className="flex items-center gap-1.5 rounded-full border-2 border-[#452215] px-3 py-1.5 text-xs font-medium bg-[#DF6C4F] text-[#FFFFF0] shadow-[2px_2px_0_#8F5E41] transition-all hover:shadow-[3px_3px_0_#8F5E41] hover:-translate-y-0.5"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={(e) => e.stopPropagation()}
             >
-              <Download size={11} /> Save
-            </a>
+              <Download size={12} /> Save
+            </motion.a>
+            
             {cert.verifyUrl && (
-              <a
+              <motion.a
                 href={cert.verifyUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-ui flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px]"
-                style={{ background: '#FFFFF0', color: '#FF9398' }}
+                className="flex items-center gap-1.5 rounded-full border-2 border-[#452215] px-3 py-1.5 text-xs font-medium bg-[#FF9398] text-[#452215] shadow-[2px_2px_0_#8F5E41] transition-all hover:shadow-[3px_3px_0_#8F5E41] hover:-translate-y-0.5"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={(e) => e.stopPropagation()}
               >
-                <ExternalLink size={11} /> Verify
-              </a>
+                <ExternalLink size={12} /> Verify
+              </motion.a>
             )}
-          </div>
+          </motion.div>
         </div>
+
+        {/* Hover glow effect */}
+        <motion.div
+          className="absolute inset-0 rounded-2xl pointer-events-none"
+          style={{
+            boxShadow: hovered ? `0 0 30px ${cert.color}30` : 'none',
+            transition: 'box-shadow 0.3s ease',
+          }}
+        />
       </div>
     </motion.article>
   );
@@ -353,25 +481,35 @@ const CertificateCard = memo(function CertificateCard({ cert, index, onPreview }
    STAT CARD
    ───────────────────────────────────────────── */
 const StatCard = memo(function StatCard({ value, label, icon: Icon, delay }) {
+  const [hovered, setHovered] = useState(false);
+
   return (
     <motion.div
-      className="flex items-center gap-4 rounded-xl border p-4"
-      style={{ background: 'rgba(244,242,241,0.8)', borderColor: '#FFF8EE' }}
+      className="flex items-center gap-4 rounded-xl border-2 border-[#452215] bg-[#FFFFF0] p-4 shadow-[4px_4px_0_#8F5E41] transition-all duration-300 hover:shadow-[6px_6px_0_#8F5E41] hover:-translate-y-1"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ delay, duration: 0.5 }}
-      whileHover={{ scale: 1.02, backgroundColor: 'rgba(244,242,241,1)' }}
+      transition={{ delay, duration: 0.5, type: 'spring' }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
     >
-      <div
-        className="flex h-12 w-12 items-center justify-center rounded-full"
-        style={{ background: '#FFF8EE' }}
+      <motion.div
+        className="flex h-14 w-14 items-center justify-center rounded-xl border-2 border-[#452215] bg-[#FFF8EE] shadow-[2px_2px_0_#8F5E41]"
+        animate={{ rotate: hovered ? 5 : 0, scale: hovered ? 1.1 : 1 }}
+        transition={{ duration: 0.3 }}
       >
-        <Icon size={22} style={{ color: '#452215' }} />
-      </div>
+        <Icon size={24} style={{ color: '#DF6C4F' }} />
+      </motion.div>
       <div>
-        <div className="font-fliege text-2xl" style={{ color: '#452215' }}>{value}</div>
-        <div className="font-caption text-sm" style={{ color: 'rgba(51,51,51,0.72)' }}>{label}</div>
+        <motion.div 
+          className="font-fliege text-3xl" 
+          style={{ color: '#452215' }}
+          animate={{ scale: hovered ? 1.05 : 1 }}
+          transition={{ duration: 0.2 }}
+        >
+          {value}
+        </motion.div>
+        <div className="font-caption text-sm" style={{ color: 'rgba(69,34,21,0.7)' }}>{label}</div>
       </div>
     </motion.div>
   );
@@ -385,6 +523,7 @@ const INITIAL_VISIBLE_CERTS = 3;
 export default function Certificates() {
   const [previewCert, setPreviewCert] = useState(null);
   const [showAll, setShowAll] = useState(false);
+  const sectionRef = useRef(null);
 
   const totalCertificates = CERTIFICATES.length;
   const totalPlatforms = useMemo(() => new Set(CERTIFICATES.map(c => c.issuer)).size, []);
@@ -399,14 +538,64 @@ export default function Certificates() {
   return (
     <section
       id="certificates-section"
+      ref={sectionRef}
       className="relative min-h-screen w-full py-20 lg:py-32 overflow-hidden"
       style={{ background: '#FFFFF0' }}
     >
-      {/* Background blobs */}
+      {/* Animated Background Elements */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
-        <div className="absolute top-20 left-10 h-72 w-72 rounded-full blur-3xl" style={{ background: '#FFF8EE' }} />
-        <div className="absolute bottom-20 right-10 h-96 w-96 rounded-full blur-3xl" style={{ background: '#FF939820' }} />
+        <FloatingParticle delay={0} x="10%" y="20%" size={80} color="#452215" />
+        <FloatingParticle delay={2} x="85%" y="30%" size={100} color="#DF6C4F" />
+        <FloatingParticle delay={4} x="70%" y="80%" size={120} color="#FF9398" />
+        <FloatingParticle delay={1} x="30%" y="70%" size={90} color="#452215" />
+        <FloatingParticle delay={3} x="90%" y="15%" size={70} color="#DF6C4F" />
+        
+        <motion.div
+          className="absolute top-20 left-10 h-72 w-72 rounded-full blur-3xl"
+          style={{ background: '#FFF8EE' }}
+          animate={{
+            x: [0, 50, 0],
+            y: [0, 30, 0],
+          }}
+          transition={{
+            duration: 15,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
+        />
+        
+        <motion.div
+          className="absolute bottom-20 right-10 h-96 w-96 rounded-full blur-3xl"
+          style={{ background: '#FF939820' }}
+          animate={{
+            x: [0, -40, 0],
+            y: [0, -20, 0],
+          }}
+          transition={{
+            duration: 12,
+            repeat: Infinity,
+            ease: 'easeInOut',
+            delay: 2,
+          }}
+        />
       </div>
+
+      {/* Grid Pattern Overlay */}
+      <motion.div
+        className="absolute inset-0 opacity-[0.02] pointer-events-none"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0L60 60M60 0L0 60' stroke='%23452215' stroke-width='0.5'/%3E%3C/svg%3E")`,
+          backgroundSize: '40px 40px',
+        }}
+        animate={{
+          backgroundPosition: ['0px 0px', '40px 40px'],
+        }}
+        transition={{
+          duration: 20,
+          repeat: Infinity,
+          ease: 'linear',
+        }}
+      />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
 
@@ -421,12 +610,18 @@ export default function Certificates() {
             <motion.span
               className="font-ui mb-4 inline-flex items-center gap-2 text-sm uppercase tracking-[0.28em]"
               style={{ color: '#DF6C4F' }}
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
             >
-              <span className="h-px w-8 bg-[#DF6C4F]" />
+              <motion.span 
+                className="h-px w-8 bg-[#DF6C4F]"
+                initial={{ width: 0 }}
+                whileInView={{ width: 32 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                viewport={{ once: true }}
+              />
               Credentials
             </motion.span>
 
@@ -439,12 +634,19 @@ export default function Certificates() {
               transition={{ duration: 0.8, delay: 0.1 }}
             >
               Verified{' '}
-              <span className="italic" style={{ color: '#DF6C4F' }}>Certificates</span>
+              <motion.span 
+                className="italic inline-block"
+                style={{ color: '#DF6C4F' }}
+                animate={{ rotate: [0, 2, -2, 0] }}
+                transition={{ duration: 5, repeat: Infinity }}
+              >
+                Certificates
+              </motion.span>
             </motion.h2>
 
             <motion.p
               className="mt-4 text-lg max-w-xl"
-              style={{ color: 'rgba(51,51,51,0.8)' }}
+              style={{ color: 'rgba(69,34,21,0.8)' }}
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
@@ -453,11 +655,20 @@ export default function Certificates() {
               Professional certifications from industry-leading platforms, validating expertise
               in modern development practices.
             </motion.p>
+
+            {/* Decorative line */}
+            <motion.div
+              className="mt-6 h-0.5 w-24 bg-linear-to-r from-[#DF6C4F] to-transparent"
+              initial={{ width: 0 }}
+              whileInView={{ width: 96 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              viewport={{ once: true }}
+            />
           </motion.div>
 
           <div className="flex gap-4">
-            <StatCard value={`${totalCertificates}`} label="Total Certs" icon={Award} delay={0.4} />
-            <StatCard value={`${totalPlatforms}`} label="Platforms" icon={Building2} delay={0.5} />
+            <StatCard value={`${totalCertificates}`} label="Total Certificates" icon={Medal} delay={0.4} />
+            <StatCard value={`${totalPlatforms}`} label="Learning Platforms" icon={Building2} delay={0.5} />
           </div>
         </div>
 
@@ -476,7 +687,7 @@ export default function Certificates() {
         {/* Show More / Show Less */}
         {hasMore && (
           <motion.div
-            className="mt-10 flex justify-center"
+            className="mt-12 flex justify-center"
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -485,12 +696,8 @@ export default function Certificates() {
             <motion.button
               type="button"
               onClick={toggleShowAll}
-              className="font-ui inline-flex items-center gap-2 rounded-full border-2 px-7 py-3 text-sm transition-all duration-300 hover:text-[#FFFFF0]"
-              style={{
-                borderColor: '#452215',
-                color: '#452215',
-              }}
-              whileHover={{ scale: 1.04, y: -1, backgroundColor: '#DF6C4F', color: '#FFFFF0' }}
+              className="font-ui inline-flex items-center gap-2 rounded-full border-2 border-[#452215] bg-[#FFFFF0] px-7 py-3 text-sm text-[#452215] shadow-[4px_4px_0_#8F5E41] transition-all duration-300 hover:shadow-[6px_6px_0_#8F5E41] hover:-translate-y-1"
+              whileHover={{ scale: 1.04, backgroundColor: '#DF6C4F', color: '#FFFFF0' }}
               whileTap={{ scale: 0.97 }}
               aria-expanded={showAll}
             >
@@ -520,8 +727,8 @@ export default function Certificates() {
             href="https://linkedin.com/in/singh-harshit-"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 px-8 py-4 border-2 rounded-full font-medium transition-all"
-            style={{ borderColor: '#452215', color: '#452215' }}
+            className="inline-flex items-center gap-3 px-8 py-4 border-2 border-[#452215] bg-[#FFFFF0] rounded-full font-medium shadow-[4px_4px_0_#8F5E41] transition-all duration-300 hover:shadow-[6px_6px_0_#8F5E41] hover:-translate-y-1"
+            style={{ color: '#452215' }}
             whileHover={{ scale: 1.05, backgroundColor: '#DF6C4F', color: '#FFFFF0' }}
             whileTap={{ scale: 0.95 }}
           >

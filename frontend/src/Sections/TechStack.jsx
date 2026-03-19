@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef } from 'react';
+import React, { useState, useMemo, useRef, memo } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from '../utils/motion';
 import { ExternalLink, ArrowRight } from 'lucide-react';
 import {
@@ -81,6 +81,8 @@ const TECH_STACK = {
   ],
 };
 
+const LEARNING_PHASE_TECHS = ['Kubernetes', 'Terraform', 'Prometheus', 'GraphQL', 'Redis', 'Socket.io'];
+
 const TAB_LABELS = [
   { id: 'frontend', label: 'Frontend' },
   { id: 'backend', label: 'Backend' },
@@ -115,8 +117,9 @@ const MARQUEE_TECH_ICONS = {
   Express: SiExpress,
 };
 
-const OrbCard = ({ tech, index }) => {
+const OrbCard = memo(({ tech, index }) => {
   const Icon = tech.icon;
+  const isLearning = LEARNING_PHASE_TECHS.includes(tech.name);
 
   return (
     <motion.a
@@ -133,14 +136,14 @@ const OrbCard = ({ tech, index }) => {
     >
       <div className="relative mb-4 h-24 w-24 lg:h-28 lg:w-28">
         <motion.div
-          className="absolute inset-0 rounded-full blur-xl opacity-0 transition-opacity duration-500 group-hover:opacity-30"
+          className="absolute inset-0 rounded-xl blur-xl opacity-0 transition-opacity duration-500 group-hover:opacity-30"
           style={{ backgroundColor: tech.color }}
         />
 
         <motion.div
-          className="relative flex h-full w-full items-center justify-center rounded-full border transition-all duration-300"
-          style={{ backgroundColor: `${tech.color}12`, borderColor: `${tech.color}35` }}
-          whileHover={{ backgroundColor: `${tech.color}24`, borderColor: tech.color }}
+          className="relative flex h-full w-full items-center justify-center rounded-xl border-2 border-[#452215] shadow-[4px_4px_0_#8F5E41] transition-all duration-300 group-hover:shadow-[6px_6px_0_#8F5E41]"
+          style={{ backgroundColor: `${tech.color}12` }}
+          whileHover={{ backgroundColor: `${tech.color}24` }}
         >
           <Icon
             size={32}
@@ -149,7 +152,7 @@ const OrbCard = ({ tech, index }) => {
           />
 
           <motion.div
-            className="absolute inset-0 rounded-full border border-dashed opacity-20"
+            className="absolute inset-0 rounded-xl border border-dashed opacity-20"
             style={{ borderColor: tech.color }}
             animate={{ rotate: 360 }}
             transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
@@ -163,19 +166,30 @@ const OrbCard = ({ tech, index }) => {
         >
           <ExternalLink size={12} className="text-[#FFFFF0]" />
         </motion.div>
+
+        {isLearning && (
+          <motion.div
+            className="absolute -bottom-2 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-[#FF9398] px-2 py-0.5 text-[10px] font-medium text-[#452215]"
+            initial={{ opacity: 0, y: 5 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            Learning Phase
+          </motion.div>
+        )}
       </div>
 
       <motion.h3 className="font-ui mb-1 text-sm text-[#452215] transition-colors group-hover:text-[#DF6C4F]">
         {tech.name}
       </motion.h3>
-      <span className="font-caption text-xs text-[#452215] transition-colors group-hover:text-[#49C5B6]">
+      <span className="font-caption text-xs text-[#452215] transition-colors group-hover:text-[#DF6C4F]">
         {tech.category}
       </span>
     </motion.a>
   );
-};
+});
 
-const TabSlider = ({ activeTab, onTabChange }) => (
+const TabSlider = memo(({ activeTab, onTabChange }) => (
   <div className="relative mx-auto mb-12 flex w-fit items-center gap-2 rounded-full border border-[#FFF8EE] bg-[#FFFFF0] p-1.5">
     <motion.div
       className="absolute h-[calc(100%-12px)] rounded-full bg-[#452215]"
@@ -200,9 +214,9 @@ const TabSlider = ({ activeTab, onTabChange }) => (
       </button>
     ))}
   </div>
-);
+));
 
-const MarqueeRow = ({ items, direction = 'left', speed = 30 }) => (
+const MarqueeRow = memo(({ items, direction = 'left', speed = 30 }) => (
   <div className="relative overflow-hidden py-4">
     <motion.div
       className="flex gap-8 whitespace-nowrap"
@@ -214,7 +228,7 @@ const MarqueeRow = ({ items, direction = 'left', speed = 30 }) => (
         return (
           <span
             key={`${tech}-${index}`}
-            className="font-mono-ui inline-flex cursor-default flex-col items-center gap-2.5 rounded-xl border border-[#FFF8EE] bg-[#FFFFF0] px-4 py-3 text-[#452215] transition-colors hover:border-[#49C5B6] hover:bg-[#FFF8EE]"
+            className="font-mono-ui inline-flex cursor-default flex-col items-center gap-2.5 rounded-xl border border-[#FFF8EE] bg-[#FFFFF0] px-4 py-3 text-[#452215] transition-colors hover:border-[#DF6C4F] hover:bg-[#FFF8EE]"
           >
             <span className="flex h-12 w-12 items-center justify-center rounded-lg border border-[#DF6C4F]/20 bg-[#FFFFF0]">
               {TechLogo ? <TechLogo size={22} style={{ color: '#DF6C4F' }} /> : null}
@@ -225,9 +239,9 @@ const MarqueeRow = ({ items, direction = 'left', speed = 30 }) => (
       })}
     </motion.div>
   </div>
-);
+));
 
-export default function TechStack() {
+export default memo(function TechStack() {
   const [activeTab, setActiveTab] = useState('frontend');
   const containerRef = useRef(null);
 
@@ -318,33 +332,6 @@ export default function TechStack() {
         </div>
 
         <motion.div
-          className="mt-20 grid grid-cols-2 gap-8 md:grid-cols-4"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-        >
-          {[
-            { label: 'Technologies', value: '32+' },
-            { label: 'Years Exp.', value: '3+' },
-            { label: 'Projects', value: '50+' },
-            { label: 'Commits', value: '2K+' },
-          ].map((stat, index) => (
-            <motion.div
-              key={stat.label}
-              className="text-center"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              viewport={{ once: true }}
-            >
-              <div className="font-fliege mb-1 text-3xl text-[#452215] lg:text-4xl">{stat.value}</div>
-              <div className="font-caption text-sm text-[#452215]">{stat.label}</div>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        <motion.div
           className="mt-16 text-center"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -365,4 +352,4 @@ export default function TechStack() {
       </div>
     </section>
   );
-}
+});

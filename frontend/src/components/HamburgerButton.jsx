@@ -1,4 +1,6 @@
-export function HamburgerButton({ isOpen, onClick }) {
+import { memo } from 'react';
+
+export const HamburgerButton = memo(function HamburgerButton({ isOpen, onClick }) {
   return (
     <button
       type="button"
@@ -21,4 +23,4 @@ export function HamburgerButton({ isOpen, onClick }) {
       />
     </button>
   );
-}
+});

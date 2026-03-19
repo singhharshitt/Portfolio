@@ -35,8 +35,11 @@ export default function useScrollNavbar({ threshold = 10, topAt = 50 } = {}) {
     };
 
     window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, [update, topAt]);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      tickingRef.current = false;
+    };
+  }, [update, topAt, threshold]);
 
   return showNavbar;
 }

@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, memo } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 
 /**
@@ -41,7 +41,7 @@ export default function HorizontalGallery({ items = [] }) {
         return (
             <div className="px-4 grid grid-cols-1 gap-6">
                 {items.map((item, index) => (
-                    <GalleryCard key={item.id || index} item={item} index={index} />
+                    <GalleryCard key={item.id ? item.id : `gallery-${index}`} item={item} index={index} />
                 ))}
             </div>
         );
@@ -60,7 +60,7 @@ export default function HorizontalGallery({ items = [] }) {
                     className="flex gap-6 px-12"
                 >
                     {items.map((item, index) => (
-                        <GalleryCard key={item.id || index} item={item} index={index} />
+                        <GalleryCard key={item.id ? item.id : `gallery-${index}`} item={item} index={index} />
                     ))}
                 </motion.div>
             </div>
@@ -68,7 +68,7 @@ export default function HorizontalGallery({ items = [] }) {
     );
 }
 
-function GalleryCard({ item, index }) {
+const GalleryCard = memo(function GalleryCard({ item, index }) {
     return (
         <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -112,4 +112,4 @@ function GalleryCard({ item, index }) {
             </span>
         </motion.div>
     );
-}
+});
