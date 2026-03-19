@@ -3,7 +3,7 @@ import { AnimatePresence, motion, useInView, useScroll, useTransform } from '../
 import { ArrowUpRight, ChevronLeft, ChevronRight, Eye, FileText, Github, X } from 'lucide-react';
 import SwapVerse from '../assets/swapverse.png';
 import PrioSync from '../assets/PrioSync.png';
-import SkyX from '../assets/skyx.png';
+import SkyX from '../assets/SKYX.png';
 import mm from '../assets/mm.png';
 import InkDrop from '../assets/inkdrop.png';
 import WhiskandBloom from '../assets/whiskandbloom.png';
