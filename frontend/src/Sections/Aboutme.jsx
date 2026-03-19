@@ -357,8 +357,10 @@ export default function Aboutme() {
               viewport={{ once: true }}
             >
               <motion.a
-                href="/cv.pdf"
+                href={import.meta.env.VITE_RESUME_URL}
                 download
+                target="_blank"
+                rel="noopener noreferrer"
                 className="font-ui inline-flex items-center gap-2 rounded-full border-2 border-[#452215] bg-[#DF6C4F] px-6 py-3 text-sm text-[#FFFFF0] shadow-[4px_4px_0_#8F5E41] transition-all duration-300 hover:shadow-[6px_6px_0_#8F5E41] hover:-translate-y-1 hover:bg-[#FF9398]"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}

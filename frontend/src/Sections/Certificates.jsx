@@ -1,5 +1,6 @@
 import React, { memo, useMemo, useRef, useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence, useInView } from '../utils/motion';
+import { getCertificates } from '../constants/certificates';
 import { 
   BadgeCheck, 
   ExternalLink, 
@@ -19,81 +20,9 @@ import {
 } from 'lucide-react';
 
 /* ─────────────────────────────────────────────
-   CERTIFICATE FILE IMPORT (static glob)
+   BUILD CERTIFICATE LIST FROM ENVIRONMENT VARIABLES
    ───────────────────────────────────────────── */
-const CERTIFICATE_FILES = import.meta.glob('../Certificates/*.{pdf,PDF,jpg,JPG,jpeg,JPEG,png,PNG,webp,WEBP}', {
-  eager: true,
-  import: 'default',
-});
-
-const IMAGE_EXTENSIONS = new Set(['jpg', 'jpeg', 'png', 'webp']);
-
-/* ─────────────────────────────────────────────
-   METADATA RESOLUTION
-   ───────────────────────────────────────────── */
-const CERTIFICATE_ISSUER_RULES = [
-  { pattern: /coursera/i, issuer: 'Coursera', color: '#452215' },
-  { pattern: /udemy/i, issuer: 'Udemy', color: '#DF6C4F' },
-  { pattern: /google|gen ai google/i, issuer: 'Google', color: '#FF9398' },
-  { pattern: /adobe/i, issuer: 'Adobe', color: '#DF6C4F' },
-  { pattern: /iit/i, issuer: 'IIT Ropar', color: '#452215' },
-  { pattern: /neo/i, issuer: 'Neo Colab', color: '#FF9398' },
-  { pattern: /lpu/i, issuer: 'LPU', color: '#452215' },
-];
-
-const resolveIssuerMetadata = (name) => {
-  for (const rule of CERTIFICATE_ISSUER_RULES) {
-    if (rule.pattern.test(name)) return { issuer: rule.issuer, color: rule.color };
-  }
-  return { issuer: 'Certificate', color: '#452215' };
-};
-
-const normalizeTitle = (rawName) => {
-  const cleaned = rawName.replace(/[_-]+/g, ' ').replace(/\s+/g, ' ').trim();
-  const withoutGeneric = cleaned
-    .replace(/\bcertificate\b/gi, '')
-    .replace(/\bcert\b/gi, '')
-    .replace(/\s+/g, ' ')
-    .trim();
-  return withoutGeneric || cleaned;
-};
-
-const toCertificateId = (rawName) =>
-  rawName.toUpperCase().replace(/[^A-Z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 36);
-
-const toIssuedDate = (rawName) => {
-  const yearMatch = rawName.match(/(20\d{2})/);
-  return yearMatch ? `Issued ${yearMatch[1]}` : 'From Certificate Folder';
-};
-
-/* ─────────────────────────────────────────────
-   BUILD CERTIFICATE LIST (once at module load)
-   ───────────────────────────────────────────── */
-const CERTIFICATES = Object.entries(CERTIFICATE_FILES)
-  .map(([filePath, fileUrl]) => {
-    const fileName = filePath.split('/').pop() || '';
-    const extension = (fileName.split('.').pop() || '').toLowerCase();
-    const baseName = fileName.replace(/\.[^.]+$/, '');
-    const { issuer, color } = resolveIssuerMetadata(baseName);
-    const isImage = IMAGE_EXTENSIONS.has(extension);
-    const previewEmbedUrl = isImage
-      ? fileUrl
-      : `${fileUrl}#toolbar=0&navpanes=0&scrollbar=0&page=1&view=FitH`;
-    return {
-      title: normalizeTitle(baseName),
-      issuer,
-      date: toIssuedDate(baseName),
-      certificateId: toCertificateId(baseName),
-      previewType: isImage ? 'image' : 'pdf',
-      previewUrl: fileUrl,
-      previewEmbedUrl,
-      verifyUrl: '',
-      viewUrl: fileUrl,
-      downloadUrl: fileUrl,
-      color,
-    };
-  })
-  .sort((a, b) => a.title.localeCompare(b.title));
+const CERTIFICATES = getCertificates();
 
 /* ─────────────────────────────────────────────
    FLOATING PARTICLES FOR BACKGROUND

@@ -1,0 +1,154 @@
+{
+  "resume": {
+    "url": "https://res.cloudinary.com/dtvqrkwvv/raw/upload/v1773943685/resume/harshit-singh-cv.pdf",
+    "size": 164619,
+    "public_id": "resume/harshit-singh-cv.pdf"
+  },
+  "certificates": [
+    {
+      "fileName": "Adobe Participation.pdf",
+      "url": "https://res.cloudinary.com/dtvqrkwvv/raw/upload/v1773943686/certificates/adobe-participation.pdf",
+      "size": 251308,
+      "public_id": "certificates/adobe-participation.pdf"
+    },
+    {
+      "fileName": "CHAT GPT.pdf",
+      "url": "https://res.cloudinary.com/dtvqrkwvv/raw/upload/v1773943687/certificates/chat-gpt.pdf",
+      "size": 203637,
+      "public_id": "certificates/chat-gpt.pdf"
+    },
+    {
+      "fileName": "Computational Theory.pdf",
+      "url": "https://res.cloudinary.com/dtvqrkwvv/raw/upload/v1773943688/certificates/computational-theory.pdf",
+      "size": 122745,
+      "public_id": "certificates/computational-theory.pdf"
+    },
+    {
+      "fileName": "Coursera  computer communication.pdf",
+      "url": "https://res.cloudinary.com/dtvqrkwvv/raw/upload/v1773943688/certificates/coursera--computer-communication.pdf",
+      "size": 354566,
+      "public_id": "certificates/coursera--computer-communication.pdf"
+    },
+    {
+      "fileName": "Coursera Certificate.pdf",
+      "url": "https://res.cloudinary.com/dtvqrkwvv/raw/upload/v1773943690/certificates/coursera-certificate.pdf",
+      "size": 292750,
+      "public_id": "certificates/coursera-certificate.pdf"
+    },
+    {
+      "fileName": "Coursera Digital Systems- From Logic Gates to Processors.pdf",
+      "url": "https://res.cloudinary.com/dtvqrkwvv/raw/upload/v1773943692/certificates/coursera-digital-systems--from-logic-gates-to-processors.pdf",
+      "size": 315676,
+      "public_id": "certificates/coursera-digital-systems--from-logic-gates-to-processors.pdf"
+    },
+    {
+      "fileName": "Coursera Fundamentals of Network Communication.pdf",
+      "url": "https://res.cloudinary.com/dtvqrkwvv/raw/upload/v1773943693/certificates/coursera-fundamentals-of-network-communication.pdf",
+      "size": 319874,
+      "public_id": "certificates/coursera-fundamentals-of-network-communication.pdf"
+    },
+    {
+      "fileName": "Coursera Introduction to Hardware and Operating Systems.pdf",
+      "url": "https://res.cloudinary.com/dtvqrkwvv/raw/upload/v1773943694/certificates/coursera-introduction-to-hardware-and-operating-systems.pdf",
+      "size": 307579,
+      "public_id": "certificates/coursera-introduction-to-hardware-and-operating-systems.pdf"
+    },
+    {
+      "fileName": "Coursera Packet Switching Networks and Algorithms.pdf",
+      "url": "https://res.cloudinary.com/dtvqrkwvv/raw/upload/v1773943695/certificates/coursera-packet-switching-networks-and-algorithms.pdf",
+      "size": 319427,
+      "public_id": "certificates/coursera-packet-switching-networks-and-algorithms.pdf"
+    },
+    {
+      "fileName": "Coursera Peer-to-Peer Protocols and Local Area Networks.pdf",
+      "url": "https://res.cloudinary.com/dtvqrkwvv/raw/upload/v1773943695/certificates/coursera-peer-to-peer-protocols-and-local-area-networks.pdf",
+      "size": 319689,
+      "public_id": "certificates/coursera-peer-to-peer-protocols-and-local-area-networks.pdf"
+    },
+    {
+      "fileName": "Coursera TCP-IP and Advanced Topics.pdf",
+      "url": "https://res.cloudinary.com/dtvqrkwvv/raw/upload/v1773943696/certificates/coursera-tcp-ip-and-advanced-topics.pdf",
+      "size": 319226,
+      "public_id": "certificates/coursera-tcp-ip-and-advanced-topics.pdf"
+    },
+    {
+      "fileName": "Coursera The Bits and Bytes of Computer Networking.pdf",
+      "url": "https://res.cloudinary.com/dtvqrkwvv/raw/upload/v1773943697/certificates/coursera-the-bits-and-bytes-of-computer-networking.pdf",
+      "size": 298812,
+      "public_id": "certificates/coursera-the-bits-and-bytes-of-computer-networking.pdf"
+    },
+    {
+      "fileName": "GEN AI GOOGLE.pdf",
+      "url": "https://res.cloudinary.com/dtvqrkwvv/raw/upload/v1773943698/certificates/gen-ai-google.pdf",
+      "size": 286784,
+      "public_id": "certificates/gen-ai-google.pdf"
+    },
+    {
+      "fileName": "GEN AI UDEMY.pdf",
+      "url": "https://res.cloudinary.com/dtvqrkwvv/raw/upload/v1773943698/certificates/gen-ai-udemy.pdf",
+      "size": 223872,
+      "public_id": "certificates/gen-ai-udemy.pdf"
+    },
+    {
+      "fileName": "IIT ROPAR CERTIFICATE.pdf",
+      "url": "https://res.cloudinary.com/dtvqrkwvv/raw/upload/v1773943699/certificates/iit-ropar-certificate.pdf",
+      "size": 109892,
+      "public_id": "certificates/iit-ropar-certificate.pdf"
+    },
+    {
+      "fileName": "LPU MERN STACK CERTIFICATE.pdf",
+      "url": "https://res.cloudinary.com/dtvqrkwvv/raw/upload/v1773943700/certificates/lpu-mern-stack-certificate.pdf",
+      "size": 1023640,
+      "public_id": "certificates/lpu-mern-stack-certificate.pdf"
+    },
+    {
+      "fileName": "Launched Web3 Certificate.pdf",
+      "url": "https://res.cloudinary.com/dtvqrkwvv/raw/upload/v1773943701/certificates/launched-web3-certificate.pdf",
+      "size": 203936,
+      "public_id": "certificates/launched-web3-certificate.pdf"
+    },
+    {
+      "fileName": "NEO COLAB CPP.pdf",
+      "url": "https://res.cloudinary.com/dtvqrkwvv/raw/upload/v1773943701/certificates/neo-colab-cpp.pdf",
+      "size": 435147,
+      "public_id": "certificates/neo-colab-cpp.pdf"
+    },
+    {
+      "fileName": "NEO COLAB DSA.pdf",
+      "url": "https://res.cloudinary.com/dtvqrkwvv/raw/upload/v1773943702/certificates/neo-colab-dsa.pdf",
+      "size": 435716,
+      "public_id": "certificates/neo-colab-dsa.pdf"
+    },
+    {
+      "fileName": "NEO COLAB JAVA.pdf",
+      "url": "https://res.cloudinary.com/dtvqrkwvv/raw/upload/v1773943703/certificates/neo-colab-java.pdf",
+      "size": 305460,
+      "public_id": "certificates/neo-colab-java.pdf"
+    },
+    {
+      "fileName": "NEO COLLAB C Programming.pdf",
+      "url": "https://res.cloudinary.com/dtvqrkwvv/raw/upload/v1773943704/certificates/neo-collab-c-programming.pdf",
+      "size": 640784,
+      "public_id": "certificates/neo-collab-c-programming.pdf"
+    },
+    {
+      "fileName": "NO CODE TOOLS.pdf",
+      "url": "https://res.cloudinary.com/dtvqrkwvv/raw/upload/v1773943705/certificates/no-code-tools.pdf",
+      "size": 225234,
+      "public_id": "certificates/no-code-tools.pdf"
+    },
+    {
+      "fileName": "TATA Crucible Campus Partipiation.pdf",
+      "url": "https://res.cloudinary.com/dtvqrkwvv/raw/upload/v1773943706/certificates/tata-crucible-campus-partipiation.pdf",
+      "size": 682897,
+      "public_id": "certificates/tata-crucible-campus-partipiation.pdf"
+    },
+    {
+      "fileName": "Udemy Cetrtificate Master gen ai.pdf",
+      "url": "https://res.cloudinary.com/dtvqrkwvv/raw/upload/v1773943765/certificates/udemy-cetrtificate-master-gen-ai.pdf",
+      "size": 223872,
+      "public_id": "certificates/udemy-cetrtificate-master-gen-ai.pdf"
+    }
+  ],
+  "errors": []
+}
