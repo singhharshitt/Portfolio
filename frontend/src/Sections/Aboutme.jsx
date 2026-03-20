@@ -357,7 +357,7 @@ export default function Aboutme() {
               viewport={{ once: true }}
             >
               <motion.a
-                href={import.meta.env.VITE_RESUME_URL}
+                href={import.meta.env.VITE_RESUME_URL || '#'}
                 download
                 target="_blank"
                 rel="noopener noreferrer"
