@@ -7,7 +7,7 @@ import SkyX from '../assets/SKYX.png';
 import mm from '../assets/mm.png';
 import InkDrop from '../assets/inkdrop.png';
 import WhiskandBloom from '../assets/whiskandbloom.png';
-import GrabDesk from '../assets/grabdesk.png';
+import GrabDesk from '../assets/Grabdesk.png';
 
 import {
   SiReact,
