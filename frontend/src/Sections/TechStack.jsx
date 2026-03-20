@@ -20,7 +20,7 @@ import {
   SiPrisma,
   SiDocker,
   SiKubernetes,
-  SiAmazonwebservices,
+  SiAmazon,
   SiVercel,
   SiGithubactions,
   SiNginx,
@@ -62,7 +62,7 @@ const TECH_STACK = {
   devops: [
     { name: 'Docker', category: 'Container', icon: SiDocker, color: PALETTE[0], url: 'https://docker.com' },
     { name: 'Kubernetes', category: 'Orchestration', icon: SiKubernetes, color: PALETTE[1], url: 'https://kubernetes.io' },
-    { name: 'AWS', category: 'Cloud', icon: SiAmazonwebservices, color: PALETTE[2], url: 'https://aws.amazon.com' },
+    { name: 'AWS', category: 'Cloud', icon: SiAmazon, color: PALETTE[2], url: 'https://aws.amazon.com' },
     { name: 'Vercel', category: 'Deployment', icon: SiVercel, color: PALETTE[0], url: 'https://vercel.com' },
     { name: 'GitHub Actions', category: 'CI/CD', icon: SiGithubactions, color: PALETTE[1], url: 'https://github.com/features/actions' },
     { name: 'Nginx', category: 'Server', icon: SiNginx, color: PALETTE[2], url: 'https://nginx.org' },
@@ -102,7 +102,7 @@ const MARQUEE_TECH_ICONS = {
   TypeScript: SiTypescript,
   MongoDB: SiMongodb,
   Docker: SiDocker,
-  AWS: SiAmazonwebservices,
+  AWS: SiAmazon,
   Tailwind: SiTailwindcss,
   GraphQL: SiGraphql,
   Redis: SiRedis,
@@ -314,7 +314,7 @@ export default memo(function TechStack() {
 
         <TabSlider activeTab={activeTab} onTabChange={setActiveTab} />
 
-        <div className="relative min-h-[400px]">
+        <div className="relative min-h-100">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}
