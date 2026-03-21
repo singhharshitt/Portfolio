@@ -81,7 +81,7 @@ const TECH_STACK = {
   ],
 };
 
-const LEARNING_PHASE_TECHS = ['Kubernetes', 'Terraform', 'Prometheus', 'GraphQL', 'Redis', 'Socket.io'];
+const LEARNING_PHASE_TECHS = ['Kubernetes', 'Terraform', 'Prometheus', 'GraphQL', 'Redis', 'Prisma','Next.js', 'Jest', 'Storybook','Slack','Nginx','AWS'];
 
 const TAB_LABELS = [
   { id: 'frontend', label: 'Frontend' },

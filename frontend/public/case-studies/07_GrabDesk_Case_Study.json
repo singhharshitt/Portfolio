@@ -1,0 +1,61 @@
+{
+  "title": "GrabDesk",
+  "description": "GrabDesk is my real-time commerce platform focused on live admin clarity, recommendation relevance, and secure checkout logic.",
+  "techStack": [
+    "React 18",
+    "Node.js + Express",
+    "MongoDB",
+    "Socket.IO",
+    "Cloudinary",
+    "Vercel/Render"
+  ],
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "GrabDesk started when I saw how much admin time gets wasted in stale dashboards and delayed inventory updates."
+    },
+    {
+      "type": "heading",
+      "text": "What I wanted to fix"
+    },
+    {
+      "type": "paragraph",
+      "text": "I needed admins to operate from one live truth, and I needed users to get recommendations that felt relevant even without massive data volume."
+    },
+    {
+      "type": "paragraph",
+      "text": "Socket.IO handled real-time dashboard sync, while tag-based recommendation scoring gave contextual suggestions with lightweight behavior signals."
+    },
+    {
+      "type": "highlight",
+      "text": "Real-time updates were not visual polish. They were operational safety."
+    },
+    {
+      "type": "heading",
+      "text": "Security and scale work"
+    },
+    {
+      "type": "paragraph",
+      "text": "I enforced server-side price recalculation at checkout so the backend never trusted client-submitted totals. I also kept images in Cloudinary to avoid bloating MongoDB with binary payloads."
+    },
+    {
+      "type": "quote",
+      "text": "In commerce, silent trust in the client is how expensive bugs are born."
+    },
+    {
+      "type": "paragraph",
+      "text": "For stock consistency under concurrent operations, I switched to atomic update patterns so inventory state stayed correct under load."
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "paragraph",
+      "text": "GrabDesk taught me to balance three priorities at once: fast operations, secure transactions, and recommendations that still feel personal."
+    },
+    {
+      "type": "gif",
+      "suggestion": "Admin product update instantly broadcasting to all connected dashboards"
+    }
+  ]
+}

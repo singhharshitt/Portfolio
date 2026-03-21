@@ -1,6 +1,8 @@
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion, useInView, useScroll, useTransform } from '../utils/motion';
 import { ArrowUpRight, ChevronLeft, ChevronRight, Eye, FileText, Github, X } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { getProjectSlug } from '../utils/projectSlug';
 import SwapVerse from '../assets/swapverse.png';
 import PrioSync from '../assets/PrioSync.png';
 import SkyX from '../assets/SKYX.png';
@@ -10,8 +12,12 @@ import WhiskandBloom from '../assets/whiskandbloom.png';
 import GrabDesk from '../assets/Grabdesk.png';
 
 import {
+  SiCss3,
+  SiHtml5,
+  SiJavascript,
   SiReact,
   SiNextdotjs,
+  SiPython,
   SiTypescript,
   SiTailwindcss,
   SiNodedotjs,
@@ -45,25 +51,25 @@ const PROJECT_IMAGES = {
 const PROJECT_TECH_STACK = {
   PrioSync: [
     { name: 'React', icon: SiReact, color: '#452215' },
-    { name: 'TypeScript', icon: SiTypescript, color: '#DF6C4F' },
-    { name: 'Tailwind', icon: SiTailwindcss, color: '#FF9398' },
-    { name: 'Vercel', icon: SiVercel, color: '#452215' },
+    { name: 'Tailwind CSS', icon: SiTailwindcss, color: '#DF6C4F' },
+    { name: 'Express', icon: SiExpress, color: '#FF9398' },
+    { name: 'MongoDB', icon: SiMongodb, color: '#452215' },
   ],
   SkyX: [
-    { name: 'Next.js', icon: SiNextdotjs, color: '#DF6C4F' },
-    { name: 'TypeScript', icon: SiTypescript, color: '#FF9398' },
-    { name: 'Tailwind', icon: SiTailwindcss, color: '#452215' },
-    { name: 'Vercel', icon: SiVercel, color: '#DF6C4F' },
-  ],
-  MovieMagic: [
-    { name: 'React', icon: SiReact, color: '#FF9398' },
+    { name: 'JavaScript', icon: SiJavascript, color: '#DF6C4F' },
+    { name: 'Tailwind CSS', icon: SiTailwindcss, color: '#FF9398' },
     { name: 'Node.js', icon: SiNodedotjs, color: '#452215' },
     { name: 'Express', icon: SiExpress, color: '#DF6C4F' },
-    { name: 'MongoDB', icon: SiMongodb, color: '#FF9398' },
+  ],
+  MovieMagic: [
+    { name: 'HTML5', icon: SiHtml5, color: '#FF9398' },
+    { name: 'CSS3', icon: SiCss3, color: '#452215' },
+    { name: 'JavaScript', icon: SiJavascript, color: '#DF6C4F' },
+    { name: 'Flask/Python', icon: SiPython, color: '#FF9398' },
   ],
   InkDrop: [
     { name: 'React', icon: SiReact, color: '#452215' },
-    { name: 'Node.js', icon: SiNodedotjs, color: '#DF6C4F' },
+    { name: 'Tailwind CSS', icon: SiTailwindcss, color: '#DF6C4F' },
     { name: 'Express', icon: SiExpress, color: '#FF9398' },
     { name: 'MongoDB', icon: SiMongodb, color: '#452215' },
   ],
@@ -75,19 +81,19 @@ const PROJECT_TECH_STACK = {
   ],
   SwapVerse: [
     { name: 'React', icon: SiReact, color: '#FF9398' },
+    { name: 'Tailwind CSS', icon: SiTailwindcss, color: '#452215' },
     { name: 'Node.js', icon: SiNodedotjs, color: '#452215' },
-    { name: 'Express', icon: SiExpress, color: '#DF6C4F' },
-    { name: 'PostgreSQL', icon: SiPostgresql, color: '#FF9398' },
+    { name: 'Ethers.js', icon: SiNodedotjs, color: '#DF6C4F' },
   ],
   GrabDesk: [
-    { name: 'Next.js', icon: SiNextdotjs, color: '#452215' },
-    { name: 'TypeScript', icon: SiTypescript, color: '#DF6C4F' },
-    { name: 'Prisma', icon: SiPrisma, color: '#FF9398' },
-    { name: 'PostgreSQL', icon: SiPostgresql, color: '#452215' },
+    { name: 'React', icon: SiReact, color: '#452215' },
+    { name: 'Tailwind CSS', icon: SiTailwindcss, color: '#DF6C4F' },
+    { name: 'Express', icon: SiExpress, color: '#FF9398' },
+    { name: 'MongoDB', icon: SiMongodb, color: '#452215' },
   ],
 };
 
-const PROJECTS = [
+export const PROJECTS = [
   {
     title: 'PrioSync',
     description: 'Priority-focused productivity experience deployed for real-time usage.',
@@ -217,7 +223,7 @@ const ProjectCard = memo(function ProjectCard({ project, index, onOpenPreview, o
       <div className="h-full rounded-2xl border-2 border-[#452215] shadow-[4px_4px_0_#8F5E41] transition-all duration-300 hover:shadow-[6px_6px_0_#8F5E41] bg-[#FFFFF0] p-6">
         <div className="flex h-full flex-col gap-6">
           {/* Project Image */}
-          <div className="relative h-48 w-full overflow-hidden rounded-xl border-2 border-[#452215] bg-[#FFF8EE]">
+          <div className="relative aspect-video w-full overflow-hidden rounded-xl border-2 border-[#452215] bg-[#FFF8EE]">
             <img
               src={project.image}
               alt={`${project.title} preview`}
@@ -269,7 +275,7 @@ const ProjectCard = memo(function ProjectCard({ project, index, onOpenPreview, o
           <div className="mt-auto flex flex-wrap gap-3">
             <ActionButton icon={Eye} label="Live Preview" variant="primary" onClick={() => onOpenPreview(project)} />
             <ActionButton href={project.githubUrl} icon={Github} label="GitHub" variant="outline" />
-            <ActionButton icon={FileText} label="Case Study" variant="secondary" onClick={() => onOpenCaseStudy(project)} />
+            <ActionButton icon={FileText} label="Read Case Study" variant="secondary" onClick={() => onOpenCaseStudy(project)} />
           </div>
         </div>
       </div>
@@ -615,6 +621,7 @@ const HorizontalScrollGallery = memo(function HorizontalScrollGallery({ onOpenPr
    MAIN EXPORT
    ───────────────────────────────────────────── */
 export default memo(function ProjectsSection() {
+  const navigate = useNavigate();
   const headerRef = useRef(null);
   const [activePreviewProject, setActivePreviewProject] = useState(null);
   const [activeCaseStudyProject, setActiveCaseStudyProject] = useState(null);
@@ -657,8 +664,9 @@ export default memo(function ProjectsSection() {
   }, []);
   const openCaseStudy = useCallback((project) => {
     setActivePreviewProject(null);
-    setActiveCaseStudyProject(project);
-  }, []);
+    setActiveCaseStudyProject(null);
+    navigate(`/case-study/${getProjectSlug(project.title)}`);
+  }, [navigate]);
 
   return (
     <section id="projects-showcase" className="relative min-h-screen w-full overflow-hidden bg-[#FFFFF0] py-20 lg:py-32">

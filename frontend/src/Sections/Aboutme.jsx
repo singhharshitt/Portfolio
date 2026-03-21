@@ -43,7 +43,7 @@ export default function Aboutme() {
   });
 
   const smoothProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
-  const x1 = useTransform(smoothProgress, [0, 1], [100, -100]);
+  const x1 = useTransform(smoothProgress, [0, 1], [60, -60]);
   const y1 = useTransform(smoothProgress, [0, 1], [-30, 30]);
   const rotate1 = useTransform(smoothProgress, [0, 1], [-5, 5]);
   const scale = useTransform(smoothProgress, [0, 0.5, 1], [0.8, 1, 0.9]);
@@ -91,7 +91,7 @@ export default function Aboutme() {
       src: profileMain,
       alt: 'Harshit Singh - Profile',
       style: { x: x1, y: y1, rotate: rotate1 },
-      className: 'h-80 w-64 rounded-2xl object-cover shadow-[0_24px_48px_rgba(69,34,21,0.12)] z-10 border-2 border-[#452215]',
+      className: 'h-96 w-[19.2rem] rounded-2xl object-cover shadow-[0_24px_48px_rgba(69,34,21,0.12)] z-10 border-2 border-[#452215] sm:h-[26rem] sm:w-[20.8rem] lg:h-[32rem] lg:w-[25.6rem]',
       delay: 0,
     },
   ];
@@ -162,19 +162,19 @@ export default function Aboutme() {
         }}
       />
 
-      <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-12">
-        <div className="grid min-h-[80vh] items-center gap-12 lg:grid-cols-2 lg:gap-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid min-h-[72vh] items-center gap-10 sm:gap-12 lg:min-h-[80vh] lg:grid-cols-2 lg:gap-16">
 
           {/* Image Section */}
           <motion.div
-            className="relative flex h-[500px] items-center justify-center lg:h-[600px]"
+            className="relative flex h-108 items-center justify-center sm:h-128 lg:h-150 lg:justify-start"
             style={{ scale, opacity }}
           >
-            <div className="relative flex h-full w-full items-center justify-center">
+            <div className="relative flex h-full w-full items-center justify-center lg:justify-start">
               {images.map((img, index) => (
                 <motion.div
                   key={index}
-                  className="absolute left-1/2 -translate-x-1/2"
+                  className="absolute left-1/2 -translate-x-1/2 lg:left-[44%]"
                   style={img.style}
                   initial={{ opacity: 0, y: 50 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -238,7 +238,7 @@ export default function Aboutme() {
 
           {/* Content Section */}
           <motion.div
-            className="space-y-8 lg:pl-8"
+            className="space-y-6 sm:space-y-7 lg:space-y-8 lg:pl-6 xl:pl-8"
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
@@ -268,17 +268,7 @@ export default function Aboutme() {
               transition={{ delay: 0.3 }}
               viewport={{ once: true }}
             >
-              I design and build{' '}
-              <motion.span 
-                className="italic inline-block text-[#DF6C4F]"
-                animate={{ 
-                  rotate: [0, 2, -2, 0],
-                  scale: [1, 1.05, 1]
-                }}
-                transition={{ duration: 4, repeat: Infinity }}
-              >
-                modern web experiences
-              </motion.span>
+              Building With Purpose
             </motion.h2>
 
             <motion.p 
@@ -288,10 +278,10 @@ export default function Aboutme() {
               transition={{ delay: 0.4 }}
               viewport={{ once: true }}
             >
-              I'm a full-stack developer focused on building fast, scalable,
-              and user-centered web applications. I enjoy transforming complex
-              ideas into clean, intuitive digital experiences using modern
-              technologies like React, Node.js, and thoughtful design systems.
+              I am a full-stack developer from India who loves building things on
+              the internet. What began as college curiosity - exploring,
+              experimenting, breaking, and learning - grew into the work I care
+              about most.
             </motion.p>
 
             <motion.p 
@@ -301,9 +291,33 @@ export default function Aboutme() {
               transition={{ delay: 0.5 }}
               viewport={{ once: true }}
             >
-              I'm passionate about crafting interfaces that feel effortless,
-              while ensuring the underlying architecture is reliable,
-              maintainable, and built for long-term growth.
+              I enjoy turning ideas into real products people can use and connect
+              with, with a strong focus on clean, thoughtful, and well-designed
+              experiences.
+            </motion.p>
+
+            <motion.p 
+              className="font-bodycopy max-w-lg text-lg leading-relaxed text-[#452215] opacity-80"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ delay: 0.6 }}
+              viewport={{ once: true }}
+            >
+              These days, I mostly work with React, Node.js, and modern
+              full-stack tools - building projects, experimenting with UI/UX, and
+              improving through hands-on work, mistakes, and iteration.
+            </motion.p>
+
+            <motion.p 
+              className="font-bodycopy max-w-lg text-lg leading-relaxed text-[#452215] opacity-80"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ delay: 0.7 }}
+              viewport={{ once: true }}
+            >
+              Outside coding, I am drawn to open-source, freelancing, and design.
+              For me, development is about solving problems, thinking
+              differently, and getting a little better every day.
             </motion.p>
 
             {/* Skills */}

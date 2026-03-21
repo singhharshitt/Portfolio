@@ -1,4 +1,4 @@
-import React, { memo, useRef } from 'react';
+import React, { memo, useRef, lazy, Suspense } from 'react';
 import { motion, useInView, useScroll, useTransform } from '../utils/motion';
 import { 
   Code2, 
@@ -11,8 +11,15 @@ import {
   Zap,
   ArrowRight,
   Heart,
-  Star
+  Star,
+  Activity
 } from 'lucide-react';
+import { useGitHubActivity, useLeetCodeStats } from '../hooks/useActivityData';
+
+// Lazy load heavy activity components
+const GitHubHeatmap = lazy(() => import('../components/activity/GitHubHeatmap'));
+const LeetCodeStats = lazy(() => import('../components/activity/LeetCodeStats'));
+const ActivityCard = lazy(() => import('../components/activity/ActivityCard'));
 
 const INTERESTS = [
   {
@@ -152,13 +159,7 @@ const InterestCard = memo(function InterestCard({ item, index }) {
         animate={inView ? { scale: 1 } : {}}
         transition={{ delay: index * 0.08 + 0.3 }}
       />
-      <motion.div
-        className="absolute bottom-0 right-0 h-8 w-8 border-b-2 border-r-2 border-[#DF6C4F] opacity-0 transition-all duration-500 group-hover:opacity-100"
-        style={{ borderColor: item.color }}
-        initial={{ scale: 0 }}
-        animate={inView ? { scale: 1 } : {}}
-        transition={{ delay: index * 0.08 + 0.4 }}
-      />
+
 
       {/* Icon Container with Enhanced Animation */}
       <motion.div
@@ -246,6 +247,135 @@ const InterestCard = memo(function InterestCard({ item, index }) {
         <ArrowRight size={18} style={{ color: item.color }} />
       </motion.div>
     </motion.div>
+  );
+});
+
+/**
+ * Coding Activity sub-section: GitHub contributions + LeetCode stats.
+ * Lazy-loaded and uses React Query for data caching.
+ */
+const CodingActivitySection = memo(function CodingActivitySection() {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-40px' });
+
+  const github = useGitHubActivity();
+  const leetcode = useLeetCodeStats();
+
+  return (
+    <motion.div
+      ref={ref}
+      className="mt-14"
+      initial={{ opacity: 0, y: 40 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.6, delay: 0.1 }}
+    >
+      {/* Sub-heading */}
+      <div className="mb-8 flex items-center gap-3">
+        <motion.div
+          className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#452215]/10"
+          whileHover={{ scale: 1.1, rotate: 5 }}
+          transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+        >
+          <Activity size={18} className="text-[#DF6C4F]" />
+        </motion.div>
+        <div>
+          <motion.h3
+            className="font-ui text-lg text-[#452215]"
+            initial={{ opacity: 0, x: -10 }}
+            animate={inView ? { opacity: 1, x: 0 } : {}}
+            transition={{ delay: 0.15 }}
+          >
+            Coding Activity
+          </motion.h3>
+          <motion.p
+            className="font-caption text-xs text-[#452215]/50"
+            initial={{ opacity: 0 }}
+            animate={inView ? { opacity: 1 } : {}}
+            transition={{ delay: 0.25 }}
+          >
+            Real-time stats from GitHub & LeetCode
+          </motion.p>
+        </div>
+      </div>
+
+      {/* Activity cards grid */}
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <Suspense
+          fallback={
+            <div className="rounded-2xl border-2 border-[#452215] bg-[#FFFFF0] p-6 shadow-[4px_4px_0_#8F5E41] animate-pulse">
+              <div className="h-4 w-1/3 rounded bg-[#452215]/10 mb-4" />
+              <div className="h-32 w-full rounded bg-[#452215]/05" />
+            </div>
+          }
+        >
+          {github.isLoading ? (
+            <LoadingCard title="GitHub Contributions" />
+          ) : github.isError ? (
+            <ErrorCard title="GitHub Contributions" error={github.error} />
+          ) : github.data ? (
+            <GitHubHeatmap data={github.data} />
+          ) : null}
+        </Suspense>
+
+        <Suspense
+          fallback={
+            <div className="rounded-2xl border-2 border-[#452215] bg-[#FFFFF0] p-6 shadow-[4px_4px_0_#8F5E41] animate-pulse">
+              <div className="h-4 w-1/3 rounded bg-[#452215]/10 mb-4" />
+              <div className="h-32 w-full rounded bg-[#452215]/05" />
+            </div>
+          }
+        >
+          {leetcode.isLoading ? (
+            <LoadingCard title="LeetCode Progress" />
+          ) : leetcode.isError ? (
+            <ErrorCard title="LeetCode Progress" error={leetcode.error} />
+          ) : leetcode.data ? (
+            <LeetCodeStats data={leetcode.data} />
+          ) : null}
+        </Suspense>
+      </div>
+    </motion.div>
+  );
+});
+
+/**
+ * Loading skeleton card matching the theme.
+ */
+const LoadingCard = memo(function LoadingCard({ title }) {
+  return (
+    <div className="rounded-2xl border-2 border-[#452215] bg-[#FFFFF0] p-6 shadow-[4px_4px_0_#8F5E41]">
+      <h4 className="font-ui mb-4 text-base text-[#452215]">{title}</h4>
+      <div className="space-y-3 animate-pulse">
+        <div className="h-4 w-3/4 rounded bg-[#452215]/10" />
+        <div className="h-4 w-1/2 rounded bg-[#452215]/10" />
+        <div className="h-24 w-full rounded bg-[#452215]/05" />
+      </div>
+    </div>
+  );
+});
+
+/**
+ * Error fallback card matching the theme.
+ */
+const ErrorCard = memo(function ErrorCard({ title, error }) {
+  return (
+    <div className="rounded-2xl border-2 border-[#452215] bg-[#FFFFF0] p-6 shadow-[4px_4px_0_#8F5E41]">
+      <h4 className="font-ui mb-4 text-base text-[#452215]">{title}</h4>
+      <div className="rounded-lg border border-[#DF6C4F]/20 bg-[#DF6C4F]/5 p-4 text-center">
+        <p className="font-bodycopy text-sm text-[#452215]/70">
+          {error?.message?.includes('not set')
+            ? 'API key not configured'
+            : error?.message?.includes('cached data')
+            ? 'Showing last updated data'
+            : 'Unable to load data right now'}
+        </p>
+        <p className="font-caption mt-1 text-xs text-[#452215]/50">
+          {error?.message?.includes('cached data') 
+            ? 'Latest data will load when available'
+            : 'Data will appear once available'}
+        </p>
+      </div>
+    </div>
   );
 });
 
@@ -346,7 +476,7 @@ export default function InterestsSection() {
               transition={{ duration: 0.5, delay: 0.1 }}
               viewport={{ once: true }}
             />
-            Interests
+            Interests & Activity
           </motion.span>
 
           <motion.h2
@@ -384,6 +514,9 @@ export default function InterestsSection() {
             <InterestCard key={item.title} item={item} index={index} />
           ))}
         </div>
+
+        {/* ── Coding Activity Sub-section ── */}
+        <CodingActivitySection />
 
         {/* Bottom CTA */}
         <motion.div

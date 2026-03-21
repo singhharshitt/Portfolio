@@ -37,7 +37,7 @@ function Footer() {
     <footer className="border-t border-[#DF6C4F]/20 bg-[#452215] px-10 pb-10 pt-20">
       <div className="mx-auto grid max-w-350 grid-cols-[2fr_1fr_1fr_1fr_2fr] gap-12 max-[1200px]:grid-cols-[1fr_1fr_1fr] max-[768px]:grid-cols-1 max-[768px]:gap-7">
         <div>
-          <h3 className="font-fliege m-0 mb-4 text-[2rem] text-[#FFFFF0]">Harshit.</h3>
+          <h3 className="font-fliege m-0 mb-4 text-[2rem] text-[#FFFFF0]">H.</h3>
           <p className="font-bodycopy m-0 max-w-70 text-[.95rem] leading-relaxed text-[#FFF8EE]">
             Building products with careful structure, expressive interfaces, and measurable outcomes.
           </p>
@@ -65,10 +65,10 @@ function Footer() {
         <div className="font-bodycopy text-[.8rem] leading-relaxed text-[#FFF8EE]">
           <p>Based in India. Working globally.</p>
           <a
-            href="mailto:singhharshit2410@gmail.com"
+            href="mailto:iamharshit242004@gmail.com"
             className="my-1.5 inline-block text-[#FFF8EE] underline underline-offset-2 transition-colors duration-200 hover:text-[#49C5B6]"
           >
-            singhharshit2410@gmail.com
+            iamharshit242004@gmail.com
           </a>
           <p>Available for freelance and full-time roles.</p>
         </div>

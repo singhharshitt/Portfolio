@@ -1,0 +1,61 @@
+{
+  "title": "SwapVerse",
+  "description": "SwapVerse was my non-custodial web3 build focused on wallet ownership, transparent transaction flow, and trustworthy on-chain behavior.",
+  "techStack": [
+    "React 18",
+    "Ethers.js",
+    "Solidity",
+    "Hardhat",
+    "MetaMask/Phantom",
+    "Sepolia Testnet"
+  ],
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "I built SwapVerse after asking myself why users should hand over custody when smart contracts can execute swaps directly."
+    },
+    {
+      "type": "heading",
+      "text": "Trust model first"
+    },
+    {
+      "type": "paragraph",
+      "text": "The product architecture is simple in principle: the smart contract is the execution layer, and the frontend is a clear transaction interface."
+    },
+    {
+      "type": "paragraph",
+      "text": "I added multi-wallet support and kept approval plus swap as explicit user steps so nothing happened silently."
+    },
+    {
+      "type": "highlight",
+      "text": "In web3, clarity is a feature. Users should see and approve every critical step."
+    },
+    {
+      "type": "heading",
+      "text": "Where I struggled"
+    },
+    {
+      "type": "paragraph",
+      "text": "Connection state got complicated quickly with account switching, network mismatch, and disconnect events. I replaced simple flags with explicit state transitions and wallet event listeners."
+    },
+    {
+      "type": "quote",
+      "text": "Some friction is not bad UX. Sometimes it is security doing its job."
+    },
+    {
+      "type": "paragraph",
+      "text": "I also leaned on contract events for transaction history, so the UI reflected on-chain truth instead of guessing from delayed polling."
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "paragraph",
+      "text": "SwapVerse taught me to treat trust as a measurable product output, not a marketing claim."
+    },
+    {
+      "type": "gif",
+      "suggestion": "Two-step flow with wallet approval followed by successful token swap confirmation"
+    }
+  ]
+}

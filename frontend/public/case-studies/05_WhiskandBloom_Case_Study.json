@@ -1,0 +1,60 @@
+{
+  "title": "Whisk & Bloom",
+  "description": "Whisk & Bloom is where I treated storytelling and visual craft as core engineering outcomes, not cosmetic add-ons.",
+  "techStack": [
+    "HTML5",
+    "CSS3",
+    "Vite",
+    "Tailwind CSS",
+    "Vercel"
+  ],
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "This project started from a different question: how do you preserve food stories with care, not just publish recipes quickly?"
+    },
+    {
+      "type": "heading",
+      "text": "Choosing constraints on purpose"
+    },
+    {
+      "type": "paragraph",
+      "text": "I could have built a dynamic app with accounts and comments, but the mission needed fast, elegant, readable pages more than feature complexity."
+    },
+    {
+      "type": "paragraph",
+      "text": "So I chose a static architecture and focused deeply on typography, responsive imagery, and content rhythm to make each recipe feel like a cultural story."
+    },
+    {
+      "type": "highlight",
+      "text": "Saying no to unnecessary features made the core experience stronger."
+    },
+    {
+      "type": "heading",
+      "text": "What broke and what improved"
+    },
+    {
+      "type": "paragraph",
+      "text": "Image behavior across devices needed iteration. I introduced responsive sources and loading strategy so mobile stayed fast while desktop stayed rich."
+    },
+    {
+      "type": "quote",
+      "text": "For this project, design quality was engineering quality."
+    },
+    {
+      "type": "paragraph",
+      "text": "I kept resisting feature creep and prioritized consistency across pages. That decision made the site feel curated instead of stitched together."
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "paragraph",
+      "text": "Whisk & Bloom reinforced a core lesson: constraints are powerful when they are chosen intentionally and executed with discipline."
+    },
+    {
+      "type": "gif",
+      "suggestion": "Smooth transition from recipe card preview to full story-rich recipe layout across mobile and desktop"
+    }
+  ]
+}

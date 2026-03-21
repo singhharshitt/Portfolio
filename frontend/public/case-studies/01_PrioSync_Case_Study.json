@@ -1,0 +1,60 @@
+{
+  "title": "PrioSync",
+  "description": "I built PrioSync after feeling the daily friction of staring at a huge task list and still not knowing what to do first.",
+  "techStack": [
+    "React 19",
+    "Zustand",
+    "Express.js",
+    "MongoDB",
+    "Custom DAG Implementation"
+  ],
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "I did not start PrioSync because I wanted another productivity app. I started it because my own task list kept stealing time from actual work."
+    },
+    {
+      "type": "heading",
+      "text": "Where it started to hurt"
+    },
+    {
+      "type": "paragraph",
+      "text": "I had urgent tasks, important tasks, and blocked tasks all mixed together. On paper it looked organized, but in practice I kept choosing the wrong next step."
+    },
+    {
+      "type": "paragraph",
+      "text": "So I built a weighted priority engine that scores urgency, importance, deadline pressure, and task ease. Instead of manually tagging everything as high, the system calculates what deserves attention now."
+    },
+    {
+      "type": "highlight",
+      "text": "The turning point was replacing subjective labels with objective scoring."
+    },
+    {
+      "type": "heading",
+      "text": "The hard part"
+    },
+    {
+      "type": "paragraph",
+      "text": "High score did not always mean executable work. Dependencies kept breaking the flow, so I implemented DAG logic with cycle detection and topological sorting to produce valid order."
+    },
+    {
+      "type": "quote",
+      "text": "The worst bug was a smart-looking recommendation for a task I could not even start."
+    },
+    {
+      "type": "paragraph",
+      "text": "I also fixed stale multi-tab behavior using browser events and localStorage sync signals, then deduped refresh calls so changes appeared quickly without noisy API traffic."
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "paragraph",
+      "text": "PrioSync taught me that productivity UX is mostly trust. If the next-task signal is consistently right, users stop debating the list and start shipping work."
+    },
+    {
+      "type": "gif",
+      "suggestion": "Task priorities automatically reordering as a deadline approaches and dependency status changes"
+    }
+  ]
+}

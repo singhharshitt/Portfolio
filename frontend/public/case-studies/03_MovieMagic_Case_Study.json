@@ -1,0 +1,59 @@
+{
+  "title": "MovieMagic",
+  "description": "MovieMagic was my way of making movie discovery feel like conversation instead of form-filling.",
+  "techStack": [
+    "Python Flask",
+    "Vanilla JavaScript",
+    "TMDB API",
+    "Render"
+  ],
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "I was tired of endless scrolling and generic recommendations, so I built a chat-first movie finder."
+    },
+    {
+      "type": "heading",
+      "text": "Why conversation"
+    },
+    {
+      "type": "paragraph",
+      "text": "People naturally ask for movies in sentences, not in strict filter combinations. I wanted the product to understand that style of intent."
+    },
+    {
+      "type": "paragraph",
+      "text": "I used deterministic pattern matching and intent routing instead of a large language model. That gave fast responses, no hallucinated titles, and easier debugging."
+    },
+    {
+      "type": "highlight",
+      "text": "Predictable behavior beat flashy but unstable intelligence."
+    },
+    {
+      "type": "heading",
+      "text": "Bugs that shaped the system"
+    },
+    {
+      "type": "paragraph",
+      "text": "Person-name ambiguity caused wrong filmography results at first. I fixed it with popularity-based disambiguation and safer fallback messaging."
+    },
+    {
+      "type": "quote",
+      "text": "The chatbot did not need to be magical. It needed to be reliably useful."
+    },
+    {
+      "type": "paragraph",
+      "text": "I also added deduplication in result rendering and improved regional language filtering so recommendations felt cleaner and culturally relevant."
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "paragraph",
+      "text": "MovieMagic taught me that conversational UX is expectation design. Be clear about what the system can do, then execute that really well."
+    },
+    {
+      "type": "gif",
+      "suggestion": "User prompt transforms into typed response and poster cards with filtered recommendations"
+    }
+  ]
+}

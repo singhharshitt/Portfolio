@@ -1,0 +1,61 @@
+{
+  "title": "SkyX",
+  "description": "SkyX came from one frustration: converting fiat and crypto across multiple tools was slow, fragmented, and unreliable.",
+  "techStack": [
+    "Vanilla JavaScript",
+    "Express.js",
+    "Axios",
+    "Chart.js",
+    "Three.js",
+    "WebSocket"
+  ],
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "I built SkyX because simple conversion should not require a full browser tab strategy."
+    },
+    {
+      "type": "heading",
+      "text": "The real problem"
+    },
+    {
+      "type": "paragraph",
+      "text": "The challenge was not the math. It was reliability across different APIs with different failure modes, update frequencies, and limits."
+    },
+    {
+      "type": "paragraph",
+      "text": "I designed the app as an orchestrator with fallback chains. If one source failed, the system moved to the next and still returned useful output."
+    },
+    {
+      "type": "highlight",
+      "text": "I optimized for bad-day behavior, not perfect-day demos."
+    },
+    {
+      "type": "heading",
+      "text": "Decisions that mattered"
+    },
+    {
+      "type": "paragraph",
+      "text": "WebSocket handled real-time crypto updates, while HTTP fallback covered blocked or unstable connections. For historical data, I used caching windows so charts felt instant without hammering APIs."
+    },
+    {
+      "type": "quote",
+      "text": "A converter is only trustworthy when it still works while dependencies are failing."
+    },
+    {
+      "type": "paragraph",
+      "text": "I also moved third-party calls behind backend routes to avoid CORS chaos and centralize validation, error handling, and request control."
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "paragraph",
+      "text": "SkyX sharpened how I think about graceful degradation. Real-time is great, but reliability is what users remember."
+    },
+    {
+      "type": "gif",
+      "suggestion": "Primary API failure with automatic fallback while conversion results continue to update"
+    }
+  ]
+}

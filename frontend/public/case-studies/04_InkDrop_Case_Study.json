@@ -1,0 +1,60 @@
+{
+  "title": "InkDrop",
+  "description": "InkDrop started as a simple library idea and became a full request-to-fulfillment system with moderation and role-aware workflows.",
+  "techStack": [
+    "React 18",
+    "Express.js",
+    "MongoDB",
+    "Supabase S3",
+    "Socket.IO"
+  ],
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "InkDrop began with a very real pain: students paying too much for books they needed only briefly."
+    },
+    {
+      "type": "heading",
+      "text": "From shelf to system"
+    },
+    {
+      "type": "paragraph",
+      "text": "My first version was basically upload and download. It looked fine until moderation, access control, and request ownership started colliding in real usage."
+    },
+    {
+      "type": "paragraph",
+      "text": "I redesigned it around two loops: user discovery and requests, plus admin review and fulfillment. That flow made the product understandable and maintainable."
+    },
+    {
+      "type": "highlight",
+      "text": "Visibility of request status changed user trust more than any visual enhancement."
+    },
+    {
+      "type": "heading",
+      "text": "Implementation lessons"
+    },
+    {
+      "type": "paragraph",
+      "text": "I moved file handling to object storage boundaries and kept metadata in MongoDB. I also added debounced search to stop backend spam from half-typed queries."
+    },
+    {
+      "type": "quote",
+      "text": "The hardest engineering problem was not uploads. It was safe workflow transitions under human behavior."
+    },
+    {
+      "type": "paragraph",
+      "text": "Admin collision bugs pushed me to enforce strict status transitions and idempotent processing so stale actions could not re-run the same request path."
+    },
+    {
+      "type": "divider"
+    },
+    {
+      "type": "paragraph",
+      "text": "InkDrop changed my product mindset from feature-first to flow-first. Discover, request, approve, fulfill, and trust must work as one chain."
+    },
+    {
+      "type": "gif",
+      "suggestion": "Request timeline from user submission through admin approval to fulfilled status"
+    }
+  ]
+}

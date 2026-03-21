@@ -22,7 +22,7 @@ export default function Hero() {
     <MotionSection
       id="hero"
       className="hero"
-      style={{ y, opacity }}
+      style={{ y, opacity, position: 'relative' }}
     >
       {/* Orb A */}
       <MotionDiv
@@ -148,7 +148,8 @@ export default function Hero() {
           <MotionButton
             type="button"
             onClick={() => scrollTo('projects-showcase')}
-            className="font-ui inline-flex items-center justify-center rounded-full border border-[#DF6C4F] bg-[#DF6C4F] px-7.5 py-3.75 text-[0.95rem] tracking-[0.08em] text-[#FFFFF0] transition-all duration-[.4s] hover:border-[#FF9398] hover:bg-[#FF9398] hover:text-[#452215]"
+            className="font-ui inline-flex items-center justify-center rounded-full border border-[#DF6C4F] bg-[#DF6C4F] px-7.5 py-3.75 text-[0.95rem] tracking-[0.08em]  hover:border-[#FF9398]
+             text-[#FFFFF0]  hover:bg-[#FF9398] hover:text-[#452215] shadow-[4px_4px_0_#8F5E41] transition-all duration-300 hover:shadow-[6px_6px_0_#8F5E41]"
             whileHover={{ y: -2, scale: 1.01 }}
             whileTap={{ scale: 0.98 }}
           >

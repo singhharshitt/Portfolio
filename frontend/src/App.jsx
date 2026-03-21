@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Home from './pages/home';
@@ -6,6 +6,7 @@ import ErrorBoundary from './components/ErrorBoundary';
 import { LazyMotion, domAnimation } from './utils/motion';
 
 const queryClient = new QueryClient();
+const CaseStudy = lazy(() => import('./pages/CaseStudy'));
 
 function App() {
   return (
@@ -13,9 +14,12 @@ function App() {
       <LazyMotion features={domAnimation}>
         <Router>
           <ErrorBoundary>
-            <Routes>
-              <Route path="/" element={<Home />} />
-            </Routes>
+            <Suspense fallback={null}>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/case-study/:slug" element={<CaseStudy />} />
+              </Routes>
+            </Suspense>
           </ErrorBoundary>
         </Router>
       </LazyMotion>
