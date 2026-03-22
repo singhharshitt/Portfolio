@@ -2,25 +2,26 @@ import React, { memo, useState } from 'react';
 import { motion } from '../utils/motion';
 import { Mail, Send, Sparkles, Heart, ArrowUpRight } from 'lucide-react';
 import { SiGithub, SiLinkedin, SiX } from 'react-icons/si';
+import { SOCIAL_LINKS } from '../constants/socialLinks';
 
 const SOCIALS = [
   { 
     label: 'GitHub', 
-    href: 'https://github.com/singhharshitt', 
+    href: SOCIAL_LINKS.github,
     icon: SiGithub,
     color: '#452215',
     hoverColor: '#FFFFF0'
   },
   { 
     label: 'LinkedIn', 
-    href: 'https://www.linkedin.com/in/harshit-singhh/', 
+    href: SOCIAL_LINKS.linkedin,
     icon: SiLinkedin,
     color: '#DF6C4F',
     hoverColor: '#452215'
   },
   { 
     label: 'X / Twitter', 
-    href: 'https://x.com/_HarshitDev_', 
+    href: SOCIAL_LINKS.x,
     icon: SiX,
     color: '#FF9398',
     hoverColor: '#452215'

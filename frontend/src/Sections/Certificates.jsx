@@ -18,6 +18,7 @@ import {
   Shield,
   Medal
 } from 'lucide-react';
+import { SOCIAL_LINKS } from '../constants/socialLinks';
 
 /* ─────────────────────────────────────────────
    BUILD CERTIFICATE LIST FROM ENVIRONMENT VARIABLES
@@ -653,7 +654,7 @@ export default function Certificates() {
           transition={{ duration: 0.6 }}
         >
           <motion.a
-            href="https://linkedin.com/in/singh-harshit-"
+            href={SOCIAL_LINKS.linkedin}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-3 px-8 py-4 border-2 border-[#452215] bg-[#FFFFF0] rounded-full font-medium shadow-[4px_4px_0_#8F5E41] transition-all duration-300 hover:shadow-[6px_6px_0_#8F5E41] hover:-translate-y-1"

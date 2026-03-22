@@ -3,6 +3,7 @@ import { AnimatePresence, motion, useInView, useScroll, useTransform } from '../
 import { ArrowUpRight, ChevronLeft, ChevronRight, Eye, FileText, Github, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { getProjectSlug } from '../utils/projectSlug';
+import { SOCIAL_LINKS } from '../constants/socialLinks';
 import SwapVerse from '../assets/swapverse.png';
 import PrioSync from '../assets/PrioSync.png';
 import SkyX from '../assets/SKYX.png';
@@ -736,7 +737,7 @@ export default memo(function ProjectsSection() {
           viewport={{ once: true }}
         >
           <motion.a
-            href="https://github.com/singhharshitt"
+            href={SOCIAL_LINKS.github}
             target="_blank"
             rel="noopener noreferrer"
             className="font-ui inline-flex items-center gap-3 rounded-full bg-[#DF6C4F] px-8 py-4 text-lg text-[#FFFFF0] transition-all hover:bg-[#FF9398] hover:text-[#452215]"

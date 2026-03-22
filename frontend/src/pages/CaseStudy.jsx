@@ -14,6 +14,7 @@ import {
 import { fetchReadmeWithCache } from '../utils/readmeService';
 import { fetchLocalCaseStudyMarkdown, fetchLocalCaseStudyStructured } from '../utils/caseStudyMarkdownService';
 import { updateCaseStudyMeta } from '../utils/seoMeta';
+import { SOCIAL_LINKS } from '../constants/socialLinks';
 
 function getProjectFromSlug(slug) {
   return PROJECTS.find((project) => getProjectSlug(project.title) === slug) ?? null;
@@ -690,7 +691,7 @@ export default function CaseStudy() {
                 View on GitHub
               </motion.a>
               <motion.a
-                href="https://www.linkedin.com/in/harshitsingh00/"
+                href={SOCIAL_LINKS.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-ui inline-flex items-center gap-2 rounded-full border-2 border-[#452215] bg-[#FFFFF0] px-6 py-3 text-sm text-[#452215] shadow-[4px_4px_0_#8F5E41] transition-all hover:shadow-[6px_6px_0_#8F5E41] hover:-translate-y-1"
@@ -701,7 +702,7 @@ export default function CaseStudy() {
                 LinkedIn
               </motion.a>
               <motion.a
-                href="https://twitter.com/harshit_codes"
+                href={SOCIAL_LINKS.x}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-ui inline-flex items-center gap-2 rounded-full border-2 border-[#452215] bg-[#FFFFF0] px-6 py-3 text-sm text-[#452215] shadow-[4px_4px_0_#8F5E41] transition-all hover:shadow-[6px_6px_0_#8F5E41] hover:-translate-y-1"
