@@ -292,7 +292,7 @@ export default function CaseStudy() {
                   <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#DF6C4F] border-t-transparent" />
                 </div>
               )}
-              <div className="absolute inset-0 bg-linear-to-t from-[#452215]/30 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#452215]/30 to-transparent" />
               
               {/* Decorative badge */}
               <motion.div
@@ -314,7 +314,7 @@ export default function CaseStudy() {
                 className="flex items-center gap-2 mb-3"
               >
                 <span className="font-ui text-sm uppercase tracking-[0.28em] text-[#DF6C4F]">Case Study</span>
-                <div className="h-px flex-1 bg-linear-to-r from-[#DF6C4F] to-transparent" />
+                <div className="h-px flex-1 bg-gradient-to-r from-[#DF6C4F] to-transparent" />
               </motion.div>
               
               <motion.h1
@@ -395,7 +395,7 @@ export default function CaseStudy() {
                   href={project.liveUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-ui inline-flex w-full items-center justify-center gap-2 rounded-full border-2 border-[#452215] bg-[#DF6C4F] px-6 py-3 text-sm text-[#FFFFF0] shadow-[4px_4px_0_#8F5E41] transition-all hover:shadow-[6px_6px_0_#8F5E41] hover:-translate-y-1 sm:w-auto"
+                  className="font-ui inline-flex items-center gap-2 rounded-full border-2 border-[#452215] bg-[#DF6C4F] px-6 py-3 text-sm text-[#FFFFF0] shadow-[4px_4px_0_#8F5E41] transition-all hover:shadow-[6px_6px_0_#8F5E41] hover:-translate-y-1"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -406,7 +406,7 @@ export default function CaseStudy() {
                   href={project.githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-ui inline-flex w-full items-center justify-center gap-2 rounded-full border-2 border-[#452215] bg-[#FFFFF0] px-6 py-3 text-sm text-[#452215] shadow-[4px_4px_0_#8F5E41] transition-all hover:shadow-[6px_6px_0_#8F5E41] hover:-translate-y-1 sm:w-auto"
+                  className="font-ui inline-flex items-center gap-2 rounded-full border-2 border-[#452215] bg-[#FFFFF0] px-6 py-3 text-sm text-[#452215] shadow-[4px_4px_0_#8F5E41] transition-all hover:shadow-[6px_6px_0_#8F5E41] hover:-translate-y-1"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -441,7 +441,7 @@ export default function CaseStudy() {
           viewport={{ once: true, margin: '-50px' }}
           className="mt-8 overflow-hidden rounded-2xl border-2 border-[#452215] bg-[#FFFFF0] shadow-[4px_4px_0_#8F5E41] transition-all duration-300 hover:shadow-[6px_6px_0_#8F5E41]"
         >
-          <div className="border-b-2 border-[#452215] bg-linear-to-r from-[#FFF8EE] to-[#FFFFF0] p-5 sm:p-6">
+          <div className="border-b-2 border-[#452215] bg-gradient-to-r from-[#FFF8EE] to-[#FFFFF0] p-5 sm:p-6">
             <h2 className="font-ui flex items-center gap-2 text-2xl text-[#452215] sm:text-3xl">
               <Sparkles size={24} className="text-[#DF6C4F]" />
               Project Deep Dive
@@ -462,7 +462,7 @@ export default function CaseStudy() {
               <p className="font-bodycopy leading-relaxed text-[#452215]">{deepDiveContent.overview}</p>
             </motion.div>
 
-            <div className="h-px bg-linear-to-r from-transparent via-[#DF6C4F] to-transparent" />
+            <div className="h-px bg-gradient-to-r from-transparent via-[#DF6C4F] to-transparent" />
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -477,7 +477,7 @@ export default function CaseStudy() {
               <p className="font-bodycopy leading-relaxed text-[#452215]">{deepDiveContent.problemStatement}</p>
             </motion.div>
 
-            <div className="h-px bg-linear-to-r from-transparent via-[#DF6C4F] to-transparent" />
+            <div className="h-px bg-gradient-to-r from-transparent via-[#DF6C4F] to-transparent" />
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -492,7 +492,7 @@ export default function CaseStudy() {
               <p className="font-bodycopy leading-relaxed text-[#452215]">{deepDiveContent.solution}</p>
             </motion.div>
 
-            <div className="h-px bg-linear-to-r from-transparent via-[#DF6C4F] to-transparent" />
+            <div className="h-px bg-gradient-to-r from-transparent via-[#DF6C4F] to-transparent" />
 
             {/* Tech Stack, Key Features, Learnings & Challenges */}
             <motion.div
@@ -517,7 +517,7 @@ export default function CaseStudy() {
               </div>
             </motion.div>
 
-            <div className="h-px bg-linear-to-r from-transparent via-[#DF6C4F] to-transparent" />
+            <div className="h-px bg-gradient-to-r from-transparent via-[#DF6C4F] to-transparent" />
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -546,7 +546,7 @@ export default function CaseStudy() {
               </ul>
             </motion.div>
 
-            <div className="h-px bg-linear-to-r from-transparent via-[#DF6C4F] to-transparent" />
+            <div className="h-px bg-gradient-to-r from-transparent via-[#DF6C4F] to-transparent" />
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -608,7 +608,7 @@ export default function CaseStudy() {
           viewport={{ once: true, margin: '-50px' }}
           className="mt-8 overflow-hidden rounded-2xl border-2 border-[#452215] bg-[#FFFFF0] shadow-[4px_4px_0_#8F5E41] transition-all duration-300 hover:shadow-[6px_6px_0_#8F5E41]"
         >
-          <div className="border-b-2 border-[#452215] bg-linear-to-r from-[#FFF8EE] to-[#FFFFF0] p-5 sm:p-6">
+          <div className="border-b-2 border-[#452215] bg-gradient-to-r from-[#FFF8EE] to-[#FFFFF0] p-5 sm:p-6">
             <h2 className="font-ui flex items-center gap-2 text-2xl text-[#452215] sm:text-3xl">
               <Sparkles size={24} className="text-[#DF6C4F]" />
               Case Study Narrative
@@ -633,7 +633,7 @@ export default function CaseStudy() {
                     <p className="font-bodycopy text-lg leading-relaxed text-[#452215] first:mt-0">
                       {caseStudy.overview}
                     </p>
-                    <div className="my-6 h-px bg-linear-to-r from-transparent via-[#DF6C4F] to-transparent" />
+                    <div className="my-6 h-px bg-gradient-to-r from-transparent via-[#DF6C4F] to-transparent" />
                     <p className="font-bodycopy leading-relaxed text-[#452215]">
                       {caseStudy.solution}
                     </p>
@@ -667,7 +667,7 @@ export default function CaseStudy() {
           viewport={{ once: true, margin: '-50px' }}
           className="mt-8 overflow-hidden rounded-2xl border-2 border-[#452215] bg-[#FFFFF0] shadow-[4px_4px_0_#8F5E41] transition-all duration-300 hover:shadow-[6px_6px_0_#8F5E41]"
         >
-          <div className="border-b-2 border-[#452215] bg-linear-to-r from-[#FFF8EE] to-[#FFFFF0] p-5 sm:p-6">
+          <div className="border-b-2 border-[#452215] bg-gradient-to-r from-[#FFF8EE] to-[#FFFFF0] p-5 sm:p-6">
             <h2 className="font-ui flex items-center gap-2 text-2xl text-[#452215] sm:text-3xl">
               <Sparkles size={24} className="text-[#DF6C4F]" />
               Connect With Me

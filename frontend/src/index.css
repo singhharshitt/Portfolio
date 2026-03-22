@@ -139,18 +139,12 @@
   box-sizing: border-box
 }
 
-*::before,
-*::after {
-  box-sizing: border-box
-}
-
 html,
 body,
 #root {
   margin: 0;
   min-height: 100%;
-  width: 100%;
-  overflow-x: hidden
+  width: 100%
 }
 
 html {
@@ -168,13 +162,6 @@ body {
 
 body::-webkit-scrollbar {
   display: none
-}
-
-img,
-svg,
-canvas,
-video {
-  max-width: 100%
 }
 
 ::selection {
@@ -242,14 +229,6 @@ video {
   isolation: isolate;
   padding: 128px 0 120px;
   background: #452215
-}
-
-@media (max-width: 1023px) {
-  .hero {
-    margin-top: -80px;
-    min-height: calc(100vh - 80px);
-    padding: 104px 0 84px
-  }
 }
 
 .hero::before {
@@ -516,7 +495,7 @@ video {
 
 /* ── section-container (still used by TimeLine via timeline-container) ── */
 .section-container {
-  width: min(1400px, calc(100% - 48px));
+  width: min(1400px, calc(100% - 80px));
   margin: 0 auto
 }
 
@@ -606,7 +585,7 @@ video {
 
   .section-container,
   .timeline-container {
-    width: calc(100% - 32px)
+    width: calc(100% - 40px)
   }
 
   .hero {
@@ -617,6 +596,15 @@ video {
 
   .scroll-indicator {
     bottom: 16px
+  }
+}
+
+@media (min-width:769px) and (max-width:1024px) {
+  .hero {
+    justify-content: flex-start;
+    padding-top: 80px;
+    padding-bottom: 80px;
+    min-height: auto
   }
 }
 

@@ -285,7 +285,7 @@ export default memo(function JourneyTimeline() {
               return (
                 <motion.div
                   key={item.date}
-                  className={`relative flex flex-row items-center gap-4 sm:gap-6 lg:gap-8 ${
+                  className={`relative flex flex-row items-center gap-8 ${
                     isLeft ? 'lg:flex-row' : 'lg:flex-row-reverse'
                   }`}
                   initial={{ opacity: 0, x: isLeft ? -50 : 50 }}
@@ -303,7 +303,7 @@ export default memo(function JourneyTimeline() {
                 >
                   {/* Content */}
                   <motion.div
-                    className={`flex-1 pl-16 sm:pl-20 lg:pl-0 ${isLeft ? 'lg:text-right' : 'lg:text-left'}`}
+                    className={`flex-1 pl-20 lg:pl-0 ${isLeft ? 'lg:text-right' : 'lg:text-left'}`}
                     animate={{ 
                       scale: isActive ? 1.02 : 1, 
                       opacity: isActive ? 1 : 0.8 

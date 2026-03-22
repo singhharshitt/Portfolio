@@ -325,12 +325,12 @@ const LivePreviewOverlay = memo(function LivePreviewOverlay({ project, onClose }
         transition={{ duration: 0.3, ease: 'easeOut' }}
         onClick={(event) => event.stopPropagation()}
       >
-        <div className="flex flex-col items-start justify-between gap-3 border-b border-[#FFF8EE] px-4 py-4 sm:flex-row sm:items-center sm:px-6">
+        <div className="flex items-center justify-between gap-3 border-b border-[#FFF8EE] px-5 py-4 sm:px-6">
           <div>
             <p className="font-mono-ui text-xs uppercase tracking-[0.18em] text-[#DF6C4F]">Live Preview</p>
             <h3 className="font-ui text-xl text-[#452215] sm:text-2xl">{project.title}</h3>
           </div>
-          <div className="flex w-full items-center gap-2 sm:w-auto">
+          <div className="flex items-center gap-2">
             <ActionButton href={project.liveUrl} icon={ArrowUpRight} label="Open Live" variant="secondary" />
             <motion.button
               type="button"
@@ -582,7 +582,7 @@ const HorizontalScrollGallery = memo(function HorizontalScrollGallery({ onOpenPr
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {visibleProjects.map((project, index) => (
-            <div key={project.title} className="w-[88vw] shrink-0 snap-center sm:w-[62vw] lg:w-auto">
+            <div key={project.title} className="w-[85vw] shrink-0 snap-center sm:w-[60vw] lg:w-auto">
               <ProjectCard
                 project={project}
                 index={index}

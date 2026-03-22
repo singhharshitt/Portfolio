@@ -4,9 +4,6 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  optimizeDeps: {
-    include: ['react-markdown', 'remark-gfm'],
-  },
   build: {
     cssCodeSplit: true,
     rollupOptions: {

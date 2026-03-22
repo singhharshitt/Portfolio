@@ -67,7 +67,7 @@ const SocialLink = memo(function SocialLink({ item, index }) {
       href={item.href}
       target="_blank"
       rel="noopener noreferrer"
-      className="relative inline-flex items-center gap-2 rounded-full border-2 border-[#452215] bg-[#FFFFF0] px-5 py-3 text-[#452215] shadow-[4px_4px_0_#8F5E41] transition-all duration-300 hover:shadow-[6px_6px_0_#8F5E41] hover:-translate-y-1 sm:gap-3 sm:px-7 sm:py-4"
+      className="relative inline-flex items-center gap-3 rounded-full border-2 border-[#452215] bg-[#FFFFF0] px-7 py-4 text-[#452215] shadow-[4px_4px_0_#8F5E41] transition-all duration-300 hover:shadow-[6px_6px_0_#8F5E41] hover:-translate-y-1"
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ 
@@ -109,7 +109,7 @@ const SocialLink = memo(function SocialLink({ item, index }) {
       
       {/* Label */}
       <motion.span 
-        className="relative z-10 font-ui text-xs sm:text-sm"
+        className="relative z-10 font-ui text-sm"
         animate={{ 
           x: hovered ? 3 : 0,
           color: hovered ? item.hoverColor : '#452215'
@@ -142,7 +142,7 @@ export default function ConnectSection() {
   return (
     <section
       id="connect"
-      className="relative min-h-[60vh] overflow-hidden bg-[#FFF8EE] py-20 text-center sm:py-28 lg:py-40"
+      className="relative min-h-[60vh] overflow-hidden bg-[#FFF8EE] py-40 text-center"
     >
       {/* Animated Background Elements */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
@@ -199,7 +199,7 @@ export default function ConnectSection() {
         }}
       />
 
-      <div className="relative z-10 mx-auto w-full max-w-350 px-4 sm:px-8">
+      <div className="relative z-10 mx-auto w-[min(1400px,calc(100%-80px))]">
         {/* Animated SVG */}
         <motion.div 
           className="reveal-item mx-auto mb-12 max-w-125 opacity-90"
@@ -284,7 +284,7 @@ export default function ConnectSection() {
 
         {/* Description */}
         <motion.p 
-          className="font-bodycopy reveal-item mx-auto mb-10 mt-0 max-w-125 px-2 text-base text-[#452215] sm:mb-12 sm:text-xl"
+          className="font-bodycopy reveal-item mx-auto mb-12 mt-0 max-w-125 text-xl text-[#452215]"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ delay: 0.2, duration: 0.6 }}
@@ -308,7 +308,7 @@ export default function ConnectSection() {
 
         {/* Email Button */}
         <motion.div
-          className="relative inline-block max-w-full"
+          className="relative inline-block"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.6 }}
@@ -318,7 +318,7 @@ export default function ConnectSection() {
         >
           <motion.a
             href={`mailto:${EMAIL}`}
-            className="relative inline-flex max-w-full items-center gap-3 rounded-full border-2 border-[#452215] bg-[#452215] px-5 py-4 text-sm text-[#FFFFF0] shadow-[6px_6px_0_#8F5E41] transition-all duration-300 hover:shadow-[8px_8px_0_#8F5E41] hover:-translate-y-1 cursor-pointer sm:gap-4 sm:px-10 sm:py-5 sm:text-[1.05rem]"
+            className="relative inline-flex items-center gap-4 rounded-full border-2 border-[#452215] bg-[#452215] px-10 py-5 text-[1.05rem] text-[#FFFFF0] shadow-[6px_6px_0_#8F5E41] transition-all duration-300 hover:shadow-[8px_8px_0_#8F5E41] hover:-translate-y-1 cursor-pointer"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             style={{ willChange: 'transform' }}
@@ -337,11 +337,11 @@ export default function ConnectSection() {
             
             {/* Content */}
             <motion.div
-              className="relative z-10 flex min-w-0 items-center gap-3 sm:gap-4"
+              className="relative z-10 flex items-center gap-4"
               animate={{ x: emailHovered ? 5 : 0 }}
             >
               <Mail size={20} />
-              <span className="font-ui break-all text-left sm:break-normal">{EMAIL}</span>
+              <span className="font-ui">{EMAIL}</span>
               <motion.div
                 animate={{ 
                   rotate: emailHovered ? [0, 15, 0] : 0,

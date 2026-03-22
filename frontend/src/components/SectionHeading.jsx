@@ -1,5 +1,5 @@
 import { useRef, memo } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { motion, useInView } from '../../utils/motion';
 
 const THEME = {
   accent: '#DF6C4F',
