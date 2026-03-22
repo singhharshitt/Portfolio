@@ -139,12 +139,18 @@
   box-sizing: border-box
 }
 
+*::before,
+*::after {
+  box-sizing: border-box
+}
+
 html,
 body,
 #root {
   margin: 0;
   min-height: 100%;
-  width: 100%
+  width: 100%;
+  overflow-x: hidden
 }
 
 html {
@@ -162,6 +168,13 @@ body {
 
 body::-webkit-scrollbar {
   display: none
+}
+
+img,
+svg,
+canvas,
+video {
+  max-width: 100%
 }
 
 ::selection {
@@ -229,6 +242,14 @@ body::-webkit-scrollbar {
   isolation: isolate;
   padding: 128px 0 120px;
   background: #452215
+}
+
+@media (max-width: 1023px) {
+  .hero {
+    margin-top: -80px;
+    min-height: calc(100vh - 80px);
+    padding: 104px 0 84px
+  }
 }
 
 .hero::before {
@@ -495,7 +516,7 @@ body::-webkit-scrollbar {
 
 /* ── section-container (still used by TimeLine via timeline-container) ── */
 .section-container {
-  width: min(1400px, calc(100% - 80px));
+  width: min(1400px, calc(100% - 48px));
   margin: 0 auto
 }
 
@@ -585,7 +606,7 @@ body::-webkit-scrollbar {
 
   .section-container,
   .timeline-container {
-    width: calc(100% - 40px)
+    width: calc(100% - 32px)
   }
 
   .hero {
@@ -613,8 +634,6 @@ body::-webkit-scrollbar {
   }
 }
 
-
-/* Auto‑generated font‑face declarations */
 @font-face {
   font-family: 'BasisGrotesqueProMono';
   src: url('./fonts/BasisGrotesqueProMono.woff2') format('woff2');

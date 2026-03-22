@@ -257,7 +257,7 @@ export default memo(function MenuOverlay({ isOpen, onClose, onNavigate }) {
           </div>
 
           <div className="relative h-full overflow-y-auto overscroll-contain">
-            <div className="flex min-h-full flex-col px-6 py-24 sm:px-8 lg:px-12 lg:py-32 xl:px-16">
+            <div className="flex min-h-full flex-col px-4 py-20 sm:px-8 sm:py-24 lg:px-12 lg:py-32 xl:px-16">
               <div className="mx-auto w-full max-w-7xl">
                 <div className="grid gap-12 lg:grid-cols-2 lg:gap-20">
                   {/* Main Navigation */}
@@ -289,7 +289,7 @@ export default memo(function MenuOverlay({ isOpen, onClose, onNavigate }) {
 
                             <div className="relative flex items-center justify-between px-4">
                               <div className="flex flex-col">
-                                <span className="font-fliege text-4xl text-[#FFFFF0] transition-all duration-500 group-hover:translate-x-3 group-hover:text-[#FF9398] sm:text-5xl lg:text-6xl">
+                                <span className="font-fliege text-3xl text-[#FFFFF0] transition-all duration-500 group-hover:translate-x-3 group-hover:text-[#FF9398] sm:text-5xl lg:text-6xl">
                                   {item.label}
                                   {index === 3 && (
                                     <motion.span
@@ -376,7 +376,7 @@ export default memo(function MenuOverlay({ isOpen, onClose, onNavigate }) {
                     {/* Quick Stats */}
                     <motion.div
                       variants={itemVariants}
-                      className="flex gap-6 pt-4"
+                      className="flex flex-wrap gap-4 pt-4 sm:gap-6"
                     >
                       <div className="flex items-center gap-2">
                         <div className="h-8 w-8 rounded-full border border-[#FFFFF0]/20 flex items-center justify-center">
@@ -557,7 +557,7 @@ export default memo(function MenuOverlay({ isOpen, onClose, onNavigate }) {
                       </motion.div>
                     </div>
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
                       {[
                         { icon: Twitter, label: 'Twitter', href: 'https://twitter.com/singhharshitt', color: '#FF9398' },
                         { icon: Linkedin, label: 'LinkedIn', href: 'https://linkedin.com/in/singh-harshit-', color: '#DF6C4F' },

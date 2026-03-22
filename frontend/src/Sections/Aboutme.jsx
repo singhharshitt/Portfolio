@@ -91,7 +91,7 @@ export default function Aboutme() {
       src: profileMain,
       alt: 'Harshit Singh - Profile',
       style: { x: x1, y: y1, rotate: rotate1 },
-      className: 'h-96 w-[19.2rem] rounded-2xl object-cover shadow-[0_24px_48px_rgba(69,34,21,0.12)] z-10 border-2 border-[#452215] sm:h-[26rem] sm:w-[20.8rem] lg:h-[32rem] lg:w-[25.6rem]',
+      className: 'h-[22rem] w-[15.75rem] rounded-2xl object-cover shadow-[0_24px_48px_rgba(69,34,21,0.12)] z-10 border-2 border-[#452215] sm:h-[26rem] sm:w-[19rem] lg:h-[32rem] lg:w-[25.6rem]',
       delay: 0,
     },
   ];
@@ -167,7 +167,7 @@ export default function Aboutme() {
 
           {/* Image Section */}
           <motion.div
-            className="relative flex h-108 items-center justify-center sm:h-128 lg:h-150 lg:justify-start"
+            className="relative flex h-80 items-center justify-center sm:h-128 lg:h-150 lg:justify-start"
             style={{ scale, opacity }}
           >
             <div className="relative flex h-full w-full items-center justify-center lg:justify-start">
@@ -220,7 +220,7 @@ export default function Aboutme() {
 
                     {/* Floating Badge */}
                     <motion.div
-                      className="absolute -right-4 -bottom-4 flex items-center gap-2 rounded-full border-2 border-[#452215] bg-[#FFFFF0] px-3 py-1.5 shadow-[3px_3px_0_#8F5E41]"
+                      className="absolute bottom-0 right-0 flex items-center gap-2 rounded-full border-2 border-[#452215] bg-[#FFFFF0] px-3 py-1.5 shadow-[3px_3px_0_#8F5E41] sm:-bottom-4 sm:-right-4"
                       initial={{ scale: 0, rotate: -10 }}
                       whileInView={{ scale: 1, rotate: 0 }}
                       transition={{ delay: 0.3, type: 'spring' }}
@@ -272,7 +272,7 @@ export default function Aboutme() {
             </motion.h2>
 
             <motion.p 
-              className="font-bodycopy max-w-lg text-lg leading-relaxed text-[#452215] opacity-80"
+              className="font-bodycopy max-w-lg text-base leading-relaxed text-[#452215] opacity-80 sm:text-lg"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
@@ -285,7 +285,7 @@ export default function Aboutme() {
             </motion.p>
 
             <motion.p 
-              className="font-bodycopy max-w-lg text-lg leading-relaxed text-[#452215] opacity-80"
+              className="font-bodycopy max-w-lg text-base leading-relaxed text-[#452215] opacity-80 sm:text-lg"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
@@ -297,7 +297,7 @@ export default function Aboutme() {
             </motion.p>
 
             <motion.p 
-              className="font-bodycopy max-w-lg text-lg leading-relaxed text-[#452215] opacity-80"
+              className="font-bodycopy max-w-lg text-base leading-relaxed text-[#452215] opacity-80 sm:text-lg"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ delay: 0.6 }}
@@ -309,7 +309,7 @@ export default function Aboutme() {
             </motion.p>
 
             <motion.p 
-              className="font-bodycopy max-w-lg text-lg leading-relaxed text-[#452215] opacity-80"
+              className="font-bodycopy max-w-lg text-base leading-relaxed text-[#452215] opacity-80 sm:text-lg"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ delay: 0.7 }}
@@ -346,7 +346,7 @@ export default function Aboutme() {
 
             {/* Stats */}
             <motion.div 
-              className="flex gap-6 pt-2"
+              className="flex flex-wrap gap-4 pt-2 sm:gap-6"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ delay: 0.7 }}
@@ -364,7 +364,7 @@ export default function Aboutme() {
 
             {/* Buttons */}
             <motion.div 
-              className="flex flex-wrap items-center gap-6 pt-2"
+              className="flex flex-wrap items-center gap-4 pt-2 sm:gap-6"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ delay: 0.8 }}

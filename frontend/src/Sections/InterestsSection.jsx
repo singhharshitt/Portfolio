@@ -528,7 +528,7 @@ export default function InterestsSection() {
         >
           <motion.a
             href="#contact"
-            className="font-ui inline-flex items-center gap-2 rounded-full border-2 border-[#452215] bg-[#FFFFF0] px-6 py-3 text-sm text-[#452215] shadow-[4px_4px_0_#8F5E41] transition-all duration-300 hover:shadow-[6px_6px_0_#8F5E41] hover:-translate-y-1 hover:border-[#DF6C4F] hover:text-[#DF6C4F]"
+            className="font-ui inline-flex max-w-full items-center gap-2 rounded-full border-2 border-[#452215] bg-[#FFFFF0] px-4 py-2.5 text-center text-xs text-[#452215] shadow-[4px_4px_0_#8F5E41] transition-all duration-300 hover:shadow-[6px_6px_0_#8F5E41] hover:-translate-y-1 hover:border-[#DF6C4F] hover:text-[#DF6C4F] sm:px-6 sm:py-3 sm:text-sm"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >

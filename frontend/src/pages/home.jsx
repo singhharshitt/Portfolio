@@ -13,13 +13,6 @@ const BlogSection = lazy(() => import('../Sections/BlogSection.jsx'));
 const ConnectSection = lazy(() => import('../Sections/ConnectSection.jsx'));
 const InterestsSection = lazy(() => import('../Sections/InterestsSection.jsx'));
 
-// the heavy realtime dashboard was replaced by a static interests section
-// const Dashboard = dynamic(() => import('../Sections/DeveloperActivityDashboard.jsx'), { ssr: false });
-// const DASHBOARD_PROPS = Object.freeze({
-//   githubStats: EMPTY_GITHUB_STATS,
-//   leetCodeStats: EMPTY_LEETCODE_STATS,
-//   gfgStats: EMPTY_GFG_STATS,
-// });
 
 function Home() {
   useEffect(() => {
@@ -98,7 +91,7 @@ function Home() {
     <>
       <Navbar onNavigate={scrollToSection} />
 
-      <main className="pt-[108px]">
+      <main className="pt-20 md:pt-24 lg:pt-27">
         <Hero />
         <Suspense fallback={null}>
           <Aboutme />

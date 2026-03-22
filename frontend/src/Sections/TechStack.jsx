@@ -190,7 +190,7 @@ const OrbCard = memo(({ tech, index }) => {
 });
 
 const TabSlider = memo(({ activeTab, onTabChange }) => (
-  <div className="relative mx-auto mb-12 flex w-fit items-center gap-2 rounded-full border border-[#FFF8EE] bg-[#FFFFF0] p-1.5">
+  <div className="relative mx-auto mb-10 grid w-full max-w-3xl grid-cols-4 items-center rounded-full border border-[#FFF8EE] bg-[#FFFFF0] p-1.5 sm:mb-12">
     <motion.div
       className="absolute h-[calc(100%-12px)] rounded-full bg-[#452215]"
       layoutId="activeTab"
@@ -208,7 +208,7 @@ const TabSlider = memo(({ activeTab, onTabChange }) => (
         key={tab.id}
         type="button"
         onClick={() => onTabChange(tab.id)}
-        className={`font-ui relative z-10 rounded-full px-3 py-2.5 text-sm tracking-[0.08em] transition-colors duration-300 sm:px-6 ${activeTab === tab.id ? 'text-[#FFFFF0]' : 'text-[#452215] hover:text-[#DF6C4F]'}`}
+        className={`font-ui relative z-10 rounded-full px-1.5 py-2 text-center text-[11px] tracking-[0.06em] transition-colors duration-300 sm:px-6 sm:py-2.5 sm:text-sm sm:tracking-[0.08em] ${activeTab === tab.id ? 'text-[#FFFFF0]' : 'text-[#452215] hover:text-[#DF6C4F]'}`}
       >
         {tab.label}
       </button>
@@ -322,7 +322,7 @@ export default memo(function TechStack() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
-              className="grid grid-cols-2 justify-items-center gap-6 md:grid-cols-4 md:gap-8 lg:gap-12"
+              className="grid grid-cols-1 justify-items-center gap-6 sm:grid-cols-2 md:grid-cols-4 md:gap-8 lg:gap-12"
             >
               {panelItems.map((tech, index) => (
                 <OrbCard key={tech.name} tech={tech} index={index} />

@@ -34,8 +34,8 @@ function scrollTo(section) {
 
 function Footer() {
   return (
-    <footer className="border-t border-[#DF6C4F]/20 bg-[#452215] px-10 pb-10 pt-20">
-      <div className="mx-auto grid max-w-350 grid-cols-[2fr_1fr_1fr_1fr_2fr] gap-12 max-[1200px]:grid-cols-[1fr_1fr_1fr] max-[768px]:grid-cols-1 max-[768px]:gap-7">
+    <footer className="border-t border-[#DF6C4F]/20 bg-[#452215] px-4 pb-8 pt-16 sm:px-8 sm:pb-10 sm:pt-20 lg:px-10">
+      <div className="mx-auto grid max-w-350 grid-cols-1 gap-8 sm:gap-10 lg:grid-cols-[2fr_1fr_1fr_1fr_2fr] lg:gap-12 max-[1200px]:grid-cols-[1fr_1fr_1fr] max-[768px]:grid-cols-1 max-[768px]:gap-7">
         <div>
           <h3 className="font-fliege m-0 mb-4 text-[2rem] text-[#FFFFF0]">H.</h3>
           <p className="font-bodycopy m-0 max-w-70 text-[.95rem] leading-relaxed text-[#FFF8EE]">
@@ -74,7 +74,7 @@ function Footer() {
         </div>
       </div>
 
-      <div className="mx-auto mt-15 flex max-w-350 flex-wrap items-center justify-between gap-4 border-t border-[#DF6C4F]/20 pt-10">
+      <div className="mx-auto mt-10 flex max-w-350 flex-wrap items-center justify-between gap-4 border-t border-[#DF6C4F]/20 pt-8 sm:mt-15 sm:pt-10">
         <p className="font-mono-ui m-0 text-[.8rem] text-[#FFF8EE]">
           © 2026 Harshit Singh. All rights reserved.
         </p>

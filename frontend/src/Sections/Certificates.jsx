@@ -89,7 +89,7 @@ const CertificateModal = memo(function CertificateModal({ cert, onClose }) {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Modal header */}
-        <div className="flex items-start justify-between border-b-2 border-[#452215] p-5 bg-linear-to-r from-[#FFF8EE] to-[#FFFFF0]">
+        <div className="flex flex-col items-start justify-between gap-3 border-b-2 border-[#452215] p-4 bg-linear-to-r from-[#FFF8EE] to-[#FFFFF0] sm:flex-row sm:items-start sm:p-5">
           <div>
             <p className="font-mono-ui mb-1 text-xs uppercase tracking-widest" style={{ color: '#DF6C4F' }}>
               {cert.issuer}
@@ -153,7 +153,7 @@ const CertificateModal = memo(function CertificateModal({ cert, onClose }) {
         </div>
 
         {/* Modal footer */}
-        <div className="flex items-center gap-3 border-t-2 border-[#452215] p-4 bg-[#FFF8EE]">
+        <div className="flex flex-wrap items-center gap-3 border-t-2 border-[#452215] p-4 bg-[#FFF8EE]">
           <motion.a
             href={cert.viewUrl}
             target="_blank"
@@ -352,7 +352,7 @@ const CertificateCard = memo(function CertificateCard({ cert, index, onPreview }
 
           {/* Action row */}
           <motion.div
-            className="flex items-center gap-2 mt-4 pt-3 border-t-2 border-[#452215]"
+            className="mt-4 flex flex-wrap items-center gap-2 border-t-2 border-[#452215] pt-3"
             animate={{ opacity: hovered ? 1 : 0.5 }}
             transition={{ duration: 0.25 }}
           >
@@ -414,7 +414,7 @@ const StatCard = memo(function StatCard({ value, label, icon: Icon, delay }) {
 
   return (
     <motion.div
-      className="flex items-center gap-4 rounded-xl border-2 border-[#452215] bg-[#FFFFF0] p-4 shadow-[4px_4px_0_#8F5E41] transition-all duration-300 hover:shadow-[6px_6px_0_#8F5E41] hover:-translate-y-1"
+      className="flex min-w-0 flex-1 items-center gap-3 rounded-xl border-2 border-[#452215] bg-[#FFFFF0] p-3 shadow-[4px_4px_0_#8F5E41] transition-all duration-300 hover:shadow-[6px_6px_0_#8F5E41] hover:-translate-y-1 sm:gap-4 sm:p-4"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -423,15 +423,15 @@ const StatCard = memo(function StatCard({ value, label, icon: Icon, delay }) {
       onMouseLeave={() => setHovered(false)}
     >
       <motion.div
-        className="flex h-14 w-14 items-center justify-center rounded-xl border-2 border-[#452215] bg-[#FFF8EE] shadow-[2px_2px_0_#8F5E41]"
+        className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border-2 border-[#452215] bg-[#FFF8EE] shadow-[2px_2px_0_#8F5E41] sm:h-14 sm:w-14"
         animate={{ rotate: hovered ? 5 : 0, scale: hovered ? 1.1 : 1 }}
         transition={{ duration: 0.3 }}
       >
-        <Icon size={24} style={{ color: '#DF6C4F' }} />
+        <Icon size={20} style={{ color: '#DF6C4F' }} />
       </motion.div>
       <div>
         <motion.div 
-          className="font-fliege text-3xl" 
+          className="font-fliege text-2xl sm:text-3xl" 
           style={{ color: '#452215' }}
           animate={{ scale: hovered ? 1.05 : 1 }}
           transition={{ duration: 0.2 }}
@@ -595,7 +595,7 @@ export default function Certificates() {
             />
           </motion.div>
 
-          <div className="flex gap-4">
+          <div className="flex w-full flex-wrap gap-3 lg:w-auto lg:gap-4">
             <StatCard value={`${totalCertificates}`} label="Total Certificates" icon={Medal} delay={0.4} />
             <StatCard value={`${totalPlatforms}`} label="Learning Platforms" icon={Building2} delay={0.5} />
           </div>

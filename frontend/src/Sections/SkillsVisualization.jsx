@@ -157,7 +157,7 @@ const SkillConstellation = memo(function SkillConstellation({ skill, index, isHo
       whileHover={{ scale: 1.12, zIndex: 10 }}
     >
       <motion.div
-        className={`relative flex h-20 w-20 items-center justify-center rounded-2xl border-2 border-[#452215] shadow-[4px_4px_0_#8F5E41] transition-all duration-300 hover:shadow-[6px_6px_0_#8F5E41] ${
+        className={`relative flex h-16 w-16 items-center justify-center rounded-2xl border-2 border-[#452215] shadow-[4px_4px_0_#8F5E41] transition-all duration-300 hover:shadow-[6px_6px_0_#8F5E41] sm:h-20 sm:w-20 ${
           isHovered ? 'bg-[#452215]' : 'bg-[#FFFFF0]'
         }`}
         animate={{ 
@@ -207,7 +207,7 @@ const SkillConstellation = memo(function SkillConstellation({ skill, index, isHo
 
       {/* Connection line */}
       <motion.div
-        className="absolute -right-8 top-1/2 h-0.5 bg-linear-to-r from-[#FF9398] to-transparent"
+        className="absolute -right-8 top-1/2 hidden h-0.5 bg-linear-to-r from-[#FF9398] to-transparent md:block"
         style={{ width: 32 }}
         initial={{ scaleX: 0, opacity: 0 }}
         whileInView={{ scaleX: 1, opacity: 0.4 }}
@@ -222,7 +222,7 @@ const SkillConstellation = memo(function SkillConstellation({ skill, index, isHo
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.9 }}
             transition={{ duration: 0.2 }}
-            className="absolute -bottom-28 left-1/2 z-20 w-48 -translate-x-1/2 rounded-xl border-2 border-[#452215] bg-[#FFFFF0] p-4 shadow-[4px_4px_0_#8F5E41]"
+            className="absolute -bottom-28 left-1/2 z-20 hidden w-48 -translate-x-1/2 rounded-xl border-2 border-[#452215] bg-[#FFFFF0] p-4 shadow-[4px_4px_0_#8F5E41] md:block"
           >
             <h4 className="font-ui mb-1 text-[#452215]">{skill.name}</h4>
             <p className="font-caption mb-3 text-xs text-[#452215] opacity-80">{skill.description}</p>
@@ -571,7 +571,7 @@ export default function SkillsVisualization() {
                     />
                   </svg>
 
-                  <div className="grid grid-cols-2 justify-items-center gap-8 md:grid-cols-4 lg:gap-12">
+                  <div className="grid grid-cols-2 justify-items-center gap-6 sm:gap-8 md:grid-cols-4 lg:gap-12">
                     {group.skills.map((skill, index) => (
                       <SkillConstellation
                         key={skill.name}

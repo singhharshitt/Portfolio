@@ -46,14 +46,14 @@ export default function Hero() {
 
         {/* Eyebrow labels */}
         <MotionDiv
-          className="flex items-center gap-3 mb-[clamp(1rem,2vw,1.8rem)]"
+          className="mb-[clamp(0.75rem,2vw,1.8rem)] flex items-center gap-2 sm:gap-3"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
         >
           {/* text-[clamp(0.65rem,1vw,0.8rem)] */}
-          <span className="font-mono-ui  uppercase tracking-[0.22em] text-[#FF9398] text-2xl">Hey,</span>
-          <span className="font-mono-ui  uppercase tracking-[0.22em] text-[#FFF8EE] opacity-60 text-2xl">I Am</span>
+          <span className="font-mono-ui text-base uppercase tracking-[0.18em] text-[#FF9398] sm:text-xl sm:tracking-[0.22em] lg:text-2xl">Hey,</span>
+          <span className="font-mono-ui text-base uppercase tracking-[0.18em] text-[#FFF8EE] opacity-60 sm:text-xl sm:tracking-[0.22em] lg:text-2xl">I Am</span>
         </MotionDiv>
 
         {/* ── Headline — full viewport width, staggered like reference image ── */}
@@ -71,7 +71,7 @@ export default function Hero() {
         >
           {/* Line 1 — left-aligned, fills left side of viewport */}
           <MotionSpan
-            className="block text-left ml-10"
+            className="ml-1 block text-left sm:ml-6 lg:ml-10"
             initial={{ y: 80, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.75, delay: 0.22, ease: [0.16, 1, 0.3, 1] }}
@@ -80,7 +80,7 @@ export default function Hero() {
           </MotionSpan>
           {/* Line 2 — right-aligned, fills right side — mirrors the reference image stagger */}
           <MotionSpan
-            className="block text-right italic text-[#FF9398] mr-10"
+            className="mr-1 block text-right italic text-[#FF9398] sm:mr-6 lg:mr-10"
             initial={{ y: 80, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.75, delay: 0.34, ease: [0.16, 1, 0.3, 1] }}
@@ -93,8 +93,8 @@ export default function Hero() {
       {/* ═══ ZONE 2 — Role · Description · Buttons ═══ */}
       {/* marginTop: 'clamp(2.5rem, -2vw, 3.5rem)' */}
       <div
-        className="relative z-2 w-full"
-        style={{ paddingInline: '4vw', marginTop: '-80px' }}
+        className="relative z-2 mt-4 w-full sm:-mt-10 lg:-mt-16"
+        style={{ paddingInline: '4vw' }}
       >
         {/* Typewriter role text */}
         <MotionDiv
@@ -104,7 +104,7 @@ export default function Hero() {
         >
           <span
             className="font-ui block uppercase text-[#FFF8EE]"
-            style={{ fontSize: '40px ', letterSpacing: '3px', marginBottom: 'clamp(1rem,1.8vw,1.4rem)'}}
+            style={{ fontSize: 'clamp(1rem, 4.8vw, 2.5rem)', letterSpacing: 'clamp(0.06em, 0.25vw, 0.18em)', marginBottom: 'clamp(0.8rem,1.8vw,1.4rem)' }}
           >
             {"Full Stack Developer".split("").map((char, i) => (
               <MotionSpan
@@ -140,7 +140,7 @@ export default function Hero() {
 
         {/* CTA Buttons */}
         <MotionDiv
-          className="flex flex-wrap gap-3.5"
+          className="flex flex-wrap gap-3"
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.55, delay: 0.98 }}
